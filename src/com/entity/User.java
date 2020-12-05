@@ -8,7 +8,7 @@ public class User {
     private String username;
     private String password;
 
-    private String password;
+    private String sex;
 
     public String getUsername() {
         return username;
