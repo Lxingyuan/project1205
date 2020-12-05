@@ -5,15 +5,8 @@ package com.entity;
  * @date ：Created in 2020/12/5 10:32
  */
 public class User {
-    private String username;
-    private String password;
-
-    public String getUsername() {
-        return username;
-    }
+    private Integer username;
+    private Integer password;
 
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }
