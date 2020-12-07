@@ -7,7 +7,7 @@ package com.entity;
 public class User {
     private String username;
     private String password;
-    private String password2;
+    public String password2;
 
     public String getUsername() {
         return username;
