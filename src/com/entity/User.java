@@ -7,7 +7,7 @@ package com.entity;
 public class User {
     private String username;
     private String password;
-    public String password2;//陈立豪修改的
+    public Integer password2;//陈立豪修改的
     private String password3;//陈立豪新增的
 
     public String getUsername() {
