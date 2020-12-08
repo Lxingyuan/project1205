@@ -14,19 +14,17 @@ import java.lang.reflect.Method;
 public abstract class BaseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //防止中文乱码的金句
-/*        response.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("utf-8");
-        request.setCharacterEncoding("utf-8");*/
+        request.setCharacterEncoding("utf-8");
         doGet(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //金句：防止中文乱码
-   /*     response.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("utf-8");
-        request.setCharacterEncoding("utf-8");*/
+        request.setCharacterEncoding("utf-8");
         String action = request.getParameter("action");
         try {
             //获取action业务鉴别字符串 获取相应的业务 方法反射对象

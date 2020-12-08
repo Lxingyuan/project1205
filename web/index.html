@@ -2,9 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>注册页面</title>
+    <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap.js"></script>
+    <script>
+        $(function () {
+            //提交按钮
+            $("#submitButton").bind("click", function () {
+                //var username=encodeURI(encodeURI($("#username").val()));
+                var username=$("#username").val();
+                alert("username:"+username);
+                $.ajax({
+                    url: "/user.do?action=register",
+                    data: {username:username},
+                    type: "POST",
+                    dataType: "text",
+                    success: function (data) {
+                        alert("传回来:"+data)
+                    }
+                });
+            })
+        });
+    </script>
 </head>
 <body>
-     首页
+<center>
+    <font size="5">注册页</font>
+</center>
+<form action="#" method="get" id="form1">
+
+    用&ensp;户&ensp;名:<input type="text" name="username" size="30" id="username"/>
+    <button type="submit" id="submitButton">提交</button>
+    <button type="reset">重置</button>
+
+</form>
 </body>
 </html>
