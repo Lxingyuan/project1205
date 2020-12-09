@@ -1,0 +1,73 @@
+.content {
+    width: 1920px;
+    height: 1080px;
+    background-image: url("/static/images/loginBackground.jpg");
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+
+.div1 {
+    font-size: 40px;
+    font-family: "宋体";
+    color: #bec8d4;
+    position: relative;
+    top: 100px;
+    left: 140px;
+}
+
+.div2 {
+    font-size: 40px;
+    font-family: "宋体";
+    color: #ced8e4;
+    position: relative;
+    top: 180px;
+    left: 210px;
+}
+
+.div3 {
+    position: relative;
+    top: -50px;
+    left: 1110px;
+    width: 480px;
+    height: 680px;
+    border-radius:25px;
+    background: rgba(255,255,255,.9);
+    opacity: 90%;
+}
+
+.sp1{
+    color: #656b74;
+    margin-left: 40px;
+}
+
+.div4 {
+    /*border: 1px solid red;*/
+    width: 100%;
+    height: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    line-height: 50px;
+}
+
+.div4 input{
+    width: 70%;
+    height: 100%;
+    float: right;
+    margin-right: 40px;
+}
+.div4 span{
+    margin-left: 50px;
+}
+.div4 button{
+    height: 100%;
+    float: right;
+    position: relative;
+    top: -50px;
+    right: 40px;
+}
+.div4 .input1{
+    width: 40%;
+    height: 100%;
+    float: right;
+    margin-right: 182px;
+}
