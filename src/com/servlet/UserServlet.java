@@ -18,6 +18,7 @@ import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
  * 作者：林星源
  * 日期: 2020/12/1 16:08
  * 描述:用户执行操作
+ *  Win10
  */
 @WebServlet("/user.do")
 public class UserServlet extends BaseServlet {

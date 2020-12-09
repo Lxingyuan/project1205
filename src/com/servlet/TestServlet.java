@@ -21,7 +21,7 @@ import java.util.List;
  * @author ：liuyuntao
  * @date ：Created in 2020/12/4 16:07
  */
-@WebServlet("/user.do")
+@WebServlet("/user.do2")
 public class TestServlet extends BaseServlet {
 
     @Override

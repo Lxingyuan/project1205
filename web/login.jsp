@@ -22,6 +22,15 @@
 
         })
     </script>
+    <style type="text/css">
+        .content {
+            width: 1920px;
+            height: 1080px;
+            background-image: url("./static/images/loginBackground.jpg");
+            background-repeat: no-repeat;
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 <body>
 <div class="content" >

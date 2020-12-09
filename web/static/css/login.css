@@ -1,10 +1,10 @@
-.content {
+/*.content {
     width: 1920px;
     height: 1080px;
     background-image: url("/static/images/loginBackground.jpg");
     background-repeat: no-repeat;
     overflow-x: hidden;
-}
+}*/
 
 .div1 {
     font-size: 40px;
@@ -58,12 +58,10 @@
 .div4 span{
     margin-left: 50px;
 }
-.div4 button{
-    height: 100%;
-    float: right;
-    position: relative;
-    top: -50px;
-    right: 40px;
+.div4 button {
+    height: 95%;
+    margin-top: -48px;
+    margin-left: 325px;
 }
 .div4 .input1{
     width: 40%;
