@@ -1,6 +1,6 @@
 package com.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author Win10
@@ -9,19 +9,19 @@ public class Admin {
     private Integer id;
     private Integer createUserId;
     private Integer updateUserId;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private Date createTime;
+    private Date updateTime;
     private String title;
     private String userName;
     private String password;
-    private Timestamp LastTime;
+    private Date LastTime;
     private Integer logCount;
     private String headPic;
 
     public Admin() {
     }
 
-    public Admin(Integer createUserId, Integer updateUserId, Timestamp createTime, Timestamp updateTime, String title, String userName, String password, Timestamp lastTime, Integer logCount, String headPic) {
+    public Admin(Integer createUserId, Integer updateUserId, Date createTime, Date updateTime, String title, String userName, String password, Date lastTime, Integer logCount, String headPic) {
         this.createUserId = createUserId;
         this.updateUserId = updateUserId;
         this.createTime = createTime;
@@ -75,19 +75,19 @@ public class Admin {
         this.updateUserId = updateUserId;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -115,11 +115,11 @@ public class Admin {
         this.password = password;
     }
 
-    public Timestamp getLastTime() {
+    public Date getLastTime() {
         return LastTime;
     }
 
-    public void setLastTime(Timestamp lastTime) {
+    public void setLastTime(Date lastTime) {
         LastTime = lastTime;
     }
 
