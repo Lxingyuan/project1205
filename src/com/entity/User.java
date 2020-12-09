@@ -1,27 +1,27 @@
 package com.entity;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author Win10
  */
 public class User {
     private Integer userId;
-    private Timestamp createTime;
-    private Timestamp updateTime;
+    private Date createTime;
+    private Date updateTime;
     private String userName;
     private String userPassword;
     private String telephone;
     private String qq;
     private String email;
     private String sex;
-    private Timestamp registerTime;
+    private Date registerTime;
     private String headPic;
 
     public User() {
     }
 
-    public User(Timestamp createTime, Timestamp updateTime, String userName, String userPassword, String telephone, String qq, String email, String sex, Timestamp registerTime, String headPic) {
+    public User(Date createTime, Date updateTime, String userName, String userPassword, String telephone, String qq, String email, String sex, Date registerTime, String headPic) {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.userName = userName;
@@ -50,7 +50,7 @@ public class User {
                 '}';
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -58,19 +58,19 @@ public class User {
         this.userId = userId;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -122,11 +122,11 @@ public class User {
         this.sex = sex;
     }
 
-    public Timestamp getRegisterTime() {
+    public Date getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Timestamp registerTime) {
+    public void setRegisterTime(Date registerTime) {
         this.registerTime = registerTime;
     }
 
