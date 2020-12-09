@@ -14,7 +14,7 @@ public class Admin {
     private String title;
     private String userName;
     private String password;
-    private Date LastTime;
+    private Date lastTime;
     private Integer logCount;
     private String headPic;
 
@@ -29,7 +29,7 @@ public class Admin {
         this.title = title;
         this.userName = userName;
         this.password = password;
-        LastTime = lastTime;
+        this.lastTime = lastTime;
         this.logCount = logCount;
         this.headPic = headPic;
     }
@@ -45,7 +45,7 @@ public class Admin {
                 ", title='" + title + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-                ", LastTime=" + LastTime +
+                ", LastTime=" + lastTime +
                 ", logCount=" + logCount +
                 ", headPic='" + headPic + '\'' +
                 '}';
@@ -116,11 +116,11 @@ public class Admin {
     }
 
     public Date getLastTime() {
-        return LastTime;
+        return lastTime;
     }
 
     public void setLastTime(Date lastTime) {
-        LastTime = lastTime;
+        lastTime = lastTime;
     }
 
     public Integer getLogCount() {
