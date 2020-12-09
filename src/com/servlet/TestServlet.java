@@ -41,34 +41,6 @@ public class TestServlet extends BaseServlet {
     }
 
     public void register(HttpServletRequest request, HttpServletResponse response) throws IOException {
-       /* if (ServletFileUpload.isMultipartContent(request)) {
-            // 创建FileItemFactory 工厂实现类
-            FileItemFactory fileItemFactory = new DiskFileItemFactory();
-            //创建用于解析上传数据的工具类
-            ServletFileUpload servletFileUpload = new ServletFileUpload(fileItemFactory);
-            String date=null;
-            try {
-                //解析上传的数据 得到每一个表单项FileItem
-                List<FileItem> list = servletFileUpload.parseRequest(request);
-                //循环判断，每一个表单项 是普通类型 还是上传的文件
-                for (FileItem fileItem : list) {
-                    if (fileItem.isFormField()) {
-                        String str = fileItem.getFieldName();
-                        if ("username".equals(str)) {
-                            System.out.println("username:"+fileItem.getString());
-                            date=fileItem.getString();
-                        }
-                    } else {
-                        //文件项
-                    }
-                }
-            } catch (FileUploadException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            response.getWriter().write(date);
-        }*/
         String username=request.getParameter("username");
         System.out.println(username);
         response.getWriter().write("哈哈哈");
