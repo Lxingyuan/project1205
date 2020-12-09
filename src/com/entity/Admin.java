@@ -21,7 +21,13 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(Integer createUserId, Integer updateUserId, Date createTime, Date updateTime, String title, String userName, String password, Date lastTime, Integer logCount, String headPic) {
+    public Admin(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public Admin(Integer id, Integer createUserId, Integer updateUserId, Date createTime, Date updateTime, String title, String userName, String password, Date lastTime, Integer logCount, String headPic) {
+        this.id = id;
         this.createUserId = createUserId;
         this.updateUserId = updateUserId;
         this.createTime = createTime;
@@ -45,7 +51,7 @@ public class Admin {
                 ", title='" + title + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
-                ", LastTime=" + lastTime +
+                ", lastTime=" + lastTime +
                 ", logCount=" + logCount +
                 ", headPic='" + headPic + '\'' +
                 '}';

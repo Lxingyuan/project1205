@@ -21,6 +21,11 @@ public class User {
     public User() {
     }
 
+    public User(String userName, String userPassword) {
+        this.userName = userName;
+        this.userPassword = userPassword;
+    }
+
     public User(Date createTime, Date updateTime, String userName, String userPassword, String telephone, String qq, String email, String sex, Date registerTime, String headPic) {
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -50,7 +55,7 @@ public class User {
                 '}';
     }
 
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 

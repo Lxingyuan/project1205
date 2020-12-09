@@ -40,4 +40,18 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         String sql = "select * from user where UserName = ? and UserPassword = ?";
         return queryForOne(User.class, sql, user.getUserName(), user.getUserPassword());
     }
+
+    //查询当前表的总记录条数
+    @Override
+    public Integer queryPageTotalCounts() {
+        String sql = "select count(1) from user";
+        return Math.toIntExact((Long) queryForSingleValue(sql));
+    }
+
+    @Override
+    public List<User> queryUserByPage(Integer begin, Integer pageSize) {
+        String sql = "select * from user limit ?, ?";
+        return queryForList(User.class, sql, begin, pageSize);
+    }
+
 }

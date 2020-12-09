@@ -2,6 +2,7 @@ package com.dao;
 
 import com.entity.Admin;
 import com.entity.User;
+import com.utils.Page;
 
 import java.util.List;
 
@@ -50,4 +51,8 @@ public interface AdminDao {
      * @return
      */
     Admin queryAdminByNameAndPassword(Admin admin);
+
+    List<Admin> queryAdminByPage(Integer begin, Integer pageSize);
+
+    Integer queryPageTotalCounts();
 }

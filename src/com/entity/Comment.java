@@ -29,6 +29,19 @@ public class Comment {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "commentId=" + commentId +
+                ", commentTypeId=" + commentTypeId +
+                ", movieId=" + movieId +
+                ", commentUser='" + commentUser + '\'' +
+                ", commentContent='" + commentContent + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     public Integer getCommentId() {
         return commentId;
     }
