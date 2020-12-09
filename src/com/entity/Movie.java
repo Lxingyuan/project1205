@@ -37,6 +37,23 @@ public class Movie {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "movieId=" + movieId +
+                ", movieName='" + movieName + '\'' +
+                ", typeId=" + typeId +
+                ", director='" + director + '\'' +
+                ", protagonist='" + protagonist + '\'' +
+                ", showTime='" + showTime + '\'' +
+                ", picAddress='" + picAddress + '\'' +
+                ", content='" + content + '\'' +
+                ", hits=" + hits +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
+
     public Integer getMovieId() {
         return movieId;
     }
