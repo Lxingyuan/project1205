@@ -37,6 +37,9 @@
           <element id="library" level="project" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" />
           <element id="library" level="project" name="Maven: org.testng:testng:7.3.0" />
           <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.21" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.47" />
+          <element id="library" level="project" name="Maven: com.aliyun:aliyun-java-sdk-core:3.7.1" />
+          <element id="library" level="project" name="Maven: org.json:json:20170516" />
         </element>
       </element>
     </root>
