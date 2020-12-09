@@ -33,8 +33,8 @@ public class FileUtils {
             for (FileItem fileItem :
                     list) {
                 //上传的文件
-                StringBuilder sb = new StringBuilder("G:\\upload\\");
-                fileName.append(new Date().getTime());
+                StringBuilder sb = new StringBuilder("D:\\project1205\\images");
+                fileName.append(System.currentTimeMillis());
                 fileName.append(fileItem.getName());
                 sb.append(fileName);
                 imagePath = sb.toString();

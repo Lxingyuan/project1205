@@ -12,9 +12,11 @@ import java.util.Map;
 public class IPFilter implements Filter {
     private ServletContext servletContext;
 
+    @Override
     public void destroy() {
     }
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         //1.强转
         HttpServletRequest request = (HttpServletRequest) req;
