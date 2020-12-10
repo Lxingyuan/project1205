@@ -15,7 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/css/login.css" rel="stylesheet">
+    <link href="static/css/register.css" rel="stylesheet">
     <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -302,7 +302,7 @@
                 <span>密码:</span>
                 <input class="form-control" placeholder="请输入密码" name="password" type="password" id="password">
                 <img src="./static/images/showPassword.ico" id="img1"
-                     style="width: 35px;float: right;margin-top: -42px;margin-right: 50px">
+                     style="width: 35px;float: right;margin-top: -42px;margin-right: 70px">
             </div>
             <span id="pwd_prompt" class="sp2">密码可含数字、字母、下划线,4-10位字符</span>
             <div class="div4">
