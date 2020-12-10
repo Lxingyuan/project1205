@@ -113,6 +113,13 @@ public class UserServlet extends BaseServlet {
         String password = request.getParameter("password");
         String telephone = request.getParameter("telephone");
         //System.out.println(username+" "+password+" "+telephone);
+        User user=new User(username,password,telephone);
+        Integer result=userService.register(user);
+        if(result>0){
+            response.getWriter().write("true");
+        }else {
+            response.getWriter().write("false");
+        }
     }
 
 

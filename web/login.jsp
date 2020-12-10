@@ -139,6 +139,7 @@
                     dataType: "text",//返回的数据类型
                     success: function (data) {
                         code = data;
+                        console.log("后端生成验证码:"+code);
                     }
                 });
             };
@@ -227,8 +228,8 @@
             });
             //注册按钮
             $("#submitButton").bind("click", function () {
-                console.log("后端:" + code);
-                console.log("前端输入:" + $("#code").val());
+                //console.log("后端:" + code);
+                //console.log("前端输入:" + $("#code").val());
                 if (AccountTel() == true && AccountTel2() == true && AccountName() == true && AccountName2() == true
                     && AccountPsw() == true && code == $("#code").val()) {
                     console.log("信息通过,开始注册...")
@@ -250,6 +251,8 @@
                             //console.log("data:" + data);//data代表服务器回传的数据
                             if (data == "true") {
                                 alert("注册成功");
+                                window.location.reload();
+                                code=null;
                             }
                             else {
                                 alert("注册失败");
