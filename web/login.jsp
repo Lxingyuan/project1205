@@ -19,6 +19,133 @@
     <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
         $(function () {
+            //判断字符串是否为空
+            function isEmptyOrBlank(str) {
+                if (str == null || str.length == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            //用户名
+            function AccountName() {
+                var $accN = $("#username").val();
+                if (!isEmptyOrBlank($accN)) {	//不为空
+                    var $zz = /^[a-zA-Z]{1}\w{3,15}$/;
+                    if (!$zz.test($accN)) {
+                        $("#user_prompt").html("用户名由英文字母和数字组成的4-16位字符，以字母开头");
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {			//为空
+                    return false;
+                }
+            }
+            //手机号
+            function AccountTel() {
+                // alert("开始检测手机号")
+                var $accN = $("#telephone").val();
+                if (!isEmptyOrBlank($accN)) {	//不为空
+                    var $zz = /^1[3-9]\d{9}$/;
+                    if (!$zz.test($accN)) {
+                        $("#telephone_prompt").html("手机格式不正确！");
+                        //$("#telephone_prompt").show();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {			//为空
+                    return false;
+                }
+            }
+
+            //密码
+            function password() {
+                var $password = $("#password").val();
+                if (!isEmptyOrBlank($password)) {
+                    var $zz = /^\w{4,10}$/;
+                    if (!$zz.test($password)) {
+                        $("#pwd_prompt").show();
+                        return false;
+                    } else {
+                        return true;
+                    }
+                } else {
+                    $("#pwd_prompt").show();
+                    return false;
+                }
+            }
+
+            //用户名
+            $("#username").bind("focus", function () {
+                $("#user_prompt").hide();
+            });
+            $("#username").bind("blur", function () {
+                //AccountName();
+                if (AccountName() == true) {//格式正确
+                    //$("#user_prompt").show();
+                    var username = $("#username").val();
+                    $.ajax({
+                        url: "/user.do",//TODO:添加Servlet url-pattern
+                        data: {action: "queryUserByUsername", username: username},
+                        type: "GET",
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //data代表服务器回传的数据
+                            console.log(data);
+                            if (data == "true") {
+                                $("#user_prompt").html("<font color=\"green\">用户名可用!</font>");
+                            }
+                            else {
+                                $("#user_prompt").html("<font color=\"red\">用户名已存在!</font>");
+                            }
+                            $("#user_prompt").show();
+                        }
+                    });
+                } else {//格式不正确
+                    $("#user_prompt").show();
+                    return false;
+                }
+            });
+            //手机
+            $("#telephone").bind("focus", function () {
+                $("#telephone_prompt").hide();
+            });
+            $("#telephone").bind("blur", function () {
+                //telephone();
+                if (AccountTel() == true) {//格式正确
+                    //$("#user_prompt").show();
+                    var telephone = $("#telephone").val();
+                    $.ajax({
+                        url: "/user.do",//TODO:添加Servlet url-pattern
+                        data: {action: "queryUserByTelephone", telephone: telephone},
+                        type: "GET",
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //data代表服务器回传的数据
+                            console.log(data);
+                            if (data == "true") {
+                                $("#telephone_prompt").html("<font color=\"green\">手机号可用!</font>");
+                            }
+                            else {
+                                $("#telephone_prompt").html("<font color=\"red\">手机号已存在!</font>");
+                            }
+                            $("#telephone_prompt").show();
+                        }
+                    });
+                } else {//格式不正确
+                    $("#telephone_prompt").show();
+                    return false;
+                }
+            });
+            //密码
+            $("#password").bind("focus", function () {
+                $("#pwd_prompt").hide();
+            });
+            $("#password").bind("blur", function () {
+                password();
+            });
 
         })
     </script>
@@ -49,22 +176,24 @@
         <form>
             <div class="div4">
                 <span>用户名:</span>
-                <input class="form-control" placeholder="请输入用户名" name="username">
+                <input class="form-control" placeholder="请输入用户名" name="username" id="username">
             </div>
+            <span id="user_prompt" class="sp2" >用户名由英文字母和数字组成的4-16位字符，以字母开头</span>
             <div class="div4">
                 <span>手机号:</span>
-                <input class="form-control" placeholder="请输入手机号" name="telephone">
+                <input class="form-control" placeholder="请输入手机号" name="telephone" id="telephone">
             </div>
+            <span id="telephone_prompt" class="sp2" ></span>
             <div class="div4">
                 <span>密码:</span>
-                <input class="form-control" placeholder="请输入密码" name="password" type="password">
+                <input class="form-control" placeholder="请输入密码" name="password" type="password" id="password">
             </div>
             <div class="div4">
                 <span>验证码:</span>
-                <input class="form-control input1" placeholder="请输入验证码" name="code" >
+                <input class="form-control input1" placeholder="请输入验证码" name="code" id="code">
                 <button type="button" class="btn btn-default">获取验证码</button>
             </div>
-            <button id="submitButton" type="submit" class="btn btn-lg btn-success" style="width: 300px;margin-left: 81px;">注册</button>
+            <button id="submitButton" type="submit" class="btn btn-lg btn-success" style="width: 300px;margin-left: 84px;margin-top: 50px">注册</button>
 
         </form>
     </div>

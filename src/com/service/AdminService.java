@@ -23,4 +23,6 @@ public interface AdminService {
     Admin queryAdminByNameAndPassword(Admin admin);
 
     Page<Admin> queryByPage(int pageNo, int pageSize);
+
+    Admin queryUserByUsername(String username);
 }

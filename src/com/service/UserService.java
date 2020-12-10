@@ -23,4 +23,8 @@ public interface UserService {
     User queryUserById(Integer id);
 
     Page<User> queryByPage(int pageNo, int pageSize);
+
+    User queryUserByUsername(String username);
+
+    User queryUserByTelephone(String telephone);
 }

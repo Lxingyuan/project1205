@@ -57,4 +57,9 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         return queryForList(Admin.class, sql, begin, pageSize);
     }
 
+    @Override
+    public Admin queryUserByUsername(String username) {
+        String sql = "select * from admin where username=?";
+        return queryForOne(Admin.class, sql, username);
+    }
 }

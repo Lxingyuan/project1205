@@ -55,4 +55,6 @@ public interface AdminDao {
     List<Admin> queryAdminByPage(Integer begin, Integer pageSize);
 
     Integer queryPageTotalCounts();
+
+    Admin queryUserByUsername(String username);
 }
