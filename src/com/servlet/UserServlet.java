@@ -122,26 +122,27 @@ public class UserServlet extends BaseServlet {
         }
     }
 
-
-
-    //登录
+    /**
+     * 登录
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ServletException
+     * @throws InterruptedException
+     */
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, InterruptedException {
-        //防止中文乱码的金句
-        response.setContentType("text/html;charset=utf-8");
-        request.setCharacterEncoding("utf-8");
-        //获取验证码
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.println("username:" + username);
-        System.out.println("password:" + password);
+        //System.out.println("username:" + username);
+        //System.out.println("password:" + password);
         User user = userService.login(new User(username, password));
-        System.out.println(user);
+        //System.out.println(user);
         if (user != null) {
             //登录成功
-            response.getWriter().write("false");
-        } else {
             response.getWriter().write("true");
             request.getSession().setAttribute("user,", user);
+        } else {
+            response.getWriter().write("false");
         }
     }
 }

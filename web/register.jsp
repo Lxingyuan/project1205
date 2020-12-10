@@ -17,6 +17,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/register.css" rel="stylesheet">
     <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
+    <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
     <script type="text/javascript">
         $(function () {
             //验证码
@@ -139,7 +141,7 @@
                     dataType: "text",//返回的数据类型
                     success: function (data) {
                         code = data;
-                        console.log("后端生成验证码:"+code);
+                        console.log("后端生成验证码:" + code);
                     }
                 });
             };
@@ -206,12 +208,19 @@
             $("#password").bind("blur", function () {
                 AccountPsw();
             });
-            //显示密码
+            //显示密码(注册)
             $("#img1").bind("mouseover", function () {
                 $("#password").attr("type", "text");
             });
             $("#img1").bind("mouseout", function () {
                 $("#password").attr("type", "password");
+            });
+            //显示密码(登录)
+            $("#img2").bind("mouseover", function () {
+                $("#password2").attr("type", "text");
+            });
+            $("#img2").bind("mouseout", function () {
+                $("#password2").attr("type", "password");
             });
             //发送验证码
             $("#sendCode").bind("click", function () {
@@ -250,16 +259,61 @@
                         success: function (data) {
                             //console.log("data:" + data);//data代表服务器回传的数据
                             if (data == "true") {
-                                alert("注册成功");
+                                swal("注册成功!", "", "success");
+                                //alert("注册成功");
                                 window.location.reload();
-                                code=null;
+                                code = null;
                             }
                             else {
-                                alert("注册失败");
+                                swal("注册失败!", "", "error");
+                                //alert("注册失败");
                             }
                         }
                     });
                 }
+            });
+            //去登录
+            $("#toLogin").bind("click", function () {
+                //console.log("点击了发送验证码")
+                $("#registerDiv").hide();
+                $("#loginDiv").show();
+            });
+            //去注册
+            $("#toRegister").bind("click", function () {
+                //console.log("点击了发送验证码")
+                $("#loginDiv").hide();
+                $("#registerDiv").show();
+            });
+
+            //登录按钮
+            $("#loginButton").bind("click", function () {
+                //console.log("后端:" + code);
+                //console.log("前端输入:" + $("#code").val());
+
+                var username = $("#username2").val();
+                var password = $("#password2").val();
+
+                $.ajax({
+                    url: "/user.do",
+                    data: {
+                        action: "login",
+                        username: username,
+                        password: password,
+                    },
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            alert("登录成功");
+                        }
+                        else {
+                            alert("用户名或密码错误！");
+                        }
+                    }
+                });
+
             });
         })
     </script>
@@ -282,11 +336,11 @@
         <span><i><b>注册后</b></i></span><br>
         <span><i><b>与网友畅所欲言！</b></i></span>
     </div>
-    <div class="div3">
+    <div class="div3" id="registerDiv">
         <br>
         <h1>&nbsp;&nbsp;&nbsp;&nbsp;<b>欢迎注册</b></h1>
         <span class="sp1">已有账号?</span>
-        <span><a href="#" style="text-decoration: none">登录</a></span>
+        <span><a href="#" style="text-decoration: none" id="toLogin">登录</a></span>
         <form>
             <div class="div4">
                 <span>用户名:</span>
@@ -314,6 +368,28 @@
                     style="width: 300px;margin-left: 84px;margin-top: 50px">注册
             </button>
 
+        </form>
+    </div>
+
+    <div class="div3" style="display: none;height: 500px" id="loginDiv">
+        <br>
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;<b>欢迎登录</b></h1>
+        <span class="sp1">没有账号?</span>
+        <span><a href="#" style="text-decoration: none" id="toRegister">注册</a></span>
+        <form>
+            <div class="div4">
+                <span>用户名:</span>
+                <input class="form-control" placeholder="请输入用户名" name="username2" id="username2">
+            </div>
+            <div class="div4">
+                <span>密码:</span>
+                <input class="form-control" placeholder="请输入密码" name="password2" type="password" id="password2">
+                <img src="./static/images/showPassword.ico" id="img2"
+                     style="width: 35px;float: right;margin-top: -42px;margin-right: 70px">
+            </div>
+            <button id="loginButton" type="button" class="btn btn-lg btn-success"
+                    style="width: 300px;margin-left: 84px;margin-top: 50px">登录
+            </button>
         </form>
     </div>
 </div>
