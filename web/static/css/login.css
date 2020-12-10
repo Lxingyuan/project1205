@@ -45,7 +45,6 @@
     width: 100%;
     height: 50px;
     margin-top: 50px;
-    margin-bottom: 50px;
     line-height: 50px;
 }
 
@@ -57,6 +56,13 @@
 }
 .div4 span{
     margin-left: 50px;
+}
+/*登录界面提示文字*/
+.sp2{
+    margin-left: 104px;
+    position: relative;
+    top: 10px;
+    color: red;
 }
 .div4 button {
     height: 95%;

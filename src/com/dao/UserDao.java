@@ -23,4 +23,8 @@ public interface UserDao {
     Integer queryPageTotalCounts();
 
     List<User> queryUserByPage(Integer pageNo, Integer pageSize);
+
+    User queryUserByUsername(String username);
+
+    User queryUserByTelephone(String telephone);
 }

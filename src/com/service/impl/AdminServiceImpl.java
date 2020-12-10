@@ -72,4 +72,9 @@ public class AdminServiceImpl implements AdminService {
         page.setItems(items);
         return page;
     }
+
+    @Override
+    public Admin queryUserByUsername(String username) {
+        return adminDao.queryUserByUsername(username);
+    }
 }
