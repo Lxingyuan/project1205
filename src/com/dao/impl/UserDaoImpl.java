@@ -71,4 +71,5 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         String sql = "select * from user where telephone=?";
         return queryForOne(User.class, sql, telephone);
     }
+
 }

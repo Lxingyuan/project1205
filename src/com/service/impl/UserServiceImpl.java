@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
         return userDao.queryUserByUsername(username);
     }
 
+
     @Override
     public User queryUserByTelephone(String telephone) {
         return userDao.queryUserByTelephone(telephone);

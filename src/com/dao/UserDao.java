@@ -27,4 +27,5 @@ public interface UserDao {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
+
 }

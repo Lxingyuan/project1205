@@ -68,4 +68,5 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         String sql = "select * from user limit ?, ?";
         return queryForList(Admin.class, sql, begin, pageSize);
     }
+
 }

@@ -27,4 +27,5 @@ public interface AdminService {
     Page<Admin> queryAdminByPage(int pageNo, int pageSize);
 
     Admin queryUserByUsername(String username);
+
 }

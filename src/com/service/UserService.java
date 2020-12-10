@@ -32,4 +32,5 @@ public interface UserService {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
+
 }
