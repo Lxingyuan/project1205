@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
- * @author ：liuyuntao
- * @date ：Created in 2020/12/1 14:50
+ * 作者：林星源
+ * 日期: 2020/12/7 16:08
+ * 描述:
+ *
  */
 public abstract class BaseServlet extends HttpServlet {
     @Override

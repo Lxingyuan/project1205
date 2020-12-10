@@ -11,6 +11,6 @@ import org.junit.Test;
 public class Test1 {
     @Test
     public void t1() throws ClientException {
-        SmsUtil.sendSms("15277323599","1234");
+        SmsUtil.sendSms("18805026635","1234");
     }
 }
