@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>注册网站账号</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/login.css" rel="stylesheet">
@@ -27,7 +27,8 @@
                     return false;
                 }
             }
-            //用户名
+
+            //用户名格式判断
             function AccountName() {
                 var $accN = $("#username").val();
                 if (!isEmptyOrBlank($accN)) {	//不为空
@@ -42,7 +43,8 @@
                     return false;
                 }
             }
-            //手机号
+
+            //手机号格式判断
             function AccountTel() {
                 // alert("开始检测手机号")
                 var $accN = $("#telephone").val();
@@ -50,7 +52,6 @@
                     var $zz = /^1[3-9]\d{9}$/;
                     if (!$zz.test($accN)) {
                         $("#telephone_prompt").html("手机格式不正确！");
-                        //$("#telephone_prompt").show();
                         return false;
                     } else {
                         return true;
@@ -60,7 +61,7 @@
                 }
             }
 
-            //密码
+            //密码格式判断
             function password() {
                 var $password = $("#password").val();
                 if (!isEmptyOrBlank($password)) {
@@ -77,76 +78,134 @@
                 }
             }
 
-            //用户名
+            //用户名查重判断
+            function AccountName2() {
+                var username = $("#username").val();
+                var flag = true;
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "queryUserByUsername", username: username},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            flag = true;
+                        }
+                        else {
+                            flag = false;
+                        }
+                    }
+                });
+                return flag;
+            };
+
+            //手机号查重判断
+            function AccountTel2() {
+                var telephone = $("#telephone").val();
+                var flag = false;
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "queryUserByTelephone", telephone: telephone},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            flag = true;
+                        }
+                        else {
+                            flag = false;
+                        }
+                    }
+                });
+                return flag;
+            };
+
+            //发送验证码
+            function SendCode() {
+                var flag = true;
+                var telephone = $("#telephone").val();
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "sendCode",telephone: telephone},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            flag = true;
+                        }
+                        else {
+                            flag = false;
+                        }
+                    }
+                });
+                return flag;
+            };
+            //用户名绑定事件
             $("#username").bind("focus", function () {
                 $("#user_prompt").hide();
             });
             $("#username").bind("blur", function () {
-                //AccountName();
                 if (AccountName() == true) {//格式正确
-                    //$("#user_prompt").show();
-                    var username = $("#username").val();
-                    $.ajax({
-                        url: "/user.do",//TODO:添加Servlet url-pattern
-                        data: {action: "queryUserByUsername", username: username},
-                        type: "GET",
-                        dataType: "text",//返回的数据类型
-                        success: function (data) {
-                            //data代表服务器回传的数据
-                            console.log(data);
-                            if (data == "true") {
-                                $("#user_prompt").html("<font color=\"green\">用户名可用!</font>");
-                            }
-                            else {
-                                $("#user_prompt").html("<font color=\"red\">用户名已存在!</font>");
-                            }
-                            $("#user_prompt").show();
-                        }
-                    });
+                    if (AccountName2() == true) {
+                        $("#user_prompt").html("<font color=\"green\">用户名可用!</font>");
+                    } else {
+                        $("#user_prompt").html("<font color=\"red\">用户名已存在!</font>");
+                    }
+                    $("#user_prompt").show();
                 } else {//格式不正确
                     $("#user_prompt").show();
                     return false;
                 }
             });
-            //手机
+            //手机绑定事件
             $("#telephone").bind("focus", function () {
                 $("#telephone_prompt").hide();
             });
             $("#telephone").bind("blur", function () {
-                //telephone();
                 if (AccountTel() == true) {//格式正确
-                    //$("#user_prompt").show();
-                    var telephone = $("#telephone").val();
-                    $.ajax({
-                        url: "/user.do",//TODO:添加Servlet url-pattern
-                        data: {action: "queryUserByTelephone", telephone: telephone},
-                        type: "GET",
-                        dataType: "text",//返回的数据类型
-                        success: function (data) {
-                            //data代表服务器回传的数据
-                            console.log(data);
-                            if (data == "true") {
-                                $("#telephone_prompt").html("<font color=\"green\">手机号可用!</font>");
-                            }
-                            else {
-                                $("#telephone_prompt").html("<font color=\"red\">手机号已存在!</font>");
-                            }
-                            $("#telephone_prompt").show();
-                        }
-                    });
+                    //console.log("AccountTel2():" + AccountTel2());
+                    if (AccountTel2() == true) {
+                        $("#telephone_prompt").html("<font color=\"green\">手机号可用!</font>");
+                    } else {
+                        $("#telephone_prompt").html("<font color=\"red\">手机号已存在!</font>");
+                    }
+                    $("#telephone_prompt").show();
                 } else {//格式不正确
                     $("#telephone_prompt").show();
                     return false;
                 }
             });
-            //密码
+            //密码绑定事件
             $("#password").bind("focus", function () {
                 $("#pwd_prompt").hide();
             });
             $("#password").bind("blur", function () {
                 password();
             });
-
+            //显示密码
+            $("#img1").bind("mouseover", function () {
+                $("#password").attr("type", "text");
+            });
+            $("#img1").bind("mouseout", function () {
+                $("#password").attr("type", "password");
+            });
+            //发送验证码
+            $("#sendCode").bind("click", function () {
+                //console.log("点击了发送验证码")
+                if (AccountTel() == true && AccountTel2() == true) {
+                    var result=SendCode();
+                    console.log("result:"+result);
+                    console.log("已发送验证码");
+                } else {
+                    console.log("错误")
+                }
+            });
         })
     </script>
     <style type="text/css">
@@ -160,7 +219,7 @@
     </style>
 </head>
 <body>
-<div class="content" >
+<div class="content">
     <div class="div1">
         <span><i><b>欢迎光临本网站</b></i></span>
     </div>
@@ -178,27 +237,31 @@
                 <span>用户名:</span>
                 <input class="form-control" placeholder="请输入用户名" name="username" id="username">
             </div>
-            <span id="user_prompt" class="sp2" >用户名由英文字母和数字组成的4-16位字符，以字母开头</span>
+            <span id="user_prompt" class="sp2">用户名由英文字母和数字组成的4-16位字符，以字母开头</span>
             <div class="div4">
                 <span>手机号:</span>
                 <input class="form-control" placeholder="请输入手机号" name="telephone" id="telephone">
             </div>
-            <span id="telephone_prompt" class="sp2" ></span>
+            <span id="telephone_prompt" class="sp2"></span>
             <div class="div4">
                 <span>密码:</span>
                 <input class="form-control" placeholder="请输入密码" name="password" type="password" id="password">
+                <img src="./static/images/showPassword.ico" id="img1"
+                     style="width: 35px;float: right;margin-top: -42px;margin-right: 50px">
             </div>
+            <span id="pwd_prompt" class="sp2">密码可含数字、字母、下划线,4-10位字符</span>
             <div class="div4">
                 <span>验证码:</span>
                 <input class="form-control input1" placeholder="请输入验证码" name="code" id="code">
-                <button type="button" class="btn btn-default">获取验证码</button>
+                <button type="button" class="btn btn-default" id="sendCode">获取验证码</button>
             </div>
-            <button id="submitButton" type="submit" class="btn btn-lg btn-success" style="width: 300px;margin-left: 84px;margin-top: 50px">注册</button>
+            <button id="submitButton" type="submit" class="btn btn-lg btn-success"
+                    style="width: 300px;margin-left: 84px;margin-top: 50px">注册
+            </button>
 
         </form>
     </div>
 </div>
-
 
 
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->

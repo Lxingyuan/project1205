@@ -1,5 +1,6 @@
 package com.servlet;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.entity.Admin;
 import com.google.gson.Gson;
 import com.entity.User;
@@ -8,6 +9,7 @@ import com.service.UserService;
 import com.service.impl.AdminServiceImpl;
 import com.service.impl.UserServiceImpl;
 import com.utils.Page;
+import com.utils.SmsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +29,10 @@ import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
 public class UserServlet extends BaseServlet {
     UserService userService = new UserServiceImpl();
     AdminService adminService = new AdminServiceImpl();
-
+    /**
+     * 验证码
+     */
+    private String code="";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -80,6 +85,21 @@ public class UserServlet extends BaseServlet {
         response.getWriter().write(message);
     }
 
+    /**
+     * 发送验证码
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClientException
+     */
+    public void sendCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
+        String telephone = request.getParameter("telephone");
+        //math.random()范围[0.0, 1.0)，那么math.random()*9+1一定是小于10的，*100000一定是<1000000的一个数
+        code=Integer.toString((int)((Math.random()*9+1)*100000));
+        System.out.println("code:"+code);
+        SmsUtil.sendSms(telephone,code);
+        response.getWriter().write("true");
+    }
     //登录
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, InterruptedException {
         //防止中文乱码的金句
