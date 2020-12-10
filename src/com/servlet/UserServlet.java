@@ -51,7 +51,7 @@ public class UserServlet extends BaseServlet {
 
     public void queryPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page<User> page = userService.queryByPage(pageNo, Page.PAGE_SIZE);
+        Page<User> page = userService.queryUserByPage(pageNo, Page.PAGE_SIZE);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
@@ -97,9 +97,28 @@ public class UserServlet extends BaseServlet {
         //math.random()范围[0.0, 1.0)，那么math.random()*9+1一定是小于10的，*100000一定是<1000000的一个数
         code=Integer.toString((int)((Math.random()*9+1)*100000));
         System.out.println("code:"+code);
-        SmsUtil.sendSms(telephone,code);
-        response.getWriter().write("true");
+        //SmsUtil.sendSms(telephone,code);
+        response.getWriter().write(code);
     }
+
+    /**
+     * 注册用户
+     * @param request
+     * @param response
+     * @throws IOException
+     * @throws ClientException
+     */
+    public void register(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String telephone = request.getParameter("telephone");
+        //System.out.println(username+" "+password+" "+telephone);
+    }
+
+
+
+
+
     //登录
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, InterruptedException {
         //防止中文乱码的金句

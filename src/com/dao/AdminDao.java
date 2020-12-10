@@ -29,4 +29,6 @@ public interface AdminDao {
 
     Integer queryPageTotalCounts();
 
+    Admin queryUserByUsername(String username);
+
 }

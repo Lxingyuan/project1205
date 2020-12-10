@@ -29,5 +29,7 @@ public interface UserService {
     //用户分页
     Page<User> queryUserByPage(int pageNo, int pageSize);
 
+    User queryUserByUsername(String username);
 
+    User queryUserByTelephone(String telephone);
 }

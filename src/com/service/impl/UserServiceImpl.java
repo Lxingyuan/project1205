@@ -16,30 +16,32 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     UserDao userDao = new UserDaoImpl();
 
+    @Override
     public int register(User user) {
         return userDao.insertUser(user);
     }
 
+    @Override
     public User login(User user) {
         return userDao.queryUserByNameAndPassword(user);
     }
-
+    @Override
     public int update(User user) {
         return userDao.updateUser(user);
     }
-
+    @Override
     public User queryUserById(Integer id) {
         return userDao.queryUserById(id);
     }
-
+    @Override
     public User queryUserByName(String username){
         return userDao.queryUserByName(username);
     }
-
+    @Override
     public User queryUserByNameAndPassword(User user){
         return userDao.queryUserByNameAndPassword(user);
     }
-
+    @Override
     public Page<User> queryUserByPage(int pageNo, int pageSize) {
         Page<User> page = new Page<>();
         //设置当前页码
@@ -64,6 +66,16 @@ public class UserServiceImpl implements UserService {
         //设置数据
         page.setItems(items);
         return page;
+    }
+
+    @Override
+    public User queryUserByUsername(String username) {
+        return userDao.queryUserByUsername(username);
+    }
+
+    @Override
+    public User queryUserByTelephone(String telephone) {
+        return userDao.queryUserByTelephone(telephone);
     }
 
 

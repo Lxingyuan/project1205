@@ -19,6 +19,9 @@
     <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
         $(function () {
+            //验证码
+            var code;
+
             //判断字符串是否为空
             function isEmptyOrBlank(str) {
                 if (str == null || str.length == 0) {
@@ -32,9 +35,9 @@
             function AccountName() {
                 var $accN = $("#username").val();
                 if (!isEmptyOrBlank($accN)) {	//不为空
-                    var $zz = /^[a-zA-Z]{1}\w{3,15}$/;
+                    var $zz = /^(\w|[\u4e00-\u9fa5]){4,16}$/;
                     if (!$zz.test($accN)) {
-                        $("#user_prompt").html("用户名由英文字母和数字组成的4-16位字符，以字母开头");
+                        $("#user_prompt").html("用户名由英文字母、数字或中文组成的，4-16位");
                         return false;
                     } else {
                         return true;
@@ -62,7 +65,7 @@
             }
 
             //密码格式判断
-            function password() {
+            function AccountPsw() {
                 var $password = $("#password").val();
                 if (!isEmptyOrBlank($password)) {
                     var $zz = /^\w{4,10}$/;
@@ -126,26 +129,40 @@
 
             //发送验证码
             function SendCode() {
-                var flag = true;
+                //var flag = true;
                 var telephone = $("#telephone").val();
                 $.ajax({
                     url: "/user.do",
-                    data: {action: "sendCode",telephone: telephone},
+                    data: {action: "sendCode", telephone: telephone},
                     type: "GET",
                     async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                     dataType: "text",//返回的数据类型
                     success: function (data) {
-                        //console.log("data:" + data);//data代表服务器回传的数据
-                        if (data == "true") {
-                            flag = true;
-                        }
-                        else {
-                            flag = false;
-                        }
+                        code = data;
                     }
                 });
-                return flag;
             };
+
+            //发送验证码倒计时
+            var countdown = 3;
+
+            function setTime(obj) {
+                if (countdown == 0) {
+                    obj.attr('disabled', false);
+                    obj.html("获取验证码");
+                    countdown = 3;
+                    return;
+                } else {
+                    obj.attr('disabled', true);
+                    obj.html("倒计时:" + countdown + "s");
+                    //console.log("countdown:" + countdown);
+                    countdown--;
+                }
+                setTimeout(function () {
+                    setTime(obj)
+                }, 1000);
+            }
+
             //用户名绑定事件
             $("#username").bind("focus", function () {
                 $("#user_prompt").hide();
@@ -186,7 +203,7 @@
                 $("#pwd_prompt").hide();
             });
             $("#password").bind("blur", function () {
-                password();
+                AccountPsw();
             });
             //显示密码
             $("#img1").bind("mouseover", function () {
@@ -199,11 +216,46 @@
             $("#sendCode").bind("click", function () {
                 //console.log("点击了发送验证码")
                 if (AccountTel() == true && AccountTel2() == true) {
-                    var result=SendCode();
-                    console.log("result:"+result);
+                    //var result=SendCode();
+                    //console.log("result:"+result);
+                    SendCode();
                     console.log("已发送验证码");
+                    setTime($(this));
                 } else {
-                    console.log("错误")
+                    console.log("手机错误")
+                }
+            });
+            //注册按钮
+            $("#submitButton").bind("click", function () {
+                console.log("后端:" + code);
+                console.log("前端输入:" + $("#code").val());
+                if (AccountTel() == true && AccountTel2() == true && AccountName() == true && AccountName2() == true
+                    && AccountPsw() == true && code == $("#code").val()) {
+                    console.log("信息通过,开始注册...")
+                    var username = $("#username").val();
+                    var password = $("#password").val();
+                    var telephone = $("#telephone").val();
+                    $.ajax({
+                        url: "/user.do",
+                        data: {
+                            action: "register",
+                            username: username,
+                            password: password,
+                            telephone: telephone
+                        },
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                alert("注册成功");
+                            }
+                            else {
+                                alert("注册失败");
+                            }
+                        }
+                    });
                 }
             });
         })
@@ -237,7 +289,7 @@
                 <span>用户名:</span>
                 <input class="form-control" placeholder="请输入用户名" name="username" id="username">
             </div>
-            <span id="user_prompt" class="sp2">用户名由英文字母和数字组成的4-16位字符，以字母开头</span>
+            <span id="user_prompt" class="sp2">用户名由英文字母、数字或中文组成的，4-16位</span>
             <div class="div4">
                 <span>手机号:</span>
                 <input class="form-control" placeholder="请输入手机号" name="telephone" id="telephone">
@@ -253,9 +305,9 @@
             <div class="div4">
                 <span>验证码:</span>
                 <input class="form-control input1" placeholder="请输入验证码" name="code" id="code">
-                <button type="button" class="btn btn-default" id="sendCode">获取验证码</button>
+                <button type="button" class="btn btn-default" id="sendCode" value="获取验证码">获取验证码</button>
             </div>
-            <button id="submitButton" type="submit" class="btn btn-lg btn-success"
+            <button id="submitButton" type="button" class="btn btn-lg btn-success"
                     style="width: 300px;margin-left: 84px;margin-top: 50px">注册
             </button>
 
