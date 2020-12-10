@@ -10,7 +10,7 @@ import java.util.Date;
 public class Movie {
     private Integer movieId;
     private String movieName;
-    private Integer typeId;
+    private String type;
     private String director;
     private String protagonist;
     private String showTime;
@@ -23,10 +23,10 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Integer movieId, String movieName, Integer typeId, String director, String protagonist, String showTime, String picAddress, String content, Integer hits, Date createTime, Date updateTime) {
+    public Movie(Integer movieId, String movieName, String type, String director, String protagonist, String showTime, String picAddress, String content, Integer hits, Date createTime, Date updateTime) {
         this.movieId = movieId;
         this.movieName = movieName;
-        this.typeId = typeId;
+        this.type = type;
         this.director = director;
         this.protagonist = protagonist;
         this.showTime = showTime;
@@ -42,7 +42,7 @@ public class Movie {
         return "Movie{" +
                 "movieId=" + movieId +
                 ", movieName='" + movieName + '\'' +
-                ", typeId=" + typeId +
+                ", type='" + type + '\'' +
                 ", director='" + director + '\'' +
                 ", protagonist='" + protagonist + '\'' +
                 ", showTime='" + showTime + '\'' +
@@ -70,12 +70,12 @@ public class Movie {
         this.movieName = movieName;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDirector() {

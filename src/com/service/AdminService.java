@@ -20,7 +20,9 @@ public interface AdminService {
 
     Admin queryUserById(Integer userId);
 
+    Admin queryAdminByName(String username);
+
     Admin queryAdminByNameAndPassword(Admin admin);
 
-    Page<Admin> queryByPage(int pageNo, int pageSize);
+    Page<Admin> queryAdminByPage(int pageNo, int pageSize);
 }

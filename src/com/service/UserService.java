@@ -6,9 +6,9 @@ import com.utils.Page;
 import java.util.List;
 
 /**
- * 作者：LiuYunTao
- * 日期: 16:00 2020/11/26
- * 描述：
+ * 作者：林星源
+ * 日期: 2020/12/9 15:31
+ * 描述:
  */
 public interface UserService {
     //注册
@@ -22,5 +22,12 @@ public interface UserService {
 
     User queryUserById(Integer id);
 
-    Page<User> queryByPage(int pageNo, int pageSize);
+    User queryUserByName(String username);
+
+    User queryUserByNameAndPassword(User user);
+
+    //用户分页
+    Page<User> queryUserByPage(int pageNo, int pageSize);
+
+
 }

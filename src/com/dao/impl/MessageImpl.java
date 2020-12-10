@@ -8,9 +8,9 @@ import java.util.List;
 
 
 /**
- * 作者：LiuYunTao
- * 日期: 19:40 2020/11/26
- * 描述：
+ * 作者：林星源
+ * 日期: 2020/12/9 11:29
+ * 描述:
  */
 public class MessageImpl extends BaseDao implements MessageDao {
     @Override

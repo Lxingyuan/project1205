@@ -15,8 +15,7 @@ import java.util.List;
  * 描述:
  */
 public class AdminServiceImpl implements AdminService {
-    AdminDao adminDao=new AdminDaoImpl();
-
+    AdminDao adminDao = new AdminDaoImpl();
 
     @Override
     public int updateAdmin(Admin admin) {
@@ -38,13 +37,17 @@ public class AdminServiceImpl implements AdminService {
         return adminDao.queryUserById(userId);
     }
 
+    public Admin queryAdminByName(String username) {
+        return adminDao.queryAdminByName(username);
+    }
+
     @Override
     public Admin queryAdminByNameAndPassword(Admin admin) {
         return adminDao.queryAdminByNameAndPassword(admin);
     }
 
     @Override
-    public Page<Admin> queryByPage(int pageNo, int pageSize) {
+    public Page<Admin> queryAdminByPage(int pageNo, int pageSize) {
         Page<Admin> page = new Page<>();
         //设置当前页码
         page.setPageNo(pageNo);
@@ -55,16 +58,16 @@ public class AdminServiceImpl implements AdminService {
         //设置总记录数
         page.setPageTotalCount(pageTotalCount);
         //求总页码
-        Integer pageTotal =pageTotalCount/pageSize;
-        if (pageTotalCount%pageSize>0){
-            pageTotal+=1;
+        Integer pageTotal = pageTotalCount / pageSize;
+        if (pageTotalCount % pageSize > 0) {
+            pageTotal += 1;
         }
         //设置总页码
         page.setPageTotal(pageTotal);
         //求开始页码
-        int begin = (page.getPageNo()-1)*pageSize;
+        int begin = (page.getPageNo() - 1) * pageSize;
         //获取开始页码的分页数据
-        List<Admin> items=adminDao.queryAdminByPage(begin,pageSize);
+        List<Admin> items = adminDao.queryAdminByPage(begin, pageSize);
         //设置数据
         page.setItems(items);
         return page;

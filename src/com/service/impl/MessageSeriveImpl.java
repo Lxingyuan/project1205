@@ -8,9 +8,9 @@ import com.service.MessageSerive;
 import java.util.List;
 
 /**
- * 作者：LiuYunTao
- * 日期: 20:06 2020/11/26
- * 描述：
+ * 作者：林星源
+ * 日期: 2020/12/9 15:31
+ * 描述:
  */
 public class MessageSeriveImpl implements MessageSerive {
     MessageDao messageDao = new MessageImpl();

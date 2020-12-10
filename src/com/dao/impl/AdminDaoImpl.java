@@ -38,6 +38,11 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         return null;
     }
 
+    public  Admin queryAdminByName(String adminName){
+        String sql="select * from admin where UserName=?";
+        return queryForOne(Admin.class, sql, adminName);
+    }
+
     @Override
     public Admin queryAdminByNameAndPassword(Admin admin) {
         String sql = "select * from admin where UserName = ? and Password = ?";
@@ -56,5 +61,4 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         String sql = "select * from user limit ?, ?";
         return queryForList(Admin.class, sql, begin, pageSize);
     }
-
 }

@@ -9,9 +9,9 @@ import com.utils.Page;
 import java.util.List;
 
 /**
- * 作者：LiuYunTao
- * 日期: 18:22 2020/11/26
- * 描述：
+ * 作者：林星源
+ * 日期: 2020/12/9 15:31
+ * 描述:
  */
 public class UserServiceImpl implements UserService {
     UserDao userDao = new UserDaoImpl();
@@ -32,7 +32,15 @@ public class UserServiceImpl implements UserService {
         return userDao.queryUserById(id);
     }
 
-    public Page<User> queryByPage(int pageNo, int pageSize) {
+    public User queryUserByName(String username){
+        return userDao.queryUserByName(username);
+    }
+
+    public User queryUserByNameAndPassword(User user){
+        return userDao.queryUserByNameAndPassword(user);
+    }
+
+    public Page<User> queryUserByPage(int pageNo, int pageSize) {
         Page<User> page = new Page<>();
         //设置当前页码
         page.setPageNo(pageNo);
@@ -57,4 +65,6 @@ public class UserServiceImpl implements UserService {
         page.setItems(items);
         return page;
     }
+
+
 }

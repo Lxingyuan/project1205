@@ -1,16 +1,16 @@
-package com.dao;
+package com.service;
 
 import com.entity.Comment;
+import com.utils.Page;
 
 import java.util.List;
 
 /**
  * 作者：林星源
- * 日期: 2020/12/9 11:14
+ * 日期: 2020/12/10 14:41
  * 描述:
  */
-public interface CommentDao {
-
+public interface CommentService {
     //添加评论信息
     int insertComment(Comment comment);
 
@@ -19,8 +19,6 @@ public interface CommentDao {
 
     //删除评论信息
     int deleteComment(Integer commentId);
-
-    Integer queryPageTotalCounts();
-
-    List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);
+    //评论页面
+    Page<Comment> queryCommentByPage(int pageNo, int pageSize);
 }

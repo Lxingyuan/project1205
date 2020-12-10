@@ -16,6 +16,8 @@ public interface UserDao {
 
     User queryUserById(Integer id);
 
+    User queryUserByName(String username);
+
     User queryUserByNameAndPassword(User user);
 
     Integer queryPageTotalCounts();

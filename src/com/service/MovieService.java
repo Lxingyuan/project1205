@@ -1,17 +1,14 @@
-package com.dao;
+package com.service;
 
 import com.entity.Movie;
-import com.entity.User;
-
-import java.util.Date;
-import java.util.List;
+import com.utils.Page;
 
 /**
  * 作者：林星源
- * 日期: 2020/12/9 11:13
- * 描述:电影
+ * 日期: 2020/12/10 14:41
+ * 描述:
  */
-public interface MovieDao {
+public interface MovieService {
     //添加电影信息
     int insertMovie(Movie movie);
 
@@ -39,7 +36,6 @@ public interface MovieDao {
     //按浏览次数查询电影
     Movie queryMovieByHits(Integer hits);
 
-    Integer queryPageTotalCounts();
-
-    List<Movie> queryMovieByPage(Integer pageNo, Integer pageSize);
+    //电影分页
+    Page<Movie> queryMovieByPage(int pageNo, int pageSize);
 }

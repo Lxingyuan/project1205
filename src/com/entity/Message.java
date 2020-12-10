@@ -2,9 +2,9 @@ package com.entity;
 
 
 /**
- * 作者：LiuYunTao
- * 日期: 15:37 2020/11/26
- * 描述：
+ * 作者：林星源
+ * 日期: 2020/12/9 10:39
+ * 描述:
  */
 public class Message {
     private Integer id;
