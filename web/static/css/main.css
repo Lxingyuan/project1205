@@ -1,0 +1,35 @@
+.leftDiv {
+    border: 1px solid #929ca8;
+    width: 10%;
+    height: 800px;
+    float: left;
+}
+
+li {
+    list-style-type: none;
+}
+.rightDiv {
+    border: 1px solid #929ca8;
+    width: 89%;
+    height: 800px;
+    float: right;
+}
+.td_1 {
+    width: 975px;
+    text-align: center;
+}
+
+.td_2 {
+    text-align: center;
+}
+
+.td_3 {
+    display: block;
+    width: 308px;
+    position: relative;
+    border: 0px;
+    left: 254px;
+}
+td {
+    text-align: center;
+}
