@@ -304,12 +304,15 @@
                     async: false,
                     dataType: "text",//返回的数据类型
                     success: function (data) {
-                        //console.log("data:" + data);//data代表服务器回传的数据
+                        console.log("data:" + data);//data代表服务器回传的数据
                         if (data == "true") {
-                            alert("登录成功");
+                            swal("登录成功!", "", "success");
+                            window.location.href = "/index.jsp";
+                            //alert("登录成功");
                         }
                         else {
-                            alert("用户名或密码错误！");
+                            swal("用户名或密码错误!", "", "error");
+                            //alert("用户名或密码错误！");
                         }
                     }
                 });

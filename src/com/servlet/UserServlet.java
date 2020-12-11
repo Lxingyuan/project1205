@@ -93,7 +93,7 @@ public class UserServlet extends BaseServlet {
      * @throws ClientException
      */
     public void sendCode(HttpServletRequest request, HttpServletResponse response) throws IOException, ClientException {
-        String telephone = request.getParameter("telephone");
+        //String telephone = request.getParameter("telephone");
         //math.random()范围[0.0, 1.0)，那么math.random()*9+1一定是小于10的，*100000一定是<1000000的一个数
         code=Integer.toString((int)((Math.random()*9+1)*100000));
         System.out.println("code:"+code);
@@ -112,7 +112,6 @@ public class UserServlet extends BaseServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String telephone = request.getParameter("telephone");
-        //System.out.println(username+" "+password+" "+telephone);
         User user=new User(username,password,telephone);
         Integer result=userService.register(user);
         if(result>0){
@@ -133,14 +132,14 @@ public class UserServlet extends BaseServlet {
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, InterruptedException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        //System.out.println("username:" + username);
-        //System.out.println("password:" + password);
         User user = userService.login(new User(username, password));
-        //System.out.println(user);
+        System.out.println(username+" "+password);
+        System.out.println("user:"+user);
         if (user != null) {
             //登录成功
             response.getWriter().write("true");
-            request.getSession().setAttribute("user,", user);
+            request.getSession().setAttribute("user", user);
+            //request.getRequestDispatcher("/index.jsp").forward(request,response);
         } else {
             response.getWriter().write("false");
         }

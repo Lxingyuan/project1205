@@ -1,3 +1,4 @@
+<%@ page import="com.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -118,6 +119,19 @@
         </div>
     </div>
 </div>
-
+<%
+    User user = (User) session.getAttribute("user");//session中保存的当前登录的用户
+%>
+<div>
+    <%
+        if(user!=null){
+    %>
+    <b>user.toString()：</b><%=user.toString()%>
+    <%
+        }
+    %>
+    <br>
+    <b>sessionScope.user:</b>${sessionScope.user}
+</div>
 </body>
 </html>
