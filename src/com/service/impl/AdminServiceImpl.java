@@ -79,4 +79,9 @@ public class AdminServiceImpl implements AdminService {
     public Admin queryUserByUsername(String username) {
         return adminDao.queryUserByUsername(username);
     }
+
+    @Override
+    public Admin login(Admin admin) {
+        return adminDao.queryAdminByNameAndPassword(admin);
+    }
 }
