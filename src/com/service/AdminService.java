@@ -28,4 +28,6 @@ public interface AdminService {
 
     Admin queryUserByUsername(String username);
 
+    //登录
+    Admin login(Admin admin);
 }
