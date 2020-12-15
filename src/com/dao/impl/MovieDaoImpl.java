@@ -27,7 +27,7 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
 
     @Override
     public int deleteMovie(Integer movieId) {
-        String sql = "delete from user where MovieId = ?";
+        String sql = "delete from movie where MovieId = ?";
         return update(sql, movieId);
     }
 

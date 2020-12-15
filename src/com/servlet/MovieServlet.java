@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 /**
  * 作者：林星源
@@ -55,4 +56,27 @@ public class MovieServlet extends BaseServlet {
         //写入返回信息
         response.getWriter().write(jsonStr);
     }
+
+    public void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String[] idNum=request.getParameterValues("idNum[]");
+        boolean flag=true;
+        Integer result;
+        //String idNum2 = request.getParameter("idNum");
+        //System.out.println("idNum:"+idNum2);
+        for (int i = 0; i <idNum.length ; i++) {
+            //System.out.print(idNum[i]+" ");
+            result=movieService.deleteMovie(Integer.parseInt(idNum[i]));
+            //删除失败
+            if(result<0){
+                flag=false;
+                break;
+            }
+        }
+        if(flag==true){
+            response.getWriter().write("true");
+        }else {
+            response.getWriter().write("false");
+        }
+    }
+
 }

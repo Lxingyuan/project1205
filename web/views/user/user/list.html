@@ -94,6 +94,7 @@
   
     //事件
     var active = {
+        //删除
       batchdel: function(){
         var checkStatus = table.checkStatus('LAY-user-manage')
         ,checkData = checkStatus.data; //得到选中的数据
@@ -155,6 +156,7 @@
       var type = $(this).data('type');
       active[type] ? active[type].call(this) : '';
     });
+
   });
   </script>
 </body>

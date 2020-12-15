@@ -15,6 +15,15 @@
             line-height: 100px;
         }
 
+        th .layui-table-cell {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .layui-table img {
+            width: 100%;
+            height: 80%;
+        }
 
     </style>
     <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
@@ -53,9 +62,19 @@
                     }
                 });
             });
+
+            function init() {
+                var myDate = new Date();
+                //获取当前年
+                var year = myDate.getFullYear();
+                for (var i = year; i >= 1950; i--) {
+                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
+                }
+            }
+
+            init();
+
         });
-
-
     </script>
 </head>
 <body>
@@ -65,30 +84,28 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">ID</label>
+                    <label class="layui-form-label">电影名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="id" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" id="kkkk">
+                    <label class="layui-form-label">电影类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">用户名</label>
+                    <label class="layui-form-label">主演</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">邮箱</label>
+                    <label class="layui-form-label">上映年份</label>
                     <div class="layui-input-block">
-                        <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">性别</label>
-                    <div class="layui-input-block">
-                        <select name="sex">
+                        <select name="showTime" id="showTime">
                             <option value="0">不限</option>
-                            <option value="1">男</option>
-                            <option value="2">女</option>
                         </select>
                     </div>
                 </div>
@@ -101,10 +118,11 @@
         </div>
 
         <div class="layui-card-body">
-            <div style="padding-bottom: 10px;">
-                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
-                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
-            </div>
+<!--            <div style="padding-bottom: 10px;" class="layui-btn-container">
+                <button class="layui-btn layuiadmin-btn-useradmin" id="deleteButton" lay-event="delete">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" lay-event="add">添加</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" id="msg" lay-event="msg">获取信息</button>
+            </div>-->
 
             <div class="layui-table-box">
                 <table id="demo" lay-filter="test">
@@ -127,35 +145,53 @@
     </div>
 </div>
 <script src="/layuiadmin/layui/layui.js"></script>
+
 <script type="text/html" id="imgTpl">
     <img src=" {{ d.picAddress }} " width="100%">
 </script>
+
+<!--<script type="text/html" id="doSomething">
+    <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button>
+    <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button>
+</script>-->
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 <script>
     layui.use('table', function () {
         var table = layui.table;
-
         //第一个实例
         table.render({
             elem: '#demo'
+            , toolbar: '#toolbarDemo'
             , url: '/movie.do?action=queryMovieList' //数据接口
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: true //开启分页
-            , height: 700
+            , height: 600
             , limits: [5, 10, 20, 30, 40, 50]
             , cols: [[ //表头
-                {field: 'movieId', title: 'ID', width: 100, sort: true, fixed: 'left'}
-                , {field: 'movieName', title: '电影名', width: 100}
-                , {field: 'type', title: '类型', width: 100}
-                , {
-                    field: 'picAddress',
-                    title: '图片预览',
-                    width: 100,
-                    templet: '#imgTpl'
-                }
-                /*,{field: 'sign', title: '签名', width: 100}
-                ,{field: 'experience', title: '积分', width: 100, sort: true}
-                ,{field: 'score', title: '评分', width: 100, sort: true}
-                ,{field: 'classify', title: '职业', width: 100}
-                ,{field: 'wealth', title: '财富', width: 100, sort: true}*/
+                {checkbox: true, fixed: true}
+                , {field: 'movieId', title: 'ID', width: 100, sort: true}
+                , {field: 'movieName', title: '电影名', width: 120}
+                , {field: 'type', title: '类型', width: 200}
+                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl'}
+                , {field: 'director', title: '导演', width: 100}
+                , {field: 'protagonist', title: '主演', width: 100}
+                , {field: 'showTime', title: '上映时间', width: 120, sort: true}
+                , {field: 'content', title: '电影详细介绍', width: 100}
+                , {field: 'hits', title: '浏览数', width: 100, sort: true}
+                // , {field: 'doSomething', title: '操作', width: 125, templet: '#doSomething'}
+                , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
@@ -177,7 +213,167 @@
 
         });
 
+/*        //获取信息按钮
+        $("#msg").on("click", function () {
+            var checkStatus = table.checkStatus('demo');
+            console.log(checkStatus.data)//选中行数据
+            var items = checkStatus.data;
+            //console.log(items.length);
+            var idNum = new Array();
+            for (var i = 0; i < items.length; i++) {
+                idNum.push(items[i].movieId);
+            }
+            console.log(idNum);
+            //console.log(items[0]);//选中第一行行数据
+            //console.log(items[0].movieId);//选中第一行的键为movieId的值
+        });
+        //删除按钮事件
+        $("#deleteButton").on("click", function () {
+            var checkStatus = table.checkStatus('demo');
+            //console.log(checkStatus.data)//选中行数据
+            var items = checkStatus.data;
+            var idNum = new Array();
+            for (var i = 0; i < items.length; i++) {
+                idNum.push(items[i].movieId);
+            }
+            //console.log(idNum);//保存的id列表
+            if (items.length != 0) {
+                layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        url: "/movie.do?action=deleteMovie",
+                        data: {idNum: idNum},
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.open({
+                                    title: '提示'
+                                    , content: '删除成功！'
+                                });
+                                //刷新表格
+                                table.reload('demo', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                });
+                            } else {
+                                layer.open({
+                                    title: '提示'
+                                    , content: '删除失败！'
+                                });
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else {
+                layer.open({
+                    title: '提示'
+                    , content: '您没有选择任何行！'
+                });
+            }
+        });*/
+
+        //表格上方头工具栏监听事件
+        table.on('toolbar(test)', function (obj) {
+            //var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('新增');
+                    break;
+                case 'delete':
+                    var checkStatus = table.checkStatus('demo');
+                    var items = checkStatus.data;//选中行数据
+                    var idNum = new Array();
+                    for (var i = 0; i < items.length; i++) {
+                        idNum.push(items[i].movieId);
+                    }
+                    //console.log(idNum);//保存的id列表
+                    if (items.length != 0) {
+                        layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
+                            $.ajax({
+                                url: "/movie.do?action=deleteMovie",
+                                data: {idNum: idNum},
+                                type: "GET",
+                                async: false,
+                                dataType: "text",//返回的数据类型
+                                success: function (data) {
+                                    //console.log("data:" + data);//data代表服务器回传的数据
+                                    if (data == "true") {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除成功！'
+                                        });*/
+                                        layer.msg('删除成功！');
+                                        //刷新表格
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: 1
+                                            }
+                                        });
+                                    } else {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除失败！'
+                                        });*/
+                                        layer.msg('删除失败');
+                                    }
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    } else {
+                        /*layer.open({
+                            title: '提示'
+                            , content: '您没有选择任何行！'
+                        });*/
+                        layer.msg('您没有选择任何行！');
+                    }
+                    break;
+            }
+        });
+
+        //监听工具条
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            //删除
+            if (layEvent === 'del') {
+                var idNum = new Array();
+                idNum.push(data.movieId);
+                layer.confirm('您确定要删除这条数据吗?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        url: "/movie.do?action=deleteMovie",
+                        data: {idNum: idNum},
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg('删除成功！');
+                                table.reload('demo', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                });
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (layEvent === 'edit') { //编辑
+                console.log(data)
+            }
+        });
+
+
     });
+
 </script>
+
 </body>
 </html>
