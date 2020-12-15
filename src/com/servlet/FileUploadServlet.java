@@ -18,8 +18,10 @@ import java.util.List;
 
 @WebServlet("/fileUpload")
 public class FileUploadServlet extends HttpServlet {
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
+        response.setCharacterEncoding("utf-8");
         request.setCharacterEncoding("utf-8");
         //1 先判断上传的数据是否多段数据 （只有是多段的数据，才是文件上传的）
         if (ServletFileUpload.isMultipartContent(request)) {
@@ -42,7 +44,7 @@ public class FileUploadServlet extends HttpServlet {
                         //上传的文件
                         System.out.println("表单项的name:" + fileItem.getFieldName());
                         System.out.println("上传的文件名:" + fileItem.getName());
-                        fileItem.write(new File("D:\\project1205\\images\\" + new Date().getTime() + fileItem.getName()));
+                        fileItem.write(new File("D:\\project1205\\images\\" + System.currentTimeMillis() + fileItem.getName()));
                     }
                 }
             } catch (FileUploadException e) {

@@ -9,6 +9,54 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <style>
+        .layui-table-cell {
+            height: 100px;
+            line-height: 100px;
+        }
+
+
+    </style>
+    <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#chooseImage').bind('change', function () {
+                // alert(123)
+                var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                    fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                    src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+
+                // 检查是否是图片
+                if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                    alert('上传错误,文件格式必须为：png/jpg/jpeg');
+                    $('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                    return false;
+                } else {
+                    //alert("上次成功");
+                    //console.log(src);
+                    console.log("filePath：" + filePath)
+                    $('#cropedBigImg').attr('src', src);
+                }
+            });
+            $('#chuan').bind('click', function () {
+                //var filepath=$("#chooseImage").val();
+                var formData = new FormData(document.getElementById("f1"));
+                $.ajax({
+                    url: "/fileUpload",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    dataType: "text",
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
+        });
+
+
+    </script>
 </head>
 <body>
 
@@ -63,42 +111,61 @@
 
                 </table>
             </div>
-
+            <!--<img src="../static/images/person_1.jpg" width="100">
+            <img src="http://localhost:8765/images\default.png" width="100">
+            <br>
+            <form id="f1">
+                <div>
+                    头像上传<span class="red">*</span>
+                    <input type="file" name="file" accept=".jpg,.png,.jpeg" id="chooseImage"><br>
+                    <img id="cropedBigImg" style="width: 200px;" src="/static/images/person_1.jpg"/>
+                </div>
+                <button type="button" id="chuan">确认上传</button>
+            </form>-->
 
         </div>
     </div>
 </div>
 <script src="/layuiadmin/layui/layui.js"></script>
+<script type="text/html" id="imgTpl">
+    <img src=" {{ d.picAddress }} " width="100%">
+</script>
 <script>
-    layui.use('table', function(){
+    layui.use('table', function () {
         var table = layui.table;
 
         //第一个实例
         table.render({
             elem: '#demo'
-            ,url: '/movie.do?action=queryMovieList' //数据接口
-            ,page: true //开启分页
-            ,limits:[5,10,20,30,40,50]
-            ,cols: [[ //表头
-                {field: 'movieId', title: 'ID', width:100, sort: true, fixed: 'left'}
-                ,{field: 'movieName', title: '电影名', width:100}
-                ,{field: 'type', title: '类型', width:100}
-                ,{field: 'picAddress', title: '图片预览', width:100,templet:'<div><img  src="{{ d.picAddress }}" width="100%"></div>'}
+            , url: '/movie.do?action=queryMovieList' //数据接口
+            , page: true //开启分页
+            , height: 700
+            , limits: [5, 10, 20, 30, 40, 50]
+            , cols: [[ //表头
+                {field: 'movieId', title: 'ID', width: 100, sort: true, fixed: 'left'}
+                , {field: 'movieName', title: '电影名', width: 100}
+                , {field: 'type', title: '类型', width: 100}
+                , {
+                    field: 'picAddress',
+                    title: '图片预览',
+                    width: 100,
+                    templet: '#imgTpl'
+                }
                 /*,{field: 'sign', title: '签名', width: 100}
                 ,{field: 'experience', title: '积分', width: 100, sort: true}
                 ,{field: 'score', title: '评分', width: 100, sort: true}
                 ,{field: 'classify', title: '职业', width: 100}
                 ,{field: 'wealth', title: '财富', width: 100, sort: true}*/
             ]]
-            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
                 //console.log(this);
                 //console.log(JSON.stringify(res));
-                if(this.page.curr){
-                    result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
                 }
-                else{
-                    result=res.data.slice(0,this.limit);
+                else {
+                    result = res.data.slice(0, this.limit);
                 }
                 return {
                     "code": res.code, //解析接口状态
