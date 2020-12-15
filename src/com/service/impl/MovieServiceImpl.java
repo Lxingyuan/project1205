@@ -5,6 +5,7 @@ import com.dao.impl.MovieDaoImpl;
 import com.entity.Movie;
 import com.service.MovieService;
 import com.utils.Page;
+import com.utils.Page2;
 
 import java.util.List;
 
@@ -85,6 +86,18 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> items = movieDao.queryMovieByPage(begin, pageSize);
         //设置数据
         page.setItems(items);
+        return page;
+    }
+
+    @Override
+    public Page2<Movie> queryMovieByPage2() {
+        Page2<Movie> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        //求总记录数
+        Integer pageTotalCount = movieDao.queryPageTotalCounts();
+        page.setCount(pageTotalCount);
+        page.setData(movieDao.queryAllMovie());
         return page;
     }
 }

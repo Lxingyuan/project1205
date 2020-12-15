@@ -139,14 +139,12 @@ public class UserServlet extends BaseServlet {
         String password = request.getParameter("password");
         User user = userService.login(new User(username, password));
         Admin admin = adminService.login(new Admin(username, password));
-//        System.out.println(username + " " + password);
-        System.out.println("user:" + user);
-        System.out.println("admin:" + admin);
+        System.out.println("UserServlet:user:" + user);
+        System.out.println("UserServlet:admin:" + admin);
         if (user != null) {
             //登录成功
             response.getWriter().write("true");
             request.getSession().setAttribute("user", user);
-            //request.getRequestDispatcher("/index.jsp").forward(request,response);
         } else if(admin!=null){
             response.getWriter().write("true");
             request.getSession().setAttribute("admin", admin);
@@ -154,6 +152,5 @@ public class UserServlet extends BaseServlet {
         else {
             response.getWriter().write("false");
         }
-        //System.out.println("保存的session:"+request.getSession().getAttribute("admin"));
     }
 }

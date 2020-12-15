@@ -22,7 +22,7 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
     @Override
     public int updateMovie(Movie movie) {
         String sql = "update movie set UpdateTime=?,MovieName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,Content=?,Hits=?";
-        return update(sql,movie.getUpdateTime(),movie.getMovieName(),movie.getType(),movie.getDirector(),movie.getProtagonist(),movie.getShowTime(),movie.getPicAddress(),movie.getContent(),movie.getHits());
+        return update(sql, movie.getUpdateTime(), movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getContent(), movie.getHits());
     }
 
     @Override
@@ -66,6 +66,7 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
         String sql = "select * from movie where Hits=?";
         return queryForOne(Movie.class, sql, hits);
     }
+
     //查询当前表的总记录条数
     @Override
     public Integer queryPageTotalCounts() {
@@ -77,6 +78,12 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
     public List<Movie> queryMovieByPage(Integer begin, Integer pageSize) {
         String sql = "select * from movie limit ?, ?";
         return queryForList(Movie.class, sql, begin, pageSize);
+    }
+
+    @Override
+    public List<Movie> queryAllMovie() {
+        String sql = "select * from movie ";
+        return queryForList(Movie.class, sql);
     }
 
 }

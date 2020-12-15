@@ -55,7 +55,7 @@ public class AdminServlet extends BaseServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         Admin admin = adminService.login(new Admin(username, password));
-        System.out.println("admin:" + admin);
+        System.out.println("AdminServlet:admin:" + admin);
         if(admin!=null){
             response.getWriter().write("true");
             request.getSession().setAttribute("admin", admin);

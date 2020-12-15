@@ -42,4 +42,6 @@ public interface MovieDao {
     Integer queryPageTotalCounts();
 
     List<Movie> queryMovieByPage(Integer pageNo, Integer pageSize);
+
+    List<Movie> queryAllMovie();
 }

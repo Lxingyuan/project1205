@@ -2,6 +2,7 @@ package com.service;
 
 import com.entity.Movie;
 import com.utils.Page;
+import com.utils.Page2;
 
 /**
  * 作者：林星源
@@ -38,4 +39,7 @@ public interface MovieService {
 
     //电影分页
     Page<Movie> queryMovieByPage(int pageNo, int pageSize);
+
+    //电影分页2
+    Page2<Movie> queryMovieByPage2();
 }
