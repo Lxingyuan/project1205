@@ -23,4 +23,7 @@ public interface CommentDao {
     Integer queryPageTotalCounts();
 
     List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);
+
+    List<Comment> queryAllComment();
+
 }

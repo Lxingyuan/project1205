@@ -5,6 +5,7 @@ import com.dao.impl.UserDaoImpl;
 import com.entity.User;
 import com.service.UserService;
 import com.utils.Page;
+import com.utils.Page2;
 
 import java.util.List;
 
@@ -29,6 +30,12 @@ public class UserServiceImpl implements UserService {
     public int update(User user) {
         return userDao.updateUser(user);
     }
+
+    @Override
+    public int deleteUser(Integer userId) {
+        return userDao.deleteUser(userId);
+    }
+
     @Override
     public User queryUserById(Integer id) {
         return userDao.queryUserById(id);
@@ -79,5 +86,14 @@ public class UserServiceImpl implements UserService {
         return userDao.queryUserByTelephone(telephone);
     }
 
-
+    public Page2<User> queryUserByPage2() {
+        Page2<User> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        //求总记录数
+        Integer pageTotalCount = userDao.queryPageTotalCounts();
+        page.setCount(pageTotalCount);
+        page.setData(userDao.queryAllUser());
+        return page;
+    }
 }
