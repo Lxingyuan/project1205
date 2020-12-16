@@ -94,10 +94,20 @@ public class MovieServiceImpl implements MovieService {
         Page2<Movie> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
-        //求总记录数
-        Integer pageTotalCount = movieDao.queryPageTotalCounts();
-        page.setCount(pageTotalCount);
-        page.setData(movieDao.queryAllMovie());
+        List<Movie> list=movieDao.queryAllMovie();
+        page.setData(list);
+        page.setCount(list.size());
+        return page;
+    }
+
+    @Override
+    public Page2<Movie> queryMovieByPage2(String movieName, String type, String protagonist, String showTime) {
+        Page2<Movie> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        List<Movie> list=movieDao.queryAllMovie(movieName,type,protagonist,showTime);
+        page.setData(list);
+        page.setCount(list.size());
         return page;
     }
 

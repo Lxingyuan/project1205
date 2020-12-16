@@ -86,26 +86,29 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">电影名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="movieName">
                     </div>
                 </div>
                 <div class="layui-inline" id="kkkk">
                     <label class="layui-form-label">电影类型</label>
                     <div class="layui-input-block">
-                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="type">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">主演</label>
                     <div class="layui-input-block">
-                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="protagonist">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">上映年份</label>
                     <div class="layui-input-block">
                         <select name="showTime" id="showTime">
-                            <option value="0">不限</option>
+                            <option value="">不限</option>
                         </select>
                     </div>
                 </div>
@@ -179,7 +182,7 @@
         table.render({
             elem: '#demo'
             , toolbar: '#toolbarDemo'
-            , url: '/movie.do?action=queryMovieList' //数据接口
+            , url: '/movie.do?action=queryMovieListLimit' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: true //开启分页
             , height: 600
@@ -345,6 +348,7 @@
         table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
             //删除
             if (layEvent === 'del') {
                 var idNum = new Array();
@@ -361,7 +365,7 @@
                                 layer.msg('删除成功！');
                                 table.reload('demo', {
                                     page: {
-                                        curr: 1
+                                        curr: recodePage
                                     }
                                 });
                             } else {
@@ -380,7 +384,9 @@
         table.on('edit(test)', function (obj) {
             var value = obj.value //得到修改后的值
                 , data = obj.data //得到所在行所有键值
-                , field = obj.field; //得到字段
+                , field = obj.field //得到字段
+                , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            console.log(recodePage);
             //修改type字段
             if (field == "type") {
                 //以&分隔的中文
@@ -389,7 +395,7 @@
                     layer.msg('电影类型格式不对！(以&分隔的中文！)');
                     table.reload('demo', {
                         page: {
-                            curr: 1
+                            curr: recodePage
                         }
                     });
                     return;
@@ -405,7 +411,7 @@
                     layer.msg('上映年份格式不对！');
                     table.reload('demo', {
                         page: {
-                            curr: 1
+                            curr: recodePage
                         }
                     });
                     return;
@@ -415,7 +421,7 @@
                     layer.msg('上映年份不对!(1800~' + year + ')');
                     table.reload('demo', {
                         page: {
-                            curr: 1
+                            curr: recodePage
                         }
                     });
                     return;
@@ -429,7 +435,7 @@
                     layer.msg('浏览数格式不对！');
                     table.reload('demo', {
                         page: {
-                            curr: 1
+                            curr: recodePage
                         }
                     });
                     return;
@@ -445,12 +451,12 @@
                 success: function (data) {
                     if (data == "true") {
                         layer.msg('更新成功');
+                    } else {
                         table.reload('demo', {
                             page: {
-                                curr: 1
+                                curr: recodePage
                             }
                         });
-                    } else {
                         layer.msg('更新失败');
                     }
                 }
@@ -459,7 +465,13 @@
         });
 
         $("#search").on("click", function () {
-            layer.msg('233');
+            //layer.msg('233');
+            //layer.msg($("#movieName").val());
+            //layer.msg($("#showTime").val());
+            table.reload('demo', {
+                url: '/movie.do?action=queryMovieListLimit' //数据接口
+                ,where:{movieName:$("#movieName").val(),type:$("#type").val(),protagonist:$("#protagonist").val(),showTime:$("#showTime").val()}
+            });
         });
     });
 
