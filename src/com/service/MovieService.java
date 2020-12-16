@@ -42,4 +42,7 @@ public interface MovieService {
 
     //电影分页2
     Page2<Movie> queryMovieByPage2();
+
+    //修改某个字段的电影信息
+    int updateMovieColumnValue(Integer movieId,String columnName,String columnValue);
 }

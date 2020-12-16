@@ -100,4 +100,9 @@ public class MovieServiceImpl implements MovieService {
         page.setData(movieDao.queryAllMovie());
         return page;
     }
+
+    @Override
+    public int updateMovieColumnValue(Integer movieId, String columnName, String columnValue) {
+        return movieDao.updateMovieColumnValue(movieId,columnName,columnValue);
+    }
 }

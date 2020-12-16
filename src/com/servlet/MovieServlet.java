@@ -78,5 +78,22 @@ public class MovieServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+    public void updateMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieId=request.getParameter("movieId");
+        //要更新的字段名
+        String columnName=request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue=request.getParameter("columnValue");
+        columnValue=columnValue.replace("'", "\\'");
+        columnValue=columnValue.replace("\"", "\\\"");
+        columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println(movieId+" "+columnName+" "+columnValue);
+        Integer result=movieService.updateMovieColumnValue(Integer.parseInt(movieId),columnName,columnValue);
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
 
 }

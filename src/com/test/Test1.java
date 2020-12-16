@@ -12,6 +12,22 @@ import org.junit.Test;
 public class Test1 {
     @Test
     public void t1() throws ClientException {
-        SmsUtil.sendSms("18805026635","1234");
+        SmsUtil.sendSms("15277323599","1234");
+    }
+    @Test
+    public void t2() throws ClientException {
+       /* System.out.println("'text'".replaceAll("'","\\\\\'"));
+        System.out.println("\"".replaceAll("\"","\\\\\""));*/
+        String ss ="'test'";
+        ss = ss.replace("'", "\\'");
+        System.out.println(ss);
+
+        String ss2 ="\"test\"";
+        ss2 = ss2.replace("\"", "\\\"");
+        System.out.println(ss2);
+
+        String ss3 ="\\test\\";
+        ss3 = ss3.replace("\\", "\\\\");
+        System.out.println(ss3);
     }
 }

@@ -21,8 +21,16 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
 
     @Override
     public int updateMovie(Movie movie) {
-        String sql = "update movie set UpdateTime=?,MovieName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,Content=?,Hits=?";
-        return update(sql, movie.getUpdateTime(), movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getContent(), movie.getHits());
+        String sql = "update movie set UpdateTime=?,MovieName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,Content=?,Hits=? where MovieId = ?";
+        return update(sql, movie.getUpdateTime(), movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getContent(), movie.getHits(),movie.getMovieId());
+    }
+
+    @Override
+    public int updateMovieColumnValue(Integer movieId, String columnName, String columnValue) {
+        //System.out.println("dao中:"+movieId+" "+columnName+" "+columnValue);
+        String sql="update movie set "+columnName+" = '"+columnValue+"' where movieId = "+movieId;
+        //System.out.println(sql);
+        return update(sql);
     }
 
     @Override

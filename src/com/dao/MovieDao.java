@@ -17,7 +17,8 @@ public interface MovieDao {
 
     //修改电影信息
     int updateMovie(Movie movie);
-
+    //修改某个字段的电影信息
+    int updateMovieColumnValue(Integer movieId,String columnName,String columnValue);
     //删除电影信息
     int deleteMovie(Integer movieId);
 
