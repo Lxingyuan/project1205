@@ -8,64 +8,76 @@ import java.util.Date;
  * 描述:
  */
 public class Notice {
-    private Integer NoticeId;
-    private String NoticeHead;
-    private String NoticeContent;
-    private String NoticeUser;
+    private Integer noticeId;
+    private String noticeHead;
+    private String noticeContent;
+    private String noticeUser;
     private Date createTime;
+    private Date updateTime;
+
 
     @Override
     public String toString() {
         return "Notice{" +
-                "NoticeId=" + NoticeId +
-                ", NoticeHead='" + NoticeHead + '\'' +
-                ", NoticeContent='" + NoticeContent + '\'' +
-                ", NoticeUser='" + NoticeUser + '\'' +
+                "noticeId=" + noticeId +
+                ", noticeHead='" + noticeHead + '\'' +
+                ", noticeContent='" + noticeContent + '\'' +
+                ", noticeUser='" + noticeUser + '\'' +
                 ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
     }
 
     public Notice() {
     }
 
-    public Notice(Integer noticeId, String noticeHead, String noticeContent, String noticeUser, Date createTime) {
-        NoticeId = noticeId;
-        NoticeHead = noticeHead;
-        NoticeContent = noticeContent;
-        NoticeUser = noticeUser;
+    public Notice(Integer noticeId, String noticeHead, String noticeContent, String noticeUser, Date createTime, Date updateTime) {
+        this.noticeId = noticeId;
+        this.noticeHead = noticeHead;
+        this.noticeContent = noticeContent;
+        this.noticeUser = noticeUser;
         this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Integer getNoticeId() {
-        return NoticeId;
+        return noticeId;
     }
 
     public void setNoticeId(Integer noticeId) {
-        NoticeId = noticeId;
+        this.noticeId = noticeId;
     }
 
     public String getNoticeHead() {
-        return NoticeHead;
+        return noticeHead;
     }
 
     public void setNoticeHead(String noticeHead) {
-        NoticeHead = noticeHead;
+        this.noticeHead = noticeHead;
     }
 
     public String getNoticeContent() {
-        return NoticeContent;
+        return noticeContent;
     }
 
     public void setNoticeContent(String noticeContent) {
-        NoticeContent = noticeContent;
+        this.noticeContent = noticeContent;
     }
 
     public String getNoticeUser() {
-        return NoticeUser;
+        return noticeUser;
     }
 
     public void setNoticeUser(String noticeUser) {
-        NoticeUser = noticeUser;
+        this.noticeUser = noticeUser;
     }
 
     public Date getCreateTime() {

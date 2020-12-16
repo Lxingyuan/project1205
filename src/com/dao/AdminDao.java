@@ -31,5 +31,6 @@ public interface AdminDao {
 
     Admin queryUserByUsername(String username);
 
+    List<Admin> queryAllAdmin();
 
 }

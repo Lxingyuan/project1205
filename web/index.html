@@ -27,9 +27,12 @@
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script type="text/javascript" src="./static/js/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <style type="text/css">
         .pic {
             width: 100%;
@@ -40,8 +43,62 @@
             height: 650px;
             margin: 0 auto;
         }
-
     </style>
+
+    <script type="text/javascript">
+        var currentPage = 1;
+        $(function () {
+            $.ajax({
+                url: "http://localhost:8765/movie.do",
+                data: {action: "queryMoviePage", pageNo: 1},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    datainit(data);
+                }
+            });
+        });
+        function changepage(i) {
+            currentPage = i;
+            $.ajax({
+                url: "http://localhost:8765/movie.do",
+                data: {action: "queryMoviePage", pageNo: i},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    if (currentPage > jsonObj.pageTotal) {
+                        currentPage--;
+                        changepage(currentPage);
+                    }
+                    datainit(data);
+                }
+            })
+        };
+
+        function datainit(data) {
+            let index = 1;
+            let jsonObj = JSON.parse(data);
+            for (let i = 0; i < jsonObj.items.length; i++) {
+                console.log(jsonObj.items[i]);
+                let colmd6 = $("<div class=\"col-md-6\"></div>");
+                let blogentry = $("<a href='blog-single.html' class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
+                let img = $("<img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/>");
+                let blogbody = $("<div class=\"blog-content-body\"></div>");
+                let postmeta = $("<div class=\"post-meta\"></div>");
+                postmeta.append("<span class=\"category\">"+jsonObj.items[i].movieName+"</span>");
+                postmeta.append("<span class=\"mr-2\">March,15,2018</span>");
+                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>3</span>")
+                blogbody.append(postmeta);
+                blogbody.append("<h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>");
+                blogentry.append(img);
+                blogentry.append(blogbody);
+                colmd6.append(blogentry);
+                $("#hotMovie").append(colmd6);
+            }
+        }
+
+    </script>
 </head>
 <body style="width: auto">
 <nav class="navbar navbar-default navbar-fixed-top" style="margin: 0;">
@@ -119,10 +176,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-
 </section>
 <!-- END section -->
 
@@ -135,122 +189,7 @@
         </div>
         <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content">
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_5.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Food</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_6.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Travel</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_7.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Travel, Asia</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_8.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Travel</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_9.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Travel</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_10.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Lifestyle</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_11.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Lifestyle</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="blog-single.html" class="blog-entry element-animate fadeIn element-animated"
-                           data-animate-effect="fadeIn">
-                            <img src="static/images/img_12.jpg" alt="Image placeholder">
-                            <div class="blog-content-body">
-                                <div class="post-meta">
-                                    <span class="category">Food</span>
-                                    <span class="mr-2">March 15, 2018 </span> •
-                                    <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                </div>
-                                <h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>
-                            </div>
-                        </a>
-                    </div>
+                <div class="row" id="hotMovie">
                 </div>
 
                 <div class="row">
@@ -266,8 +205,6 @@
                         </nav>
                     </div>
                 </div>
-
-
             </div>
 
             <!-- END main-content -->

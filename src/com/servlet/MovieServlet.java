@@ -27,7 +27,7 @@ import java.lang.reflect.Array;
  */
 @WebServlet("/movie.do")
 public class MovieServlet extends BaseServlet {
-    MovieService movieService=new MovieServiceImpl();
+    MovieService movieService = new MovieServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,11 +45,20 @@ public class MovieServlet extends BaseServlet {
         super.doGet(request, response);
     }
 
+    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
 
     public void queryMovieList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
         Page2<Movie> page = movieService.queryMovieByPage2();
-        System.out.println("page:"+page);
+        System.out.println("page:" + page);
         Gson gson = new Gson();
         //转成字符串
         String jsonStr = gson.toJson(page);
@@ -58,42 +67,42 @@ public class MovieServlet extends BaseServlet {
     }
 
     public void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] idNum=request.getParameterValues("idNum[]");
-        boolean flag=true;
+        String[] idNum = request.getParameterValues("idNum[]");
+        boolean flag = true;
         Integer result;
         //String idNum2 = request.getParameter("idNum");
         //System.out.println("idNum:"+idNum2);
-        for (int i = 0; i <idNum.length ; i++) {
+        for (int i = 0; i < idNum.length; i++) {
             //System.out.print(idNum[i]+" ");
-            result=movieService.deleteMovie(Integer.parseInt(idNum[i]));
+            result = movieService.deleteMovie(Integer.parseInt(idNum[i]));
             //删除失败
-            if(result<0){
-                flag=false;
+            if (result < 0) {
+                flag = false;
                 break;
             }
         }
-        if(flag==true){
+        if (flag == true) {
             response.getWriter().write("true");
-        }else {
+        } else {
             response.getWriter().write("false");
-        }
-    }
-    public void updateMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId=request.getParameter("movieId");
-        //要更新的字段名
-        String columnName=request.getParameter("columnName");
-        //要更新的字段值
-        String columnValue=request.getParameter("columnValue");
-        columnValue=columnValue.replace("'", "\\'");
-        columnValue=columnValue.replace("\"", "\\\"");
-        columnValue=columnValue.replace("\\", "\\\\");
-        System.out.println(movieId+" "+columnName+" "+columnValue);
-        Integer result=movieService.updateMovieColumnValue(Integer.parseInt(movieId),columnName,columnValue);
-        if(result<0){
-            response.getWriter().write("false");
-        }else {
-            response.getWriter().write("true");
         }
     }
 
+    public void updateMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieId = request.getParameter("movieId");
+        //要更新的字段名
+        String columnName = request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue = request.getParameter("columnValue");
+        columnValue = columnValue.replace("'", "\\'");
+        columnValue = columnValue.replace("\"", "\\\"");
+        columnValue = columnValue.replace("\\", "\\\\");
+        System.out.println(movieId + " " + columnName + " " + columnValue);
+        Integer result = movieService.updateMovieColumnValue(Integer.parseInt(movieId), columnName, columnValue);
+        if (result < 0) {
+            response.getWriter().write("false");
+        } else {
+            response.getWriter().write("true");
+        }
+    }
 }

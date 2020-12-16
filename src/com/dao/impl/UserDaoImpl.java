@@ -28,6 +28,12 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         return update(sql, user.getUpdateTime(), user.getUserName(), user.getUserPassword(), user.getTelephone(), user.getQq(), user.getEmail(), user.getSex(), user.getRegisterTime(), user.getHeadPic(), user.getUserId());
     }
 
+    @Override
+    public int deleteUser(Integer userId) {
+        String sql = "delete from user where UserId = ?";
+        return update(sql, userId);
+    }
+
     //根据用户id查询
     @Override
     public User queryUserById(Integer userId) {
@@ -71,5 +77,8 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         String sql = "select * from user where telephone=?";
         return queryForOne(User.class, sql, telephone);
     }
-
+    public List<User> queryAllUser() {
+        String sql = "select * from user ";
+        return queryForList(User.class, sql);
+    }
 }
