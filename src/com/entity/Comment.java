@@ -11,6 +11,7 @@ public class Comment {
     private Integer commentId;
     private Integer commentTypeId;
     private Integer movieId;
+    private String movieName;
     private String commentUser;
     private String commentContent;
     private Date createTime;
@@ -19,10 +20,11 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Integer commentId, Integer commentTypeId, Integer movieId, String commentUser, String commentContent, Date createTime, Date updateTime) {
+    public Comment(Integer commentId, Integer commentTypeId, Integer movieId, String movieName, String commentUser, String commentContent, Date createTime, Date updateTime) {
         this.commentId = commentId;
         this.commentTypeId = commentTypeId;
         this.movieId = movieId;
+        this.movieName = movieName;
         this.commentUser = commentUser;
         this.commentContent = commentContent;
         this.createTime = createTime;
@@ -35,11 +37,20 @@ public class Comment {
                 "commentId=" + commentId +
                 ", commentTypeId=" + commentTypeId +
                 ", movieId=" + movieId +
+                ", movieName='" + movieName + '\'' +
                 ", commentUser='" + commentUser + '\'' +
                 ", commentContent='" + commentContent + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public Integer getCommentId() {

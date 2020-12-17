@@ -60,6 +60,5 @@
     <orderEntry type="library" name="Maven: org.json:json:20170516" level="project" />
     <orderEntry type="library" name="Maven: com.aliyuncs:aliyun-java-sdk-core:4.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.aliyuncs:aliyun-java-sdk-dysmsapi:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.0" level="project" />
   </component>
 </module>

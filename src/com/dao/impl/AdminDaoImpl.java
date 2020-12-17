@@ -3,6 +3,7 @@ package com.dao.impl;
 import com.dao.AdminDao;
 import com.dao.BaseDao;
 import com.entity.Admin;
+import com.entity.Comment;
 import com.entity.User;
 import com.utils.Page;
 
@@ -67,6 +68,11 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
     public List<Admin> queryAdminByPage(Integer begin, Integer pageSize) {
         String sql = "select * from user limit ?, ?";
         return queryForList(Admin.class, sql, begin, pageSize);
+    }
+
+    public List<Admin> queryAllAdmin() {
+        String sql = "select * from admin ";
+        return queryForList(Admin.class, sql);
     }
 
 }
