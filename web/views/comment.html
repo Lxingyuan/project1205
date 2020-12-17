@@ -9,18 +9,258 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+
+    <style>
+        .layui-table-cell {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        th .layui-table-cell {
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+    <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            // $('#chooseImage').bind('change', function () {
+            //     // alert(123)
+            //     var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+            //         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+            //         src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+            //     // 检查是否是图片
+            //     if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+            //         alert('上传错误,文件格式必须为：png/jpg/jpeg');
+            //         $('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+            //         return false;
+            //     } else {
+            //         //alert("上次成功");
+            //         //console.log(src);
+            //         console.log("filePath：" + filePath)
+            //         $('#cropedBigImg').attr('src', src);
+            //     }
+            // });
+            // $('#chuan').bind('click', function () {
+            //     //var filepath=$("#chooseImage").val();
+            //     var formData = new FormData(document.getElementById("f1"));
+            //     $.ajax({
+            //         url: "/fileUpload",
+            //         data: formData,
+            //         processData: false,
+            //         contentType: false,
+            //         type: "POST",
+            //         dataType: "text",
+            //         success: function (data) {
+            //             alert(data);
+            //         }
+            //     });
+            // });
+            function init() {
+                var myDate = new Date();
+                //获取当前年
+                var year = myDate.getFullYear();
+                for (var i = year; i >= 1950; i--) {
+                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
+                }
+            }
+            init();
+        });
+    </script>
 </head>
 <body>
 
-<div class="layadmin-tabsbody-item layui-show"><iframe src="app/content/comment.html" frameborder="0" class="layadmin-iframe"></iframe></div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">电影名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" id="kkkk">
+                    <label class="layui-form-label">评论者</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">评论内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">评论时间</label>
+                    <div class="layui-input-block">
+                        <select name="showTime" id="showTime">
+                            <option value="0">不限</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
+        <div class="layui-card-body">
+            <div class="layui-table-box">
+                <table id="demo" lay-filter="test">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/layuiadmin/layui/layui.js"></script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 <script>
-    layui.config({
-        base: '/layuiadmin/' //静态资源所在路径
-    }).extend({
-        index: 'lib/index' //主入口模块
-    }).use(['index', 'sample']);
+    layui.use('table', function () {
+        var table = layui.table;
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo'
+            , url: '/comment.do?action=queryCommentList' //数据接口
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , page: true //开启分页
+            , height: 700
+            , limits: [5, 10, 20, 30, 40, 50]
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {type: 'checkbox'}
+                , {field: 'commentId', title: 'ID', width: 60, sort: true}
+                , {field: 'commentUser', title: '评论人', width: 130, sort: true}
+                , {field: 'movieName', title: '电影名', width: 200, sort: true}
+                , {field: 'commentContent', title: '评论内容', width: 400}
+                , {field: 'commentTypeId', title: '类型', width: 150}
+                , {field: 'createTime', title: '评论时间', width: 200, sort: true}
+                , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
+                , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+            ]]
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+        });
+        //表格上方头工具栏监听事件
+        table.on('toolbar(test)', function (obj) {
+            //var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('新增');
+                    break;
+                case 'delete':
+                    var checkStatus = table.checkStatus('demo');
+                    var items = checkStatus.data;//选中行数据
+                    var idNum = new Array();
+                    for (var i = 0; i < items.length; i++) {
+                        idNum.push(items[i].movieId);
+                    }
+                    //console.log(idNum);//保存的id列表
+                    if (items.length != 0) {
+                        layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
+                            $.ajax({
+                                url: "/comment.do?action=deleteComment",
+                                data: {idNum: idNum},
+                                type: "GET",
+                                async: false,
+                                dataType: "text",//返回的数据类型
+                                success: function (data) {
+                                    //console.log("data:" + data);//data代表服务器回传的数据
+                                    if (data == "true") {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除成功！'
+                                        });*/
+                                        layer.msg('删除成功！');
+                                        //刷新表格
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: 1
+                                            }
+                                        });
+                                    } else {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除失败！'
+                                        });*/
+                                        layer.msg('删除失败');
+                                    }
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    } else {
+                        /*layer.open({
+                            title: '提示'
+                            , content: '您没有选择任何行！'
+                        });*/
+                        layer.msg('您没有选择任何行！');
+                    }
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            //删除
+            if (layEvent === 'del') {
+                var idNum = new Array();
+                idNum.push(data.commentId);
+                layer.confirm('您确定要删除这条数据吗?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        url: "/comment.do?action=deleteComment",
+                        data: {idNum: idNum},
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg('删除成功！');
+                                table.reload('demo', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                });
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (layEvent === 'edit') { //编辑
+                console.log(data)
+            }
+        });
+    });
 </script>
 </body>
 </html>

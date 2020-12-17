@@ -5,6 +5,7 @@ import com.dao.impl.NoticeDaoImpl;
 import com.entity.Notice;
 import com.service.NoticeService;
 import com.utils.Page;
+import com.utils.Page2;
 
 import java.util.List;
 
@@ -14,7 +15,8 @@ import java.util.List;
  * 描述:
  */
 public class NoticeServiceImpl implements NoticeService {
-    NoticeDao noticeDao=new NoticeDaoImpl();
+
+    NoticeDao noticeDao = new NoticeDaoImpl();
 
     @Override
     public int insertNotice(Notice notice) {
@@ -24,6 +26,11 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public int updateNotice(Notice notice) {
         return noticeDao.updateNotice(notice);
+    }
+
+    @Override
+    public int deleteNotice(Integer noticeId) {
+        return noticeDao.deleteNotice(noticeId);
     }
 
     @Override
@@ -53,18 +60,29 @@ public class NoticeServiceImpl implements NoticeService {
         //设置总记录数
         page.setPageTotalCount(pageTotalCount);
         //求总页码
-        Integer pageTotal =pageTotalCount/pageSize;
-        if (pageTotalCount%pageSize>0){
-            pageTotal+=1;
+        Integer pageTotal = pageTotalCount / pageSize;
+        if (pageTotalCount % pageSize > 0) {
+            pageTotal += 1;
         }
         //设置总页码
         page.setPageTotal(pageTotal);
         //求开始页码
-        int begin = (page.getPageNo()-1)*pageSize;
+        int begin = (page.getPageNo() - 1) * pageSize;
         //获取开始页码的分页数据
-        List<Notice> items=noticeDao.queryNoticeByPage(begin,pageSize);
+        List<Notice> items = noticeDao.queryNoticeByPage(begin, pageSize);
         //设置数据
         page.setItems(items);
+        return page;
+    }
+
+    public Page2<Notice> queryNoticeByPage2() {
+        Page2<Notice> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        //求总记录数
+        Integer pageTotalCount = noticeDao.queryPageTotalCounts();
+        page.setCount(pageTotalCount);
+        page.setData(noticeDao.queryAllNotice());
         return page;
     }
 }
