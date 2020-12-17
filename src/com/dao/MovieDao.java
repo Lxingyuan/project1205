@@ -45,4 +45,14 @@ public interface MovieDao {
     List<Movie> queryMovieByPage(Integer pageNo, Integer pageSize);
 
     List<Movie> queryAllMovie();
+
+    /**
+     * 按条件查询
+     * @param movieName
+     * @param type
+     * @param protagonist
+     * @param showTime
+     * @return
+     */
+    List<Movie> queryAllMovie(String movieName, String type, String protagonist, String showTime);
 }

@@ -43,6 +43,15 @@ public interface MovieService {
     //电影分页2
     Page2<Movie> queryMovieByPage2();
 
+    /**
+     * 按条件查询
+     * @param movieName
+     * @param type
+     * @param protagonist
+     * @param showTime
+     * @return
+     */
+    Page2<Movie> queryMovieByPage2(String movieName,String type,String protagonist,String showTime);
     //修改某个字段的电影信息
     int updateMovieColumnValue(Integer movieId,String columnName,String columnValue);
 }
