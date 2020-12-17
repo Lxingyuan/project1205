@@ -27,12 +27,12 @@
                     success: function (data) {
                         //console.log("data:" + data);//data代表服务器回传的数据
                         if (data == "true") {
-                            swal("退出成功!", "", "success");
+                            layer.msg("退出失败！");
                             //刷新后未登录，自动跳去后台登录界面
                             window.location.reload();
                         }
                         else {
-                            swal("退出失败!", "", "error");
+                            layer.msg("退出失败！");
                         }
                     }
                 });

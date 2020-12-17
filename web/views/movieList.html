@@ -324,17 +324,17 @@
                 layer.open({
                     type: 1
                     ,title: '修改“'+data.movieName+'”的图片'
-                    ,area: ['450px', '500px']
+                    ,area: ['500px', '560px']
                     ,shade: 0.1
                     ,maxmin: true
-                    ,offset: ['20%', '32%']
+                    ,offset: ['10%', '35%']
                     ,content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
                     '                                        <div>\n' +
                     '                                            <input type="hidden" name="id" value="'+data.movieId+'">\n' +
                     '                                            <input type="hidden" name="tableName" value="movie">\n' +
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
                     '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
-                    '                                            <img id="cropedBigImg" style="width: 250px;height: 300px;" src="'+data.picAddress+'"/>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="'+data.picAddress+'"/>\n' +
                     '                                        </div>\n' +
                     '                                        <button type="button" id="chuan">确认上传</button>\n' +
                     '                                    </form></div>'
