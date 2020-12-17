@@ -60,10 +60,11 @@ public class User {
                 ", email='" + email + '\'' +
                 ", sex='" + sex + '\'' +
                 ", registerTime=" + registerTime +
+                ", headPic='" + headPic + '\'' +
                 '}';
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
