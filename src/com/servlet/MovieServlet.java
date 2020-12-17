@@ -4,6 +4,7 @@ import com.entity.Movie;
 import com.google.gson.Gson;
 import com.service.MovieService;
 import com.service.impl.MovieServiceImpl;
+import com.utils.Page;
 import com.utils.Page2;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -112,6 +113,16 @@ public class MovieServlet extends BaseServlet {
         //转成字符串
         String jsonStr = gson.toJson(page);
         //写入返回信息
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
     }
 
