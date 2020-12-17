@@ -1,10 +1,13 @@
 package com.servlet;
 
+import com.service.MovieService;
+import com.service.impl.MovieServiceImpl;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.junit.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +16,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
-@WebServlet("/fileUpload")
-public class FileUploadServlet extends HttpServlet {
+@WebServlet("/picUpload")
+public class PicUploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
         response.setCharacterEncoding("utf-8");
         request.setCharacterEncoding("utf-8");
+        //要更新的表名
+        String tableName="";
+        //列名
+        String columnName="";
+        //id
+        String id="";
+        //文件名
+        String fileName="";
         //1 先判断上传的数据是否多段数据 （只有是多段的数据，才是文件上传的）
         if (ServletFileUpload.isMultipartContent(request)) {
             // 创建FileItemFactory 工厂实现类
@@ -37,14 +47,23 @@ public class FileUploadServlet extends HttpServlet {
                         list) {
                     if (fileItem.isFormField()) {
                         //普通表单项
-                        System.out.println("普通表单项 name = " + fileItem.getFieldName());
+                        System.out.println("普通表单项 name:" + fileItem.getFieldName());
                         //参数UTF-8解决乱码
                         System.out.println("value = " + fileItem.getString("UTF-8"));
+                        if("id".equals(fileItem.getFieldName())){
+                            id=fileItem.getString("UTF-8");
+                        }else if ("tableName".equals(fileItem.getFieldName())){
+                            tableName=fileItem.getString("UTF-8");
+                        }else if ("columnName".equals(fileItem.getFieldName())){
+                            columnName=fileItem.getString("UTF-8");
+                        }
                     } else {
                         //上传的文件
-                        System.out.println("表单项的name:" + fileItem.getFieldName());
+                        //System.out.println("表单项的name:" + fileItem.getFieldName());
                         System.out.println("上传的文件名:" + fileItem.getName());
                         fileItem.write(new File("D:\\project1205\\images\\" + System.currentTimeMillis() + fileItem.getName()));
+                        //要保存时到数据库的文件名
+                        fileName="http://localhost:8765/images\\\\"+fileItem.getName();
 
                     }
                 }
@@ -54,5 +73,16 @@ public class FileUploadServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        //要更新的是movie表
+        if ("movie".equals(tableName)) {
+            MovieService movieService=new MovieServiceImpl();
+            Integer result=movieService.updateMovieColumnValue(Integer.parseInt(id),columnName,fileName);
+            if(result>0){
+                response.getWriter().write("true");
+            }else {
+                response.getWriter().write("false");
+            }
+        }
     }
+
 }
