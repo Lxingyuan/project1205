@@ -162,17 +162,6 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
-<!--<script type="text/html" id="switchTpl">-->
-<!--<input type="checkbox" name="sex" value=" {{ d.movieId }} " lay-skin="switch" lay-text="女|男" lay-filter="sexDemo">-->
-<!--</script>-->
-
-<!--<script type="text/html" id="sexTpl">
-    {{#  if(d.hits === 900){ }}
-    <span style="color: #F581B1;">{{ d.hits }}</span>
-    {{#  } else { }}
-    {{ d.hits }}
-    {{#  } }}
-</script>-->
 
 <script>
     layui.use('table', function () {
@@ -200,10 +189,17 @@
                 , {field: 'showTime', title: '上映年份', width: 120, sort: true, edit: 'text'}
                 , {field: 'content', title: '电影详细介绍', width: 100, edit: 'text'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, totalRow: true, edit: 'text'}
-                //, {field: 'hits', title: '浏览数2',width: 80, sort: true, templet: '#sexTpl'}
-                // , {field: 'doSomething', title: '操作', width: 125, templet: '#doSomething'}
                 , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo', unresize: true} //这里的toolbar值是模板元素的选择器
             ]]
+            ,done: function(res, curr, count){
+                //如果是异步请求数据方式，res即为接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+                //得到当前页码
+                console.log("页码:"+curr);
+                //得到数据总量
+                console.log("总量:"+count);
+            }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
                 //console.log(this);
@@ -221,88 +217,7 @@
                     "data": result //解析数据列表
                 };
             }
-            ,done: function(res, curr, count){
-                //如果是异步请求数据方式，res即为你接口返回的信息。
-                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                console.log(res);
-
-                //得到当前页码
-                console.log(curr);
-
-                //得到数据总量
-                console.log(count);
-            }
-
         });
-        //监听性别操作
-        /*form.on('switch(sexDemo)', function (obj) {
-            //layer.msg('选择');
-            layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
-
-        });*/
-
-        /*        //获取信息按钮
-                $("#msg").on("click", function () {
-                    var checkStatus = table.checkStatus('demo');
-                    console.log(checkStatus.data)//选中行数据
-                    var items = checkStatus.data;
-                    //console.log(items.length);
-                    var idNum = new Array();
-                    for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
-                    }
-                    console.log(idNum);
-                    //console.log(items[0]);//选中第一行行数据
-                    //console.log(items[0].movieId);//选中第一行的键为movieId的值
-                });
-                //删除按钮事件
-                $("#deleteButton").on("click", function () {
-                    var checkStatus = table.checkStatus('demo');
-                    //console.log(checkStatus.data)//选中行数据
-                    var items = checkStatus.data;
-                    var idNum = new Array();
-                    for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
-                    }
-                    //console.log(idNum);//保存的id列表
-                    if (items.length != 0) {
-                        layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
-                            $.ajax({
-                                url: "/movie.do?action=deleteMovie",
-                                data: {idNum: idNum},
-                                type: "GET",
-                                async: false,
-                                dataType: "text",//返回的数据类型
-                                success: function (data) {
-                                    //console.log("data:" + data);//data代表服务器回传的数据
-                                    if (data == "true") {
-                                        layer.open({
-                                            title: '提示'
-                                            , content: '删除成功！'
-                                        });
-                                        //刷新表格
-                                        table.reload('demo', {
-                                            page: {
-                                                curr: 1
-                                            }
-                                        });
-                                    } else {
-                                        layer.open({
-                                            title: '提示'
-                                            , content: '删除失败！'
-                                        });
-                                    }
-                                }
-                            });
-                            layer.close(index);
-                        });
-                    } else {
-                        layer.open({
-                            title: '提示'
-                            , content: '您没有选择任何行！'
-                        });
-                    }
-                });*/
 
         //表格上方头工具栏监听事件
         table.on('toolbar(test)', function (obj) {
@@ -482,6 +397,9 @@
             table.reload('demo', {
                 url: '/movie.do?action=queryMovieListLimit' //数据接口
                 ,where:{movieName:$("#movieName").val(),type:$("#type").val(),protagonist:$("#protagonist").val(),showTime:$("#showTime").val()}
+                ,page: {
+                    curr: 1
+                }
             });
         });
     });
