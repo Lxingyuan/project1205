@@ -42,8 +42,8 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     }
 
     @Override
-    public  User queryUserByName(String username){
-        String sql="select * from user where UserName=?";
+    public User queryUserByName(String username) {
+        String sql = "select * from user where UserName=?";
         return queryForOne(User.class, sql, username);
     }
 
@@ -77,6 +77,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         String sql = "select * from user where telephone=?";
         return queryForOne(User.class, sql, telephone);
     }
+
     public List<User> queryAllUser() {
         String sql = "select * from user";
         return queryForList(User.class, sql);

@@ -74,5 +74,4 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         String sql = "select * from admin ";
         return queryForList(Admin.class, sql);
     }
-
 }

@@ -71,9 +71,7 @@
                     $("#showTime").append('<option value=' + i + '>' + i + '</option>');
                 }
             }
-
             init();
-
         });
     </script>
 </head>
@@ -183,7 +181,7 @@
                 , {field: 'movieId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
                 , {field: 'movieName', title: '电影名', width: 120, edit: 'text'}
                 , {field: 'type', title: '类型', width: 200, edit: 'text'}
-                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl', unresize: true}
+                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl', unresize: true,edit: 'text'}
                 , {field: 'director', title: '导演', width: 100, edit: 'text'}
                 , {field: 'protagonist', title: '主演', width: 100, edit: 'text'}
                 , {field: 'showTime', title: '上映年份', width: 120, sort: true, edit: 'text'}
