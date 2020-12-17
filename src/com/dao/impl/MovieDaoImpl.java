@@ -93,7 +93,7 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
 
     @Override
     public List<Movie> queryAllMovie() {
-        String sql = "select * from movie ";
+        String sql = "select * from movie";
         return queryForList(Movie.class, sql);
     }
 
