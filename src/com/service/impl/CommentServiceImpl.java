@@ -5,7 +5,6 @@ import com.dao.impl.CommentDaoImpl;
 import com.entity.Comment;
 import com.service.CommentService;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -56,17 +55,6 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> items = commentDao.queryCommentByPage(begin, pageSize);
         //设置数据
         page.setItems(items);
-        return page;
-    }
-
-    public Page2<Comment> queryCommentByPage2() {
-        Page2<Comment> page = new Page2<>();
-        page.setCode(0);
-        page.setMsg("");
-        //求总记录数
-        Integer pageTotalCount = commentDao.queryPageTotalCounts();
-        page.setCount(pageTotalCount);
-        page.setData(commentDao.queryAllComment());
         return page;
     }
 }

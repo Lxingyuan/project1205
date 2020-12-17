@@ -3,7 +3,6 @@ package com.dao.impl;
 import com.dao.BaseDao;
 import com.dao.NoticeDao;
 import com.entity.Notice;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -23,12 +22,6 @@ public class NoticeDaoImpl extends BaseDao implements NoticeDao {
     public int updateNotice(Notice notice) {
         String sql = "update notice set NoticeHead=?,NoticeContent=?,NoticeUser=? where NoticeId = ?";
         return update(sql, notice.getNoticeHead(), notice.getNoticeContent(), notice.getNoticeUser(), notice.getNoticeId());
-    }
-
-    @Override
-    public int deleteNotice(Integer noticeId) {
-        String sql = "delete from notice where NoticeId = ?";
-        return update(sql, noticeId);
     }
 
     @Override
@@ -59,9 +52,5 @@ public class NoticeDaoImpl extends BaseDao implements NoticeDao {
     public List<Notice> queryNoticeByPage(Integer begin, Integer pageSize) {
         String sql = "select * from notice limit ?, ?";
         return queryForList(Notice.class, sql, begin, pageSize);
-    }
-    public List<Notice> queryAllNotice() {
-        String sql = "select * from notice";
-        return queryForList(Notice.class, sql);
     }
 }

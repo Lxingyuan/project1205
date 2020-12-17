@@ -6,7 +6,6 @@ import com.entity.Admin;
 import com.entity.User;
 import com.service.AdminService;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -84,16 +83,5 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin login(Admin admin) {
         return adminDao.queryAdminByNameAndPassword(admin);
-    }
-
-    public Page2<Admin> queryAdminByPage2() {
-        Page2<Admin> page = new Page2<>();
-        page.setCode(0);
-        page.setMsg("");
-        //求总记录数
-        Integer pageTotalCount = adminDao.queryPageTotalCounts();
-        page.setCount(pageTotalCount);
-        page.setData(adminDao.queryAllAdmin());
-        return page;
     }
 }

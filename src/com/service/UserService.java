@@ -2,7 +2,6 @@ package com.service;
 
 import com.entity.User;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -21,8 +20,6 @@ public interface UserService {
     //更新信息
     int update(User user);
 
-    int deleteUser(Integer userId);
-
     User queryUserById(Integer id);
 
     User queryUserByName(String username);
@@ -35,8 +32,5 @@ public interface UserService {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
-
-    //电影分页2
-    Page2<User> queryUserByPage2();
 
 }

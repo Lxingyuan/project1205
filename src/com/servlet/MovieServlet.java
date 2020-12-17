@@ -1,23 +1,16 @@
 package com.servlet;
 
-import com.entity.Admin;
 import com.entity.Movie;
 import com.google.gson.Gson;
-import com.service.AdminService;
 import com.service.MovieService;
-import com.service.UserService;
-import com.service.impl.AdminServiceImpl;
 import com.service.impl.MovieServiceImpl;
-import com.service.impl.UserServiceImpl;
-import com.utils.Page;
 import com.utils.Page2;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Array;
+
 
 /**
  * 作者：林星源
@@ -45,15 +38,6 @@ public class MovieServlet extends BaseServlet {
         super.doGet(request, response);
     }
 
-    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
-        Gson gson = new Gson();
-        String jsonStr = gson.toJson(page);
-        response.getWriter().write(jsonStr);
-    }
 
     public void queryMovieList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));

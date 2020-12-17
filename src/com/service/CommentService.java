@@ -2,7 +2,6 @@ package com.service;
 
 import com.entity.Comment;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -22,6 +21,4 @@ public interface CommentService {
     int deleteComment(Integer commentId);
     //评论页面
     Page<Comment> queryCommentByPage(int pageNo, int pageSize);
-
-    Page2<Comment> queryCommentByPage2();
 }

@@ -21,7 +21,7 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     @Override
     public int updateComment(Comment comment) {
         String sql = "update comment set UpdateTime = ?,CommentTypeId = ?,MovieId = ?,CommentUser = ?,CommentContent = ? where CommentId = ?";
-        return update(sql, comment.getUpdateTime(), comment.getCommentTypeId(), comment.getMovieId(), comment.getCommentUser(), comment.getCommentContent(), comment.getCommentId());
+        return update(sql, comment.getUpdateTime(), comment.getCommentTypeId(), comment.getMovieId(), comment.getCommentUser(),comment.getCommentContent(),comment.getCommentId());
 
     }
 
@@ -42,10 +42,4 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
         String sql = "select * from user limit ?, ?";
         return queryForList(Comment.class, sql, begin, pageSize);
     }
-
-    public List<Comment> queryAllComment() {
-        String sql = "select c.* , m.MovieName from `comment` c,`movie` m WHERE c.MovieId=m.MovieId";
-        return queryForList(Comment.class, sql);
-    }
-
 }

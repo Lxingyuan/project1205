@@ -3,7 +3,6 @@ package com.service;
 import com.entity.Admin;
 import com.entity.User;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -31,6 +30,4 @@ public interface AdminService {
 
     //登录
     Admin login(Admin admin);
-
-    Page2<Admin> queryAdminByPage2();
 }

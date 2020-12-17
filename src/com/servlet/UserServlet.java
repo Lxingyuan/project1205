@@ -9,7 +9,6 @@ import com.service.UserService;
 import com.service.impl.AdminServiceImpl;
 import com.service.impl.UserServiceImpl;
 import com.utils.Page;
-import com.utils.Page2;
 import com.utils.SmsUtil;
 
 import javax.servlet.ServletException;
@@ -151,37 +150,6 @@ public class UserServlet extends BaseServlet {
             request.getSession().setAttribute("admin", admin);
         }
         else {
-            response.getWriter().write("false");
-        }
-    }
-    public void queryUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page2<User> page = userService.queryUserByPage2();
-        System.out.println("page:"+page);
-        Gson gson = new Gson();
-        //转成字符串
-        String jsonStr = gson.toJson(page);
-        //写入返回信息
-        response.getWriter().write(jsonStr);
-    }
-    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] idNum=request.getParameterValues("idNum[]");
-        boolean flag=true;
-        Integer result;
-        //String idNum2 = request.getParameter("idNum");
-        //System.out.println("idNum:"+idNum2);
-        for (int i = 0; i <idNum.length ; i++) {
-            //System.out.print(idNum[i]+" ");
-            result=userService.deleteUser(Integer.parseInt(idNum[i]));
-            //删除失败
-            if(result<0){
-                flag=false;
-                break;
-            }
-        }
-        if(flag==true){
-            response.getWriter().write("true");
-        }else {
             response.getWriter().write("false");
         }
     }

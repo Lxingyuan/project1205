@@ -16,8 +16,6 @@ public interface NoticeDao {
     //修改公告
     int updateNotice(Notice notice);
 
-    int deleteNotice(Integer noticeId);
-
     //根据id搜索公告
     Notice queryNoticeById(Integer noticeId);
 
@@ -31,7 +29,4 @@ public interface NoticeDao {
     Integer queryPageTotalCounts();
 
     List<Notice> queryNoticeByPage(Integer pageNo, Integer pageSize);
-
-    List<Notice> queryAllNotice();
-
 }

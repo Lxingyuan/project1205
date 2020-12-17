@@ -2,7 +2,6 @@ package com.service;
 
 import com.entity.Notice;
 import com.utils.Page;
-import com.utils.Page2;
 
 import java.util.List;
 
@@ -17,8 +16,6 @@ public interface NoticeService {
     //修改公告
     int updateNotice(Notice notice);
 
-    int deleteNotice(Integer noticeId);
-
     //根据id搜索公告
     Notice queryNoticeById(Integer id);
 
@@ -29,6 +26,4 @@ public interface NoticeService {
     Notice queryNoticeByUser(String noticeUser);
 
     Page<Notice> queryNoticeByPage(int pageNo, int pageSize);
-
-    Page2<Notice> queryNoticeByPage2();
 }

@@ -14,8 +14,6 @@ public interface UserDao {
 
     int updateUser(User user);
 
-    int deleteUser(Integer userId);
-
     User queryUserById(Integer id);
 
     User queryUserByName(String username);
@@ -29,7 +27,5 @@ public interface UserDao {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
-
-    List<User> queryAllUser();
 
 }
