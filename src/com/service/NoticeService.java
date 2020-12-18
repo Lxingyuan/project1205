@@ -31,4 +31,8 @@ public interface NoticeService {
     Page<Notice> queryNoticeByPage(int pageNo, int pageSize);
 
     Page2<Notice> queryNoticeByPage2();
+
+    Page2<Notice> queryNoticeByPage2(String noticeHead,String noticeContent,String noticeUser);
+
+    int updateNoticeColumnValue(Integer noticeId,String columnName,String columnValue);
 }

@@ -164,6 +164,8 @@ public class UserServlet extends BaseServlet {
         //写入返回信息
         response.getWriter().write(jsonStr);
     }
+
+
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] idNum=request.getParameterValues("idNum[]");
         boolean flag=true;
@@ -184,5 +186,50 @@ public class UserServlet extends BaseServlet {
         }else {
             response.getWriter().write("false");
         }
+    }
+
+    public void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId=request.getParameter("userId");
+        //要更新的字段名
+        String columnName=request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue=request.getParameter("columnValue");
+        columnValue=columnValue.replace("'", "\\'");
+        columnValue=columnValue.replace("\"", "\\\"");
+        columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println(userId+" "+columnName+" "+columnValue);
+        Integer result=userService.updateUserColumnValue(Integer.parseInt(userId),columnName,columnValue);
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+
+    /**
+     * 限定条件查询
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void queryUserListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //用户名
+        String userName=request.getParameter("userName");
+        //电话号码
+        String telephone=request.getParameter("telephone");
+        //QQ号
+        String qq=request.getParameter("qq");
+        //电子邮箱
+        String email=request.getParameter("email");
+        System.out.println("成功获取信息");
+        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        Page2<User> page = userService.queryUserByPage2(userName,telephone,qq,email);
+        System.out.println("page2:"+page);
+        Gson gson = new Gson();
+        //转成字符串
+        String jsonStr = gson.toJson(page);
+        //写入返回信息
+        response.getWriter().write(jsonStr);
     }
 }

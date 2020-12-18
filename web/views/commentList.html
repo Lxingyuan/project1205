@@ -22,51 +22,6 @@
         }
     </style>
     <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            // $('#chooseImage').bind('change', function () {
-            //     // alert(123)
-            //     var filePath = $(this).val(), //获取到input的value，里面是文件的路径
-            //         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
-            //         src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
-            //     // 检查是否是图片
-            //     if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
-            //         alert('上传错误,文件格式必须为：png/jpg/jpeg');
-            //         $('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
-            //         return false;
-            //     } else {
-            //         //alert("上次成功");
-            //         //console.log(src);
-            //         console.log("filePath：" + filePath)
-            //         $('#cropedBigImg').attr('src', src);
-            //     }
-            // });
-            // $('#chuan').bind('click', function () {
-            //     //var filepath=$("#chooseImage").val();
-            //     var formData = new FormData(document.getElementById("f1"));
-            //     $.ajax({
-            //         url: "/fileUpload",
-            //         data: formData,
-            //         processData: false,
-            //         contentType: false,
-            //         type: "POST",
-            //         dataType: "text",
-            //         success: function (data) {
-            //             alert(data);
-            //         }
-            //     });
-            // });
-            function init() {
-                var myDate = new Date();
-                //获取当前年
-                var year = myDate.getFullYear();
-                for (var i = year; i >= 1950; i--) {
-                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
-                }
-            }
-            init();
-        });
-    </script>
 </head>
 <body>
 
@@ -77,10 +32,10 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">电影名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input" id="movieName">
                     </div>
                 </div>
-                <div class="layui-inline" id="kkkk">
+                <div class="layui-inline">
                     <label class="layui-form-label">评论者</label>
                     <div class="layui-input-block">
                         <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">

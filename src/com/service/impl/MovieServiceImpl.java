@@ -94,7 +94,7 @@ public class MovieServiceImpl implements MovieService {
         Page2<Movie> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
-        List<Movie> list=movieDao.queryAllMovie();
+        List<Movie> list = movieDao.queryAllMovie();
         page.setData(list);
         page.setCount(list.size());
         return page;
@@ -105,7 +105,7 @@ public class MovieServiceImpl implements MovieService {
         Page2<Movie> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
-        List<Movie> list=movieDao.queryAllMovie(movieName,type,protagonist,showTime);
+        List<Movie> list = movieDao.queryAllMovie(movieName, type, protagonist, showTime);
         page.setData(list);
         page.setCount(list.size());
         return page;
@@ -113,6 +113,6 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public int updateMovieColumnValue(Integer movieId, String columnName, String columnValue) {
-        return movieDao.updateMovieColumnValue(movieId,columnName,columnValue);
+        return movieDao.updateMovieColumnValue(movieId, columnName, columnValue);
     }
 }

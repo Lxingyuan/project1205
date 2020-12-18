@@ -39,4 +39,8 @@ public interface UserService {
     //电影分页2
     Page2<User> queryUserByPage2();
 
+    Page2<User> queryUserByPage2(String userName,String telephone,String qq,String email);
+
+    int updateUserColumnValue(Integer userId,String columnName,String columnValue);
+
 }

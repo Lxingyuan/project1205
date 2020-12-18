@@ -4,6 +4,7 @@ import com.dao.BaseDao;
 import com.dao.NoticeDao;
 import com.entity.Notice;
 import com.utils.Page2;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class NoticeDaoImpl extends BaseDao implements NoticeDao {
     public int deleteNotice(Integer noticeId) {
         String sql = "delete from notice where NoticeId = ?";
         return update(sql, noticeId);
+    }
+
+    @Override
+    public int updateNoticeColumnValue(Integer noticeId, String columnName, String columnValue) {
+        String sql = "update notice set " + columnName + " = '" + columnValue + "' where noticeId = " + noticeId;
+        //System.out.println(sql);
+        return update(sql);
     }
 
     @Override
@@ -60,8 +68,27 @@ public class NoticeDaoImpl extends BaseDao implements NoticeDao {
         String sql = "select * from notice limit ?, ?";
         return queryForList(Notice.class, sql, begin, pageSize);
     }
+
     public List<Notice> queryAllNotice() {
         String sql = "select * from notice";
+        return queryForList(Notice.class, sql);
+    }
+
+    @Override
+    public List<Notice> queryAllNotice(String noticeHead, String noticeContent, String noticeUser) {
+        String sql = "SELECT * FROM notice WHERE noticeHead LIKE '%' AND noticeContent LIKE '%' AND noticeUser LIKE '%'";
+        if (StringUtils.isNotEmpty(noticeHead)) {
+            String string = "noticeHead LIKE '%" + noticeHead + "%'";
+            sql = sql.replace("noticeHead LIKE '%'", string);
+        }
+        if (StringUtils.isNotEmpty(noticeContent)) {
+            String string = "noticeContent LIKE '%" + noticeContent + "%'";
+            sql = sql.replace("noticeContent LIKE '%'", string);
+        }
+        if (StringUtils.isNotEmpty(noticeUser)) {
+            String string = "noticeUser LIKE '%" + noticeUser + "%'";
+            sql = sql.replace("noticeUser LIKE '%'", string);
+        }
         return queryForList(Notice.class, sql);
     }
 }

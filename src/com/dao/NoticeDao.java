@@ -18,6 +18,7 @@ public interface NoticeDao {
 
     int deleteNotice(Integer noticeId);
 
+    int updateNoticeColumnValue(Integer noticeId,String columnName,String columnValue);
     //根据id搜索公告
     Notice queryNoticeById(Integer noticeId);
 
@@ -33,5 +34,8 @@ public interface NoticeDao {
     List<Notice> queryNoticeByPage(Integer pageNo, Integer pageSize);
 
     List<Notice> queryAllNotice();
+
+    List<Notice> queryAllNotice(String noticeHead,String noticeContent,String noticeUser);
+
 
 }

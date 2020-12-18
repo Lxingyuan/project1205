@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
     public User login(User user) {
         return userDao.queryUserByNameAndPassword(user);
     }
+
     @Override
     public int update(User user) {
         return userDao.updateUser(user);
@@ -40,14 +41,17 @@ public class UserServiceImpl implements UserService {
     public User queryUserById(Integer id) {
         return userDao.queryUserById(id);
     }
+
     @Override
-    public User queryUserByName(String username){
+    public User queryUserByName(String username) {
         return userDao.queryUserByName(username);
     }
+
     @Override
-    public User queryUserByNameAndPassword(User user){
+    public User queryUserByNameAndPassword(User user) {
         return userDao.queryUserByNameAndPassword(user);
     }
+
     @Override
     public Page<User> queryUserByPage(int pageNo, int pageSize) {
         Page<User> page = new Page<>();
@@ -60,16 +64,16 @@ public class UserServiceImpl implements UserService {
         //设置总记录数
         page.setPageTotalCount(pageTotalCount);
         //求总页码
-        Integer pageTotal =pageTotalCount/pageSize;
-        if (pageTotalCount%pageSize>0){
-            pageTotal+=1;
+        Integer pageTotal = pageTotalCount / pageSize;
+        if (pageTotalCount % pageSize > 0) {
+            pageTotal += 1;
         }
         //设置总页码
         page.setPageTotal(pageTotal);
         //求开始页码
-        int begin = (page.getPageNo()-1)*pageSize;
+        int begin = (page.getPageNo() - 1) * pageSize;
         //获取开始页码的分页数据
-        List<User> items=userDao.queryUserByPage(begin,pageSize);
+        List<User> items = userDao.queryUserByPage(begin, pageSize);
         //设置数据
         page.setItems(items);
         return page;
@@ -95,5 +99,21 @@ public class UserServiceImpl implements UserService {
         page.setCount(pageTotalCount);
         page.setData(userDao.queryAllUser());
         return page;
+    }
+
+    @Override
+    public Page2<User> queryUserByPage2(String userName, String telephone, String qq, String email) {
+        Page2<User> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        List<User> list = userDao.queryAllUser(userName, telephone, qq, email);
+        page.setData(list);
+        page.setCount(list.size());
+        return page;
+    }
+
+    @Override
+    public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
+        return userDao.updateUserColumnValue(userId, columnName, columnValue);
     }
 }
