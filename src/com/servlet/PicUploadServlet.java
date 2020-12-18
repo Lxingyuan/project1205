@@ -61,9 +61,10 @@ public class PicUploadServlet extends HttpServlet {
                         //上传的文件
                         //System.out.println("表单项的name:" + fileItem.getFieldName());
                         System.out.println("上传的文件名:" + fileItem.getName());
-                        fileItem.write(new File("D:\\project1205\\images\\" + System.currentTimeMillis() + fileItem.getName()));
+                        Long time=System.currentTimeMillis();
+                        fileItem.write(new File("D:\\project1205\\images\\" + time + fileItem.getName()));
                         //要保存时到数据库的文件名
-                        fileName = "http://localhost:8765/images\\\\" + System.currentTimeMillis() + fileItem.getName();
+                        fileName = "http://localhost:8765/images\\\\" + time + fileItem.getName();
 
                     }
                 }
