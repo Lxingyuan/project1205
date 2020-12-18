@@ -66,5 +66,48 @@ public class NoticeServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+    public void updateNotice(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String noticeId=request.getParameter("noticeId");
+        //要更新的字段名
+        String columnName=request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue=request.getParameter("columnValue");
+        columnValue=columnValue.replace("'", "\\'");
+        columnValue=columnValue.replace("\"", "\\\"");
+        columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println(noticeId+" "+columnName+" "+columnValue);
+        Integer result=noticeService.updateNoticeColumnValue(Integer.parseInt(noticeId),columnName,columnValue);
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
 
+    /**
+     * 限定条件查询
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void queryNoticeListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //公告标题
+        String noticeHead=request.getParameter("noticeHead");
+        //公告内容
+        String noticeContent=request.getParameter("noticeContent");
+        //公告创建人
+        String noticeUser=request.getParameter("noticeUser");
+
+        System.out.println(noticeHead+"?"+noticeContent+noticeUser);
+        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        Page2<Notice> page = noticeService.queryNoticeByPage2(noticeHead,noticeContent,noticeUser);
+        System.out.println("page2:"+page);
+        Gson gson = new Gson();
+        //转成字符串
+        String jsonStr = gson.toJson(page);
+        //写入返回信息
+        response.getWriter().write(jsonStr);
+    }
 }

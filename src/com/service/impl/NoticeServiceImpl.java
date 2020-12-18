@@ -85,4 +85,21 @@ public class NoticeServiceImpl implements NoticeService {
         page.setData(noticeDao.queryAllNotice());
         return page;
     }
+
+    @Override
+    public Page2<Notice> queryNoticeByPage2(String noticeHead,String noticeContent,String noticeUser) {
+        Page2<Notice> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        System.out.println("2");
+        List<Notice> list = noticeDao.queryAllNotice(noticeHead, noticeContent, noticeUser);
+        page.setData(list);
+        page.setCount(list.size());
+        return page;
+    }
+
+    @Override
+    public int updateNoticeColumnValue(Integer noticeId, String columnName, String columnValue) {
+        return noticeDao.updateNoticeColumnValue(noticeId, columnName, columnValue);
+    }
 }

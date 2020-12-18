@@ -5,7 +5,8 @@
     <title>layuiAdmin 主页示例模板一</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
@@ -43,7 +44,7 @@
                     //alert("上次成功");
                     //console.log(src);
                     console.log("filePath：" + filePath)
-                    $('#cropedBigImg').attr('src' , src);
+                    $('#cropedBigImg').attr('src', src);
                 }
             });
             $('#chuan').bind('click', function () {
@@ -61,16 +62,6 @@
                     }
                 });
             });
-
-            function init() {
-                var myDate = new Date();
-                //获取当前年
-                var year = myDate.getFullYear();
-                for (var i = year; i >= 1950; i--) {
-                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
-                }
-            }
-            init();
         });
     </script>
 </head>
@@ -81,39 +72,41 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">电影名称</label>
+                    <label class="layui-form-label">用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline" id="kkkk">
-                    <label class="layui-form-label">电影类型</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="userName">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">主演</label>
+                    <label class="layui-form-label">电话</label>
                     <div class="layui-input-block">
-                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="telephone" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="telephone">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">上映年份</label>
+                    <label class="layui-form-label">QQ</label>
                     <div class="layui-input-block">
-                        <select name="showTime" id="showTime">
-                            <option value="0">不限</option>
-                        </select>
+                        <input type="text" name="qq" placeholder="请输入" autocomplete="off" class="layui-input" id="qq">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                    <label class="layui-form-label">email</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="email">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search"
+                            id="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
             </div>
         </div>
-
         <div class="layui-card-body">
             <!--            <div style="padding-bottom: 10px;" class="layui-btn-container">
                             <button class="layui-btn layuiadmin-btn-useradmin" id="deleteButton" lay-event="delete">删除</button>
@@ -123,7 +116,6 @@
 
             <div class="layui-table-box">
                 <table id="demo" lay-filter="test">
-
                 </table>
             </div>
             <!--<img src="../static/images/person_1.jpg" width="100">
@@ -167,6 +159,7 @@
 <script>
     layui.use('table', function () {
         var table = layui.table;
+        var form = layui.form;
         //第一个实例
         table.render({
             elem: '#demo'
@@ -177,20 +170,29 @@
             , height: 600
             , limits: [5, 10, 20, 30, 40, 50]
             , cols: [[ //表头
-                {checkbox: true, fixed: true}
-                , {field: 'userId', title: 'ID', width: 100, sort: true}
-                , {field: 'userName', title: '用户名', width: 120}
-                , {field: 'userPassword', title: '用户密码', width: 200}
-                , {field: 'headPic', title: '头像', width: 100, templet: '#imgTpl'}
-                , {field: 'sex', title: '性别', width: 200}
-                , {field: 'telephone', title: '电话', width: 100}
-                , {field: 'qq', title: 'QQ', width: 150}
-                , {field: 'email', title: '电子邮箱', width: 120, sort: true}
+                {type: 'numbers'}
+                , {type: 'checkbox'}
+                , {field: 'userId', title: 'ID', width: 100, sort: true, unresize: true,}
+                , {field: 'userName', title: '用户名', width: 120, edit: 'text'}
+                , {field: 'userPassword', title: '用户密码', width: 200, edit: 'text'}
+                , {field: 'headPic', title: '头像', width: 100, templet: '#imgTpl', unresize: true,}
+                , {field: 'sex', title: '性别', width: 200, edit: 'text'}
+                , {field: 'telephone', title: '电话', width: 100, edit: 'text'}
+                , {field: 'qq', title: 'QQ', width: 150, edit: 'text'}
+                , {field: 'email', title: '电子邮箱', width: 120, sort: true, edit: 'text'}
                 , {field: 'createTime', title: '评论时间', width: 200, sort: true}
                 , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
-                // , {field: 'doSomething', title: '操作', width: 125, templet: '#doSomething'}
-                , {fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo',unresize:true} //这里的toolbar值是模板元素的选择器
+                , {fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo', unresize: true} //这里的toolbar值是模板元素的选择器
             ]]
+            , done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+                //得到当前页码
+                console.log("页码:" + curr);
+                //得到数据总量
+                console.log("总量:" + count);
+            }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
                 //console.log(this);
@@ -211,69 +213,6 @@
 
         });
 
-        /*        //获取信息按钮
-                $("#msg").on("click", function () {
-                    var checkStatus = table.checkStatus('demo');
-                    console.log(checkStatus.data)//选中行数据
-                    var items = checkStatus.data;
-                    //console.log(items.length);
-                    var idNum = new Array();
-                    for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
-                    }
-                    console.log(idNum);
-                    //console.log(items[0]);//选中第一行行数据
-                    //console.log(items[0].movieId);//选中第一行的键为movieId的值
-                });
-                //删除按钮事件
-                $("#deleteButton").on("click", function () {
-                    var checkStatus = table.checkStatus('demo');
-                    //console.log(checkStatus.data)//选中行数据
-                    var items = checkStatus.data;
-                    var idNum = new Array();
-                    for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
-                    }
-                    //console.log(idNum);//保存的id列表
-                    if (items.length != 0) {
-                        layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
-                            $.ajax({
-                                url: "/movie.do?action=deleteMovie",
-                                data: {idNum: idNum},
-                                type: "GET",
-                                async: false,
-                                dataType: "text",//返回的数据类型
-                                success: function (data) {
-                                    //console.log("data:" + data);//data代表服务器回传的数据
-                                    if (data == "true") {
-                                        layer.open({
-                                            title: '提示'
-                                            , content: '删除成功！'
-                                        });
-                                        //刷新表格
-                                        table.reload('demo', {
-                                            page: {
-                                                curr: 1
-                                            }
-                                        });
-                                    } else {
-                                        layer.open({
-                                            title: '提示'
-                                            , content: '删除失败！'
-                                        });
-                                    }
-                                }
-                            });
-                            layer.close(index);
-                        });
-                    } else {
-                        layer.open({
-                            title: '提示'
-                            , content: '您没有选择任何行！'
-                        });
-                    }
-                });*/
-
         //表格上方头工具栏监听事件
         table.on('toolbar(test)', function (obj) {
             //var checkStatus = table.checkStatus(obj.config.id);
@@ -286,7 +225,7 @@
                     var items = checkStatus.data;//选中行数据
                     var idNum = new Array();
                     for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
+                        idNum.push(items[i].userId);
                     }
                     //console.log(idNum);//保存的id列表
                     if (items.length != 0) {
@@ -336,6 +275,8 @@
         table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+
             //删除
             if (layEvent === 'del') {
                 var idNum = new Array();
@@ -365,6 +306,102 @@
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
             }
+        });
+        //监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field //得到字段
+                , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            console.log(recodePage);
+            //修改电话字段
+            if (field == "telephone") {
+                //以&分隔的中文
+                var $zz = /^1[3456789]d{9}$/;
+                if ($zz.test(value) == false) {
+                    layer.msg('电话的类型格式不对！');
+                    table.reload('demo', {
+                        page: {
+                            curr: recodePage
+                        }
+                    });
+                    return;
+                }
+            }
+
+            //修改qq字段
+            if (field == "qq") {
+                //数字
+                var $zz = /d{5,11}/;
+                if ($zz.test(value) == false) {
+                    layer.msg('QQ格式不对！');
+                    table.reload('demo', {
+                        page: {
+                            curr: recodePage
+                        }
+                    });
+                    return;
+                }
+            }
+            //修改email字段
+            if (field == "email") {
+                //数字
+                var $zz = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if ($zz.test(value) == false) {
+                    layer.msg('email格式不对！');
+                    table.reload('demo', {
+                        page: {
+                            curr: recodePage
+                        }
+                    });
+                    return;
+                }
+            }
+            //验证通过，修改数据库
+            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "/user.do?action=updateUser",
+                    data: {userId: data.userId, columnName: field, columnValue: value},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('更新成功');
+                        } else {
+                            table.reload('demo', {
+                                page: {
+                                    curr: recodePage
+                                }
+                            });
+                            layer.msg('更新失败');
+                        }
+                    }
+                });
+                layer.close(index);
+            })
+
+            //console.log(data);
+        });
+
+        $("#search").on("click", function () {
+            layer.msg('233');
+            //layer.msg($("#movieName").val());
+            //layer.msg($("#showTime").val());
+            table.reload('demo', {
+                url: '/user.do?action=queryUserListLimit' //数据接口
+                ,
+                where: {
+                    userName: $("#userName").val(),
+                    telephone: $("#telephone").val(),
+                    qq: $("#qq").val(),
+                    email: $("#email").val()
+                }
+                ,
+                page: {
+                    curr: 1
+                }
+            });
         });
     });
 </script>

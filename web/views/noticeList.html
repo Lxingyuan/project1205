@@ -24,38 +24,6 @@
     <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            // $('#chooseImage').bind('change', function () {
-            //     // alert(123)
-            //     var filePath = $(this).val(), //获取到input的value，里面是文件的路径
-            //         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
-            //         src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
-            //     // 检查是否是图片
-            //     if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
-            //         alert('上传错误,文件格式必须为：png/jpg/jpeg');
-            //         $('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
-            //         return false;
-            //     } else {
-            //         //alert("上次成功");
-            //         //console.log(src);
-            //         console.log("filePath：" + filePath)
-            //         $('#cropedBigImg').attr('src', src);
-            //     }
-            // });
-            // $('#chuan').bind('click', function () {
-            //     //var filepath=$("#chooseImage").val();
-            //     var formData = new FormData(document.getElementById("f1"));
-            //     $.ajax({
-            //         url: "/fileUpload",
-            //         data: formData,
-            //         processData: false,
-            //         contentType: false,
-            //         type: "POST",
-            //         dataType: "text",
-            //         success: function (data) {
-            //             alert(data);
-            //         }
-            //     });
-            // });
             function init() {
                 var myDate = new Date();
                 //获取当前年
@@ -64,6 +32,7 @@
                     $("#showTime").append('<option value=' + i + '>' + i + '</option>');
                 }
             }
+
             init();
         });
     </script>
@@ -75,23 +44,27 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">电影名称</label>
+                    <label class="layui-form-label">公告标题</label>
                     <div class="layui-input-block">
-                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline" id="kkkk">
-                    <label class="layui-form-label">评论者</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="noticeHead" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="noticeHead">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">评论内容</label>
+                    <label class="layui-form-label">公告内容</label>
                     <div class="layui-input-block">
-                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="noticeContent" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="noticeContent">
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">公告发出人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="noticeUser" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="noticeUser">
+                    </div>
+                </div>
+
                 <div class="layui-inline">
                     <label class="layui-form-label">评论时间</label>
                     <div class="layui-input-block">
@@ -101,7 +74,8 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search"
+                            id="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
@@ -131,6 +105,7 @@
 <script>
     layui.use('table', function () {
         var table = layui.table;
+        var form = layui.form;
         //第一个实例
         table.render({
             elem: '#demo'
@@ -144,13 +119,22 @@
                 {type: 'numbers'}
                 , {type: 'checkbox'}
                 , {field: 'noticeId', title: 'ID', width: 60, sort: true}
-                , {field: 'noticeHead', title: '公告标题', width: 130, sort: true}
-                , {field: 'noticeContent', title: '公告内容', width: 200, sort: true}
-                , {field: 'noticeUser', title: '公告发出人', width: 400}
+                , {field: 'noticeHead', title: '公告标题', width: 130, sort: true, edit: 'text'}
+                , {field: 'noticeContent', title: '公告内容', width: 200, sort: true, edit: 'text'}
+                , {field: 'noticeUser', title: '公告发出人', width: 400, edit: 'text'}
                 , {field: 'createTime', title: '创建时间', width: 200, sort: true}
                 , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
                 , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
+            , done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+                //得到当前页码
+                console.log("页码:" + curr);
+                //得到数据总量
+                console.log("总量:" + count);
+            }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
                 if (this.page.curr) {
@@ -258,6 +242,60 @@
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
             }
+        });
+//监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field //得到字段
+                , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            console.log(recodePage);
+            //修改电话字段
+
+            //验证通过，修改数据库
+            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "/notice.do?action=updateNotice",
+                    data: {noticeId: data.noticeId, columnName: field, columnValue: value},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('更新成功');
+                        } else {
+                            table.reload('demo', {
+                                page: {
+                                    curr: recodePage
+                                }
+                            });
+                            layer.msg('更新失败');
+                        }
+                    }
+                });
+                layer.close(index);
+            })
+
+            //console.log(data);
+        });
+
+        $("#search").on("click", function () {
+            layer.msg('233');
+            //layer.msg($("#movieName").val());
+            //layer.msg($("#showTime").val());
+            table.reload('demo', {
+                url: '/notice.do?action=queryNoticeListLimit' //数据接口
+                ,
+                where: {
+                    noticeHead: $("#noticeHead").val(),
+                    noticeContent: $("#noticeContent").val(),
+                    noticeUser: $("#noticeUser").val(),
+                }
+                ,
+                page: {
+                    curr: 1
+                }
+            });
         });
     });
 </script>

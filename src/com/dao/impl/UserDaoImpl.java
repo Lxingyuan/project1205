@@ -4,6 +4,7 @@ import com.dao.BaseDao;
 import com.dao.BaseDao;
 import com.dao.UserDao;
 import com.entity.User;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -26,6 +27,14 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     public int updateUser(User user) {
         String sql = "update user set UpdateTime = ?,UserName = ?,UserPassword = ?,Telephone = ?,QQ = ?,Email = ?,Sex = ?,RegisterTime = ?,HeadPic = ? where UserId = ?";
         return update(sql, user.getUpdateTime(), user.getUserName(), user.getUserPassword(), user.getTelephone(), user.getQq(), user.getEmail(), user.getSex(), user.getRegisterTime(), user.getHeadPic(), user.getUserId());
+    }
+
+    @Override
+    public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
+        //System.out.println("dao中:"+movieId+" "+columnName+" "+columnValue);
+        String sql = "update user set " + columnName + " = '" + columnValue + "' where userId = " + userId;
+        //System.out.println(sql);
+        return update(sql);
     }
 
     @Override
@@ -80,6 +89,28 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 
     public List<User> queryAllUser() {
         String sql = "select * from user";
+        return queryForList(User.class, sql);
+    }
+
+    @Override
+    public List<User> queryAllUser(String userName, String telephone, String qq, String email) {
+        String sql = "SELECT * FROM user WHERE userName LIKE '%' AND telephone LIKE '%' AND qq LIKE '%' AND email LIKE '%'";
+        if(StringUtils.isNotEmpty(userName)){
+            String string="userName LIKE '%"+userName+"%'";
+            sql=sql.replace("userName LIKE '%'",string);
+        }
+        if(StringUtils.isNotEmpty(telephone)){
+            String string="telephone LIKE '%"+telephone+"%'";
+            sql=sql.replace("telephone LIKE '%'",string);
+        }
+        if(StringUtils.isNotEmpty(qq)){
+            String string="qq LIKE '%"+qq+"%'";
+            sql=sql.replace("qq LIKE '%'",string);
+        }
+        if(StringUtils.isNotEmpty(email)){
+            String string="email LIKE '"+email+"'";
+            sql=sql.replace("email LIKE '%'",string);
+        }
         return queryForList(User.class, sql);
     }
 }
