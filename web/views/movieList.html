@@ -114,7 +114,7 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-<!--    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs test72"  lay-event="test72">
+<!--    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs updateImg"  lay-event="updateImg">
         <i class="layui-icon"></i>上传图片
     </button>-->
     <!--<a class="layui-btn layui-btn-xs" lay-event="edit">显示行信息</a>-->
@@ -143,7 +143,7 @@
                 , {field: 'movieId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
                 , {field: 'movieName', title: '电影名', width: 160, edit: 'text'}
                 , {field: 'type', title: '类型', width: 170, edit: 'text'}
-                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl', unresize: true,event: 'test72'}
+                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl', unresize: true,event: 'updateImg'}
                 , {field: 'director', title: '导演', width: 180, edit: 'text'}
                 , {field: 'protagonist', title: '主演', width: 200, edit: 'text'}
                 , {field: 'showTime', title: '上映年份', width: 120, sort: true, edit: 'text'}
@@ -261,7 +261,7 @@
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
             }
-            else if (layEvent === 'test72') { //上传图片
+            else if (layEvent === 'updateImg') { //上传图片
                 //layer.msg(layEvent);
                 //选择图片按钮事件
                 //console.log(data.picAddress);
