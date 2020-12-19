@@ -24,4 +24,8 @@ public interface CommentService {
     Page<Comment> queryCommentByPage(int pageNo, int pageSize);
 
     Page2<Comment> queryCommentByPage2();
+
+    Page2<Comment> queryCommentByPage2(String movieName,String commentUser,String commentContent);
+
+    int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
 }
