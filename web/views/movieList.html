@@ -114,10 +114,10 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-<!--    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs updateImg"  lay-event="updateImg">
-        <i class="layui-icon"></i>上传图片
-    </button>-->
-    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">显示行信息</a>-->
+    <!--    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs updateImg"  lay-event="updateImg">
+            <i class="layui-icon"></i>上传图片
+        </button>-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="showMessage">信息</a>-->
 </script>
 
 
@@ -131,7 +131,7 @@
             , toolbar: '#toolbarDemo'
             , url: '/movie.do?action=queryMovieList' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            , page:{
+            , page: {
                 limit: 10,//指定每页显示的条数
                 limits: [5, 10, 20, 30, 40, 50, 999]//每页条数
             }
@@ -143,11 +143,18 @@
                 , {field: 'movieId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
                 , {field: 'movieName', title: '电影名', width: 160, edit: 'text'}
                 , {field: 'type', title: '类型', width: 170, edit: 'text'}
-                , {field: 'picAddress', title: '图片预览', width: 100, templet: '#imgTpl', unresize: true,event: 'updateImg'}
+                , {
+                    field: 'picAddress',
+                    title: '图片预览',
+                    width: 100,
+                    templet: '#imgTpl',
+                    unresize: true,
+                    event: 'updateImg'
+                }
                 , {field: 'director', title: '导演', width: 180, edit: 'text'}
                 , {field: 'protagonist', title: '主演', width: 200, edit: 'text'}
                 , {field: 'showTime', title: '上映年份', width: 120, sort: true, edit: 'text'}
-                , {field: 'content', title: '电影详细介绍', width: 310, edit: 'text'}
+                , {field: 'content', title: '电影详细介绍', width: 210, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, totalRow: true, edit: 'text'}
                 //, {templet: setPic, title: '学生照片', align: 'center', width: '12%' }
                 , {fixed: 'right', title: '操作', width: 110, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
@@ -185,7 +192,33 @@
             //var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
                 case 'add':
-                    layer.msg('新增');
+                    //layer.msg('新增');
+                    //var dataBak = table.cache.demo;//demo为表格的id
+                    //console.log(dataBak);
+                    //console.log(dataBak.length);
+
+                    layer.open({
+                        type: 2
+                        ,
+                        title: '新增电影'
+                        ,
+                        area: ['600px', '700px']
+                        ,
+                        shade: 0.1
+                        ,
+                        maxmin: true
+                        ,
+                        offset: ['5%', '30%']
+                        ,
+                        content: '/views/addMovie.html'
+                        ,
+                        btn: ['关闭']
+                        ,
+                        yes: function () {
+                            layer.closeAll();
+                        }
+
+                    });
                     break;
                 case 'delete':
                     var checkStatus = table.checkStatus('demo');
@@ -227,7 +260,7 @@
             }
         });
 
-        //监听工具条
+        //监听工具条行内元素）
         table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
@@ -258,14 +291,79 @@
                     });
                     layer.close(index);
                 });
-            } else if (layEvent === 'edit') { //编辑
+            } else if (layEvent === 'showMessage') { //输出一行信息
                 console.log(data)
             }
-            else if (layEvent === 'updateImg') { //上传图片
+            else if (layEvent === 'content') {
+                //layer.msg("213")
+                //console.log(data.content);
+                layer.open({
+                    type: 2
+                    ,
+                    title: '修改电影详细信息'
+                    ,
+                    area: ['700px', '500px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['5%', '30%']
+                    ,
+                    content: '/views/editMovieContent.html'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
+                        //console.log(data.content);
+                        let body = layer.getChildFrame('body', index);
+                        body.find("#content").html(data.content);
+                        body.find("#id").val(data.movieId);
+                        layui.form.render();
+                    },
+                    yes: function () {
+                        layer.closeAll();
+                    }
+
+                });
+            }
+            //点击上传图片
+            else if (layEvent === 'updateImg') {
                 //layer.msg(layEvent);
+
+                layer.open({
+                    type: 1
+                    ,
+                    title: '修改“' + data.movieName + '”的图片'
+                    ,
+                    area: ['500px', '590px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['10%', '35%']
+                    ,
+                    content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
+                    '                                        <div>\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
+                    '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
+                    '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.picAddress + '"/>\n' +
+                    '                                        </div>\n' +
+                    '                                        <button type="button" id="chuan">确认上传</button>\n' +
+                    '                                    </form></div>'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+
+                });
                 //选择图片按钮事件
-                //console.log(data.picAddress);
-                $(document).on("change","#chooseImage",function(){
+                $(document).on("change", "#chooseImage", function () {
                     var filePath = $(this).val(), //获取到input的value，里面是文件的路径
                         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
                         src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
@@ -280,20 +378,20 @@
                     }
                 });
                 //上传图片按钮事件
-                $(document).on("click","#chuan",function(){
+                $(document).on("click", "#chuan", function () {
                     //var filepath=$("#chooseImage").val();
                     //layer.msg()
                     var formData = new FormData(document.getElementById("f1"));
                     //上传的文件名
-                    var fileName=formData.get("fileName").name.split(".")[0];
-                    var fileHouZhui=formData.get("fileName").name.split(".")[1];
+                    var fileName = formData.get("fileName").name.split(".")[0];
+                    var fileHouZhui = formData.get("fileName").name.split(".")[1];
                     //检查是否上传了文件
-                    if(typeof fileName == "undefined" || fileName == null || fileName == ""){
+                    if (typeof fileName == "undefined" || fileName == null || fileName == "") {
                         layer.msg("请先上传文件！");
                         return false;
                     }
                     //检查文件后缀
-                    if(fileHouZhui!="png" && fileHouZhui!="jpg" && fileHouZhui!="jpeg"){
+                    if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
                         layer.msg("请上传正确格式的图片！");
                         return false;
                     }
@@ -307,44 +405,19 @@
                         success: function (data) {
                             layer.closeAll();
                             //layer.msg(123);
-                            if (data=="true") {
+                            if (data == "true") {
                                 layer.msg("更新成功！");
                                 table.reload('demo', {
                                     page: {
                                         curr: recodePage
                                     }
                                 });
-                            }else {
+                            } else {
                                 layer.msg("更新失败！");
                             }
                         }
                     });
                 });
-
-                layer.open({
-                    type: 1
-                    ,title: '修改“'+data.movieName+'”的图片'
-                    ,area: ['500px', '590px']
-                    ,shade: 0.1
-                    ,maxmin: true
-                    ,offset: ['10%', '35%']
-                    ,content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
-                    '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="'+data.movieId+'">\n' +
-                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
-                    '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
-                    '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
-                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="'+data.picAddress+'"/>\n' +
-                    '                                        </div>\n' +
-                    '                                        <button type="button" id="chuan">确认上传</button>\n' +
-                    '                                    </form></div>'
-                    ,btn: ['关闭']
-                    ,yes: function(){
-                        layer.closeAll();
-                    }
-
-                });
-
             }
         });
 

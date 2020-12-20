@@ -32,7 +32,7 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
     public int updateMovieColumnValue(Integer movieId, String columnName, String columnValue) {
         //System.out.println("dao中:"+movieId+" "+columnName+" "+columnValue);
         String sql = "update movie set " + columnName + " = '" + columnValue + "' where movieId = " + movieId;
-        //System.out.println(sql);
+        //System.out.println("sql:"+sql);
         return update(sql);
     }
 

@@ -6,11 +6,19 @@ import com.service.MovieService;
 import com.service.impl.MovieServiceImpl;
 import com.utils.Page;
 import com.utils.Page2;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -78,9 +86,11 @@ public class MovieServlet extends BaseServlet {
         String columnName=request.getParameter("columnName");
         //要更新的字段值
         String columnValue=request.getParameter("columnValue");
-        columnValue=columnValue.replace("'", "\\'");
-        columnValue=columnValue.replace("\"", "\\\"");
+        System.out.println("columnValue替换前:"+columnValue);
+        //columnValue=columnValue.replace("'", "\\'");
+        //columnValue=columnValue.replace("\"", "\\\"");
         columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println("columnValue替换后:"+columnValue);
         System.out.println(movieId+" "+columnName+" "+columnValue);
         Integer result=movieService.updateMovieColumnValue(Integer.parseInt(movieId),columnName,columnValue);
         if(result<0){
@@ -126,4 +136,62 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
+    public void addMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Movie movie=new Movie();
+        movie.setContent("0");
+        movie.setHits(0);
+        if (ServletFileUpload.isMultipartContent(request)) {
+            // 创建FileItemFactory 工厂实现类
+            FileItemFactory fileItemFactory = new DiskFileItemFactory();
+            //创建用于解析上传数据的工具类
+            ServletFileUpload servletFileUpload = new ServletFileUpload(fileItemFactory);
+            try {
+                //解析上传的数据 得到每一个表单项FileItem
+                List<FileItem> list = servletFileUpload.parseRequest(request);
+                //循环判断，每一个表单项 是普通类型 还是上传的文件
+                for (FileItem fileItem :
+                        list) {
+                    if (fileItem.isFormField()) {
+                        //普通表单项
+                        System.out.println("普通项 name:" + fileItem.getFieldName());
+                        //参数UTF-8解决乱码
+                        System.out.println("value = " + fileItem.getString("UTF-8"));
+                        if("movieName".equals(fileItem.getFieldName())){
+                            movie.setMovieName(fileItem.getString("UTF-8"));
+                        }else if("type".equals(fileItem.getFieldName())){
+                            movie.setType(fileItem.getString("UTF-8"));
+                        }else if("director".equals(fileItem.getFieldName())){
+                            movie.setDirector(fileItem.getString("UTF-8"));
+                        }else if("protagonist".equals(fileItem.getFieldName())){
+                            movie.setProtagonist(fileItem.getString("UTF-8"));
+                        }else if("showTime".equals(fileItem.getFieldName())){
+                            movie.setShowTime(fileItem.getString("UTF-8"));
+                        }else if("content".equals(fileItem.getFieldName())){
+                            movie.setContent(fileItem.getString("UTF-8"));
+                        }
+                    } else {
+                        //上传的文件
+                        System.out.println("文件项的name:" + fileItem.getFieldName());
+                        System.out.println("上传的文件名:" + fileItem.getName());
+                        Long time=System.currentTimeMillis();
+                        fileItem.write(new File("D:\\project1205\\images\\" + time + fileItem.getName()));
+                        //要保存时到数据库的文件名
+                        String fileName = "http://localhost:8765/images\\" + time + fileItem.getName();
+                        movie.setPicAddress(fileName);
+                    }
+                }
+            } catch (FileUploadException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Integer result=movieService.insertMovie(movie);
+        System.out.println("result:"+result);
+        if(result>0){
+            response.getWriter().write("true");
+        }else {
+            response.getWriter().write("false");
+        }
+    }
 }
