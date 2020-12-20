@@ -69,4 +69,23 @@ public class CommentServiceImpl implements CommentService {
         page.setData(commentDao.queryAllComment());
         return page;
     }
+
+    @Override
+    public Page2<Comment> queryCommentByPage2(String movieName, String commentUser, String commentContent) {
+        Page2<Comment> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        System.out.println("2");
+        List<Comment> list = commentDao.queryAllComment(movieName, commentUser, commentContent);
+        page.setData(list);
+        page.setCount(list.size());
+        return page;
+    }
+
+    @Override
+    public int updateCommentColumnValue(Integer commentId, String columnName, String columnValue) {
+        return commentDao.updateCommentColumnValue(commentId, columnName, columnValue);
+    }
+
+
 }

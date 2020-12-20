@@ -1,6 +1,7 @@
 package com.dao;
 
 import com.entity.Comment;
+import com.entity.Notice;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface CommentDao {
     //修改评论信息
     int updateComment(Comment comment);
 
+    int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
+
     //删除评论信息
     int deleteComment(Integer commentId);
 
@@ -25,5 +28,8 @@ public interface CommentDao {
     List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);
 
     List<Comment> queryAllComment();
+
+    List<Comment> queryAllComment(String movieName,String commentUser,String commentContent);
+
 
 }

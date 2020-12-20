@@ -38,13 +38,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">评论者</label>
                     <div class="layui-input-block">
-                        <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="commentUser" placeholder="请输入" autocomplete="off" class="layui-input" id="commentUser">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">评论内容</label>
                     <div class="layui-input-block">
-                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input">
+                        <input type="text" name="commentContent" placeholder="请输入" autocomplete="off" class="layui-input" id="commentContent">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search" id="search">
                         <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
                     </button>
                 </div>
@@ -86,6 +86,7 @@
 <script>
     layui.use('table', function () {
         var table = layui.table;
+        var form = layui.form;
         //第一个实例
         table.render({
             elem: '#demo'
@@ -99,14 +100,24 @@
                 {type: 'numbers'}
                 , {type: 'checkbox'}
                 , {field: 'commentId', title: 'ID', width: 60, sort: true}
-                , {field: 'commentUser', title: '评论人', width: 130, sort: true}
-                , {field: 'movieName', title: '电影名', width: 200, sort: true}
-                , {field: 'commentContent', title: '评论内容', width: 400}
+                , {field: 'commentUser', title: '评论人', width: 130, sort: true,edit: 'text'}
+                , {field: 'movieId', title: '电影id', width: 100, sort: true}
+                , {field: 'movieName', title: '电影名', width: 150, sort: true}
+                , {field: 'commentContent', title: '评论内容', width: 400,edit: 'text'}
                 , {field: 'commentTypeId', title: '类型', width: 150}
                 , {field: 'createTime', title: '评论时间', width: 200, sort: true}
                 , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
                 , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
+            , done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                console.log(res);
+                //得到当前页码
+                console.log("页码:" + curr);
+                //得到数据总量
+                console.log("总量:" + count);
+            }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
                 if (this.page.curr) {
@@ -135,7 +146,7 @@
                     var items = checkStatus.data;//选中行数据
                     var idNum = new Array();
                     for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
+                        idNum.push(items[i].commentId);
                     }
                     //console.log(idNum);//保存的id列表
                     if (items.length != 0) {
@@ -214,6 +225,60 @@
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
             }
+        });
+//监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field //得到字段
+                , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            console.log(recodePage);
+            //修改电话字段
+
+            //验证通过，修改数据库
+            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "/comment.do?action=updateComment",
+                    data: {commentId: data.commentId, columnName: field, columnValue: value},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('更新成功');
+                        } else {
+                            table.reload('demo', {
+                                page: {
+                                    curr: recodePage
+                                }
+                            });
+                            layer.msg('更新失败');
+                        }
+                    }
+                });
+                layer.close(index);
+            })
+
+            //console.log(data);
+        });
+
+        $("#search").on("click", function () {
+            layer.msg('233');
+            //layer.msg($("#movieName").val());
+            //layer.msg($("#showTime").val());
+            table.reload('demo', {
+                url: '/comment.do?action=queryCommentListLimit' //数据接口
+                ,
+                where: {
+                    movieName: $("#movieName").val(),
+                    commentUser: $("#commentUser").val(),
+                    commentContent: $("#commentContent").val(),
+                }
+                ,
+                page: {
+                    curr: 1
+                }
+            });
         });
     });
 </script>

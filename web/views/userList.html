@@ -9,7 +9,6 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
-    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
     <style>
         .layui-table-cell {
             height: 100px;
@@ -28,42 +27,6 @@
 
     </style>
     <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#chooseImage').bind('change', function () {
-                // alert(123)
-                var filePath = $(this).val(), //获取到input的value，里面是文件的路径
-                    fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
-                    src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
-                // 检查是否是图片
-                if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
-                    alert('上传错误,文件格式必须为：png/jpg/jpeg');
-                    $('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
-                    return false;
-                } else {
-                    //alert("上次成功");
-                    //console.log(src);
-                    console.log("filePath：" + filePath)
-                    $('#cropedBigImg').attr('src', src);
-                }
-            });
-            $('#chuan').bind('click', function () {
-                //var filepath=$("#chooseImage").val();
-                var formData = new FormData(document.getElementById("f1"));
-                $.ajax({
-                    url: "/fileUpload",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: "POST",
-                    dataType: "text",
-                    success: function (data) {
-                        alert(data);
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 <body>
 
@@ -118,17 +81,7 @@
                 <table id="demo" lay-filter="test">
                 </table>
             </div>
-            <!--<img src="../static/images/person_1.jpg" width="100">
-            <img src="http://localhost:8765/images\default.png" width="100">
-            <br>
-            <form id="f1">
-                <div>
-                    头像上传<span class="red">*</span>
-                    <input type="file" name="file" accept=".jpg,.png,.jpeg" id="chooseImage"><br>
-                    <img id="cropedBigImg" style="width: 200px;" src="/static/images/person_1.jpg"/>
-                </div>
-                <button type="button" id="chuan">确认上传</button>
-            </form>-->
+
 
         </div>
     </div>
@@ -139,10 +92,6 @@
     <img src=" {{ d.headPic }} " width="100%">
 </script>
 
-<!--<script type="text/html" id="doSomething">
-    <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button>
-    <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button>
-</script>-->
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
@@ -172,14 +121,14 @@
             , cols: [[ //表头
                 {type: 'numbers'}
                 , {type: 'checkbox'}
-                , {field: 'userId', title: 'ID', width: 100, sort: true, unresize: true,}
-                , {field: 'userName', title: '用户名', width: 120, edit: 'text'}
-                , {field: 'userPassword', title: '用户密码', width: 200, edit: 'text'}
-                , {field: 'headPic', title: '头像', width: 100, templet: '#imgTpl', unresize: true,}
-                , {field: 'sex', title: '性别', width: 200, edit: 'text'}
-                , {field: 'telephone', title: '电话', width: 100, edit: 'text'}
-                , {field: 'qq', title: 'QQ', width: 150, edit: 'text'}
-                , {field: 'email', title: '电子邮箱', width: 120, sort: true, edit: 'text'}
+                , {field: 'userId', title: 'ID', width: 80, sort: true, unresize: true,}
+                , {field: 'userName', title: '用户名', width: 100, edit: 'text'}
+                , {field: 'userPassword', title: '用户密码', width: 150, edit: 'text'}
+                , {field: 'headPic', title: '头像', width: 100, templet: '#imgTpl', unresize: true, event: 'updateImg'}
+                , {field: 'sex', title: '性别', width: 100, edit: 'text'}
+                , {field: 'telephone', title: '电话', width: 130, edit: 'text'}
+                , {field: 'qq', title: 'QQ', width: 120, edit: 'text'}
+                , {field: 'email', title: '电子邮箱', width: 150, sort: true, edit: 'text'}
                 , {field: 'createTime', title: '评论时间', width: 200, sort: true}
                 , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
                 , {fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo', unresize: true} //这里的toolbar值是模板元素的选择器
@@ -239,10 +188,6 @@
                                 success: function (data) {
                                     //console.log("data:" + data);//data代表服务器回传的数据
                                     if (data == "true") {
-                                        /*layer.open({
-                                            title: '提示'
-                                            , content: '删除成功！'
-                                        });*/
                                         layer.msg('删除成功！');
                                         //刷新表格
                                         table.reload('demo', {
@@ -251,10 +196,6 @@
                                             }
                                         });
                                     } else {
-                                        /*layer.open({
-                                            title: '提示'
-                                            , content: '删除失败！'
-                                        });*/
                                         layer.msg('删除失败');
                                     }
                                 }
@@ -262,10 +203,6 @@
                             layer.close(index);
                         });
                     } else {
-                        /*layer.open({
-                            title: '提示'
-                            , content: '您没有选择任何行！'
-                        });*/
                         layer.msg('您没有选择任何行！');
                     }
                     break;
@@ -305,6 +242,97 @@
                 });
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
+            } else if (layEvent === 'updateImg') { //上传图片
+                layer.msg(layEvent);
+                //选择图片按钮事件
+                //console.log(data.picAddress);
+                $(document).on("change", "#chooseImage", function () {
+                    var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                        fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                        src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+                    // 检查是否是图片
+                    if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                        layer.msg('文件格式必须为：png/jpg/jpeg!');
+                        //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                        return false;
+                    } else {
+                        //layer.msg("filePath：" + filePath);
+                        $('#cropedBigImg').attr('src', src);
+                    }
+                });
+                //上传图片按钮事件
+                $(document).on("click", "#chuan", function () {
+                    //var filepath=$("#chooseImage").val();
+                    //layer.msg()
+                    var formData = new FormData(document.getElementById("f1"));
+                    //上传的文件名
+                    var fileName = formData.get("fileName").name.split(".")[0];
+                    var fileHouZhui = formData.get("fileName").name.split(".")[1];
+                    //检查是否上传了文件
+                    if (typeof fileName == "undefined" || fileName == null || fileName == "") {
+                        layer.msg("请先上传文件！");
+                        return false;
+                    }
+                    //检查文件后缀
+                    if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
+                        layer.msg("请上传正确格式的图片！");
+                        return false;
+                    }
+                    $.ajax({
+                        url: "/picUpload",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        dataType: "text",
+                        success: function (data) {
+                            layer.closeAll();
+                            //layer.msg(123);
+                            if (data == "true") {
+                                layer.msg("更新成功！");
+                                table.reload('demo', {
+                                    page: {
+                                        curr: recodePage
+                                    }
+                                });
+                            } else {
+                                layer.msg("更新失败！");
+                            }
+                        }
+                    });
+                });
+
+                layer.open({
+                    type: 1
+                    ,
+                    title: '修改“' + data.userName + '”的图片'
+                    ,
+                    area: ['500px', '590px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['10%', '35%']
+                    ,
+                    content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
+                    '                                        <div>\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.userId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="user">\n' +
+                    '                                            <input type="hidden" name="columnName" value="headPic">\n' +
+                    '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.headPic + '"/>\n' +
+                    '                                        </div>\n' +
+                    '                                        <button type="button" id="chuan">确认上传</button>\n' +
+                    '                                    </form></div>'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+
+                });
             }
         });
         //监听单元格编辑
@@ -357,6 +385,20 @@
                     return;
                 }
             }
+            //修改性别
+            if (field == "sex") {
+                //中文
+                var $zz = /^['男'|'女']$/;
+                if ($zz.test(value) == false) {
+                    layer.msg('性别格式不对，请输入男/女！');
+                    table.reload('demo', {
+                        page: {
+                            curr: recodePage
+                        }
+                    });
+                    return;
+                }
+            }
             //验证通过，修改数据库
             layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
                 $.ajax({
@@ -390,15 +432,13 @@
             //layer.msg($("#showTime").val());
             table.reload('demo', {
                 url: '/user.do?action=queryUserListLimit' //数据接口
-                ,
-                where: {
+                , where: {
                     userName: $("#userName").val(),
                     telephone: $("#telephone").val(),
                     qq: $("#qq").val(),
                     email: $("#email").val()
                 }
-                ,
-                page: {
+                , page: {
                     curr: 1
                 }
             });

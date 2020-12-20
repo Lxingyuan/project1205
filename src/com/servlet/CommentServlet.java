@@ -67,5 +67,39 @@ public class CommentServlet  extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+    public void updateComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String commentId=request.getParameter("commentId");
+        //要更新的字段名
+        String columnName=request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue=request.getParameter("columnValue");
+        columnValue=columnValue.replace("'", "\\'");
+        columnValue=columnValue.replace("\"", "\\\"");
+        columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println(commentId+" "+columnName+" "+columnValue);
+        Integer result=commentService.updateCommentColumnValue(Integer.parseInt(commentId),columnName,columnValue);
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+    public void queryCommentListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        //公告标题
+        String movieName=request.getParameter("movieName");
+        //公告内容
+        String commentUser=request.getParameter("commentUser");
+        //公告创建人
+        String commentContent=request.getParameter("commentContent");
+
+        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        Page2<Comment> page = commentService.queryCommentByPage2(movieName,commentUser,commentContent);
+        System.out.println("page2:"+page);
+        Gson gson = new Gson();
+        //转成字符串
+        String jsonStr = gson.toJson(page);
+        //写入返回信息
+        response.getWriter().write(jsonStr);
+    }
 }

@@ -3,6 +3,7 @@ package com.dao.impl;
 import com.dao.BaseDao;
 import com.dao.CommentDao;
 import com.entity.Comment;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -26,6 +27,13 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     @Override
+    public int updateCommentColumnValue(Integer commentId, String columnName, String columnValue) {
+        String sql = "update comment set " + columnName + " = '" + columnValue + "' where commentId = " + commentId;
+        //System.out.println(sql);
+        return update(sql);
+    }
+
+    @Override
     public int deleteComment(Integer commentId) {
         String sql = "delete from comment where CommentId = ?";
         return update(sql, commentId);
@@ -44,8 +52,27 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     public List<Comment> queryAllComment() {
-        String sql = "select c.* , m.MovieName from `comment` c,`movie` m WHERE c.MovieId=m.MovieId";
+        String sql = "select c.* , m.* from `comment` c,`movie` m WHERE c.MovieId=m.MovieId";
         return queryForList(Comment.class, sql);
     }
 
+    @Override
+    public List<Comment> queryAllComment(String movieName, String commentUser, String commentContent) {
+        String sql = "SELECT c.* , m.* FROM `comment` c,`movie` m WHERE m.movieName LIKE '%' AND c.commentUser LIKE '%' AND c.commentContent LIKE '%' AND c.MovieId=m.MovieId;";
+        if (StringUtils.isNotEmpty(movieName)) {
+            String string = "movieName LIKE '%" + movieName + "%'";
+            sql = sql.replace("movieName LIKE '%'", string);
+        }
+        if (StringUtils.isNotEmpty(commentUser)) {
+            String string = "commentUser LIKE '%" + commentUser + "%'";
+            sql = sql.replace("commentUser LIKE '%'", string);
+        }
+        if (StringUtils.isNotEmpty(commentContent)) {
+            String string = "commentContent LIKE '%" + commentContent + "%'";
+            sql = sql.replace("commentContent LIKE '%'", string);
+        }
+        return queryForList(Comment.class, sql);
+    }
 }
+
+
