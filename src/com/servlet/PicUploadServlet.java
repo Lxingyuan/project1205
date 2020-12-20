@@ -1,7 +1,9 @@
 package com.servlet;
 
+import com.service.AdminService;
 import com.service.MovieService;
 import com.service.UserService;
+import com.service.impl.AdminServiceImpl;
 import com.service.impl.MovieServiceImpl;
 import com.service.impl.UserServiceImpl;
 import org.apache.commons.fileupload.FileItem;
@@ -89,6 +91,15 @@ public class PicUploadServlet extends HttpServlet {
         if ("user".equals(tableName)) {
             UserService userService = new UserServiceImpl();
             Integer result = userService.updateUserColumnValue(Integer.parseInt(id), columnName, fileName);
+            if (result > 0) {
+                response.getWriter().write("true");
+            } else {
+                response.getWriter().write("false");
+            }
+        }
+        if ("admin".equals(tableName)) {
+            AdminService adminService=new AdminServiceImpl();
+            Integer result = adminService.updateUserColumnValue(Integer.parseInt(id), columnName, fileName);
             if (result > 0) {
                 response.getWriter().write("true");
             } else {

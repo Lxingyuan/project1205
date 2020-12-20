@@ -22,7 +22,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+                <!--<button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>-->
             </div>
         </div>
     </form>
@@ -56,9 +56,7 @@
             ]
             , height: 250
         });
-        $("#resetButton").on("click", function () {
-            //window.parent.layer.closeAll();
-        });
+
         //提交时验证规则
         //提交时把值同步到文本域中
         form.verify({

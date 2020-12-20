@@ -101,14 +101,15 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
 </script>
 
 <script>
     layui.use('table', function () {
         var table = layui.table;
         var form = layui.form;
+        var laytpl = layui.laytpl;
         //第一个实例
         table.render({
             elem: '#demo'
@@ -129,18 +130,30 @@
                 , {field: 'telephone', title: '电话', width: 130, edit: 'text'}
                 , {field: 'qq', title: 'QQ', width: 120, edit: 'text'}
                 , {field: 'email', title: '电子邮箱', width: 150, sort: true, edit: 'text'}
-                , {field: 'createTime', title: '评论时间', width: 200, sort: true}
-                , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
+                , {
+                    field: 'createTime',
+                    title: '评论时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.createTime) }}</div>'
+                }
+                , {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.updateTime) }}</div>'
+                }
                 , {fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo', unresize: true} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {
                 //如果是异步请求数据方式，res即为接口返回的信息。
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                console.log(res);
+                //console.log(res);
                 //得到当前页码
-                console.log("页码:" + curr);
+                //console.log("页码:" + curr);
                 //得到数据总量
-                console.log("总量:" + count);
+                //console.log("总量:" + count);
             }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
@@ -161,7 +174,45 @@
             }
 
         });
+        //转换表中的时间显示格式
+        layui.use('laytpl', function () {
+            var laytpl = layui.laytpl;
+            //时间戳的处理
+            layui.laytpl.toDateString = function (time, format) {
 
+                var date = new Date(time)
+                    , ymd = [
+                    this.digit(date.getFullYear(), 4)
+                    , this.digit(date.getMonth() + 1)
+                    , this.digit(date.getDate())
+                ]
+                    , hms = [
+                    this.digit(date.getHours())
+                    , this.digit(date.getMinutes())
+                    , this.digit(date.getSeconds())
+                ];
+
+                format = format || 'yyyy-MM-dd HH:mm:ss';
+
+                return format.replace(/yyyy/g, ymd[0])
+                    .replace(/MM/g, ymd[1])
+                    .replace(/dd/g, ymd[2])
+                    .replace(/HH/g, hms[0])
+                    .replace(/mm/g, hms[1])
+                    .replace(/ss/g, hms[2]);
+
+            }
+            //数字前置补零
+            layui.laytpl.digit = function (num, length, end) {
+                var str = '';
+                num = String(num);
+                length = length || 2;
+                for (var i = num.length; i < length; i++) {
+                    str += '0';
+                }
+                return num < Math.pow(10, length) ? str + (num | 0) : num;
+            };
+        });
         //表格上方头工具栏监听事件
         table.on('toolbar(test)', function (obj) {
             //var checkStatus = table.checkStatus(obj.config.id);
@@ -243,9 +294,8 @@
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
             } else if (layEvent === 'updateImg') { //上传图片
-                layer.msg(layEvent);
+                //layer.msg(layEvent);
                 //选择图片按钮事件
-                //console.log(data.picAddress);
                 $(document).on("change", "#chooseImage", function () {
                     var filePath = $(this).val(), //获取到input的value，里面是文件的路径
                         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
@@ -253,7 +303,6 @@
                     // 检查是否是图片
                     if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
                         layer.msg('文件格式必须为：png/jpg/jpeg!');
-                        //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
                         return false;
                     } else {
                         //layer.msg("filePath：" + filePath);
@@ -262,8 +311,6 @@
                 });
                 //上传图片按钮事件
                 $(document).on("click", "#chuan", function () {
-                    //var filepath=$("#chooseImage").val();
-                    //layer.msg()
                     var formData = new FormData(document.getElementById("f1"));
                     //上传的文件名
                     var fileName = formData.get("fileName").name.split(".")[0];
@@ -307,7 +354,7 @@
                     ,
                     title: '修改“' + data.userName + '”的图片'
                     ,
-                    area: ['500px', '590px']
+                    area: ['500px', '540px']
                     ,
                     shade: 0.1
                     ,
@@ -321,7 +368,7 @@
                     '                                            <input type="hidden" name="tableName" value="user">\n' +
                     '                                            <input type="hidden" name="columnName" value="headPic">\n' +
                     '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
-                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.headPic + '"/>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 320px" src="' + data.headPic + '"/>\n' +
                     '                                        </div>\n' +
                     '                                        <button type="button" id="chuan">确认上传</button>\n' +
                     '                                    </form></div>'

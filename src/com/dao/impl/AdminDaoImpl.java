@@ -23,6 +23,12 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
     }
 
     @Override
+    public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
+        String sql = "update admin set " + columnName + " = '" + columnValue + "' where id = " + userId;
+        return update(sql);
+    }
+
+    @Override
     public int deleteUser(Integer userId) {
         String sql = "delete from user where userId = ?";
         return update(sql, userId);
@@ -70,8 +76,11 @@ public class AdminDaoImpl extends BaseDao implements AdminDao {
         return queryForList(Admin.class, sql, begin, pageSize);
     }
 
+    @Override
     public List<Admin> queryAllAdmin() {
         String sql = "select * from admin ";
         return queryForList(Admin.class, sql);
     }
+
+
 }

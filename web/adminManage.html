@@ -11,12 +11,33 @@
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
     <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
-<!--    <script>
-        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
-    </script>-->
     <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
+        /**
+         *@param name 键值
+         * @return 通过键值获取到对应的数据，如果没有则返回null
+         **/
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(";");
+
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while(c.charAt(0) == " ")
+                    c = c.substring(1, c.length);
+                if(c.indexOf(nameEQ) == 0)
+                    return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        function init(){
+            var adminName=readCookie("adminName");
+            console.log(adminName);
+            $("#adminName").html(adminName);
+        }
         $(function () {
+            init();
+
             $("#logOut").on("click",function () {
                 $.ajax({
                     url: "/admin.do",
@@ -37,6 +58,8 @@
                     }
                 });
             });
+
+
         });
     </script>
 </head>
@@ -94,13 +117,13 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>贤心</cite>
+                        <cite id="adminName"></cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+                        <dd><a href="#" id="updatePic">修改头像</a></dd>
+                        <dd><a href="#" id="updatePassword">修改密码</a></dd>
                         <hr>
-                        <dd style="text-align: center;" id="logOut"><a>退出</a></dd>
+                        <dd style="text-align: center;" id="logOut"><a href="javascript:;">退出</a></dd>
                     </dl>
                 </li>
 
@@ -174,20 +197,7 @@
                             </dd>
                         </dl>
                     </li>
-                    <li data-name="user2" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="个人信息" lay-direction="2">
-                            <i class="layui-icon layui-icon-user"></i>
-                            <cite>个人信息</cite>
-                        </a>
-                        <dl class="layui-nav-child">
-                            <dd>
-                                <a lay-href="views/info.html">修改信息</a>
-                            </dd>
-                            <dd>
-                                <a lay-href="views/password.html">修改密码</a>
-                            </dd>
-                        </dl>
-                    </li>
+
                 </ul>
             </div>
         </div>
@@ -236,6 +246,142 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use('index');
+    $("#updatePic").on("click",function () {
+        var HeadPic="";
+        var id="";
+        $.ajax({
+            url: "/admin.do?action=findAdminHeadPic",
+            data: {adminName:readCookie("adminName")},
+            async: false,
+            dataType: "text",
+            success: function (data) {
+                HeadPic=data.split("&")[0];
+                id=data.split("&")[1];
+            }
+        });
+
+        layer.open({
+            type: 1
+            ,
+            title: '修改“' + readCookie("adminName") + '”的头像'
+            ,
+            area: ['500px', '550px']
+            ,
+            shade: 0.1
+            ,
+            maxmin: true
+            ,
+            offset: ['15%', '40%']
+            ,
+            content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
+            '                                        <div>\n' +
+            '                                            <input type="hidden" name="id" value="' + id + '">\n' +
+            '                                            <input type="hidden" name="tableName" value="admin">\n' +
+            '                                            <input type="hidden" name="columnName" value="HeadPic">\n' +
+            '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
+            '                                            <img id="cropedBigImg" style="width: 320px;" src="' + HeadPic + '"/>\n' +
+            '                                        </div>\n' +
+            '                                        <button type="button" id="chuan">确认上传</button>\n' +
+            '                                    </form></div>'
+            ,
+            btn: ['关闭']
+            ,
+            yes: function () {
+                layer.closeAll();
+            }
+
+        });
+        //选择图片按钮事件
+        $(document).on("change", "#chooseImage", function () {
+            var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+            // 检查是否是图片
+            if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                layer.msg('文件格式必须为：png/jpg/jpeg!');
+                //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                return false;
+            } else {
+                //layer.msg("filePath：" + filePath);
+                $('#cropedBigImg').attr('src', src);
+            }
+        });
+        //上传图片按钮事件
+        $(document).on("click", "#chuan", function () {
+            //var filepath=$("#chooseImage").val();
+            //layer.msg()
+            var formData = new FormData(document.getElementById("f1"));
+            //上传的文件名
+            var fileName = formData.get("fileName").name.split(".")[0];
+            var fileHouZhui = formData.get("fileName").name.split(".")[1];
+            //检查是否上传了文件
+            if (typeof fileName == "undefined" || fileName == null || fileName == "") {
+                layer.msg("请先上传文件！");
+                return false;
+            }
+            //检查文件后缀
+            if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
+                layer.msg("请上传正确格式的图片！");
+                return false;
+            }
+            $.ajax({
+                url: "/picUpload",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+                    layer.closeAll();
+                    if (data == "true") {
+                        layer.msg("更新成功！");
+                    } else {
+                        layer.msg("更新失败！");
+                    }
+                }
+            });
+        });
+    });
+    $("#updatePassword").on("click",function () {
+        var oldPassword="";
+        var id="";
+        $.ajax({
+            url: "/admin.do?action=findAdminPassword",
+            data: {adminName:readCookie("adminName")},
+            async: false,
+            dataType: "text",
+            success: function (data) {
+                oldPassword=data.split("&")[0];
+                id=data.split("&")[1];
+            }
+        });
+        console.log(oldPassword+" "+id);
+        layer.open({
+            type: 2
+            ,
+            title: '修改密码'
+            ,
+            area: ['450px', '500px']
+            ,
+            maxmin: true
+            ,
+            offset: ['15%', '39%']
+            ,
+            content: '/views/password.html'
+            ,
+            btn: ['关闭']
+            ,
+            success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
+                let body = layer.getChildFrame('body', index);
+                body.find("#id").val(id);
+                body.find("#oldPassword0").val(oldPassword);
+            },
+            yes: function () {
+                layer.closeAll();
+            }
+
+        });
+    });
 </script>
 </body>
 </html>

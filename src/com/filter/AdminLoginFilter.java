@@ -13,8 +13,8 @@ import java.io.IOException;
  * @author ：liuyuntao
  * @date ：Created in 2020/12/14 14:46
  */
-@WebFilter("/adminManage.html")//后缀名匹配
-public class AdminManageFilter implements Filter {
+@WebFilter("/adminLogin.html")//后缀名匹配
+public class AdminLoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -26,14 +26,15 @@ public class AdminManageFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
         Admin admin = (Admin) session.getAttribute("admin");
-        //没登录
-        if (admin == null) {
-            response.sendRedirect("/adminLogin.html");
-        } else {
-            System.out.println("Admin过滤器显示:管理员已登入，用户名" + admin.getUserName());
+        //System.out.println("adminLogin显示："+admin);
+        //已经登录
+        if (admin != null) {
+            response.sendRedirect("/adminManage.html");
+        }else {
             //让程序继续往下访问用户的目标资源
             filterChain.doFilter(servletRequest, servletResponse);
         }
+
     }
 
     @Override

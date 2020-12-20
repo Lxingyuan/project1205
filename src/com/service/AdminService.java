@@ -33,4 +33,6 @@ public interface AdminService {
     Admin login(Admin admin);
 
     Page2<Admin> queryAdminByPage2();
+
+    int updateUserColumnValue(Integer userId,String columnName,String columnValue);
 }

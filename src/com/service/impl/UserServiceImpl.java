@@ -90,6 +90,7 @@ public class UserServiceImpl implements UserService {
         return userDao.queryUserByTelephone(telephone);
     }
 
+    @Override
     public Page2<User> queryUserByPage2() {
         Page2<User> page = new Page2<>();
         page.setCode(0);

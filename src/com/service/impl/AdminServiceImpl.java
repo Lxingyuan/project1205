@@ -96,4 +96,9 @@ public class AdminServiceImpl implements AdminService {
         page.setData(adminDao.queryAllAdmin());
         return page;
     }
+
+    @Override
+    public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
+        return adminDao.updateUserColumnValue(userId,columnName,columnValue);
+    }
 }

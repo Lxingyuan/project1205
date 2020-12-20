@@ -99,8 +99,8 @@
     </div>
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
 </script>
 <script>
     layui.use('table', function () {
@@ -122,18 +122,30 @@
                 , {field: 'noticeHead', title: '公告标题', width: 130, sort: true, edit: 'text'}
                 , {field: 'noticeContent', title: '公告内容', width: 200, sort: true, edit: 'text'}
                 , {field: 'noticeUser', title: '公告发出人', width: 400, edit: 'text'}
-                , {field: 'createTime', title: '创建时间', width: 200, sort: true}
-                , {field: 'updateTime', title: '更新时间', width: 200, sort: true}
+                , {
+                    field: 'createTime',
+                    title: '创建时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.createTime) }}</div>'
+                }
+                , {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.updateTime) }}</div>'
+                }
                 , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {
                 //如果是异步请求数据方式，res即为接口返回的信息。
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                console.log(res);
+                //console.log(res);
                 //得到当前页码
-                console.log("页码:" + curr);
+                //console.log("页码:" + curr);
                 //得到数据总量
-                console.log("总量:" + count);
+                //console.log("总量:" + count);
             }
             , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
                 var result;
@@ -150,6 +162,45 @@
                     "data": result //解析数据列表
                 };
             }
+        });
+        //转换表中的时间显示格式
+        layui.use('laytpl', function () {
+            var laytpl = layui.laytpl;
+            //时间戳的处理
+            layui.laytpl.toDateString = function (time, format) {
+
+                var date = new Date(time)
+                    , ymd = [
+                    this.digit(date.getFullYear(), 4)
+                    , this.digit(date.getMonth() + 1)
+                    , this.digit(date.getDate())
+                ]
+                    , hms = [
+                    this.digit(date.getHours())
+                    , this.digit(date.getMinutes())
+                    , this.digit(date.getSeconds())
+                ];
+
+                format = format || 'yyyy-MM-dd HH:mm:ss';
+
+                return format.replace(/yyyy/g, ymd[0])
+                    .replace(/MM/g, ymd[1])
+                    .replace(/dd/g, ymd[2])
+                    .replace(/HH/g, hms[0])
+                    .replace(/mm/g, hms[1])
+                    .replace(/ss/g, hms[2]);
+
+            }
+            //数字前置补零
+            layui.laytpl.digit = function (num, length, end) {
+                var str = '';
+                num = String(num);
+                length = length || 2;
+                for (var i = num.length; i < length; i++) {
+                    str += '0';
+                }
+                return num < Math.pow(10, length) ? str + (num | 0) : num;
+            };
         });
         //表格上方头工具栏监听事件
         table.on('toolbar(test)', function (obj) {
@@ -243,7 +294,7 @@
                 console.log(data)
             }
         });
-//监听单元格编辑
+        //监听单元格编辑
         table.on('edit(test)', function (obj) {
             var value = obj.value //得到修改后的值
                 , data = obj.data //得到所在行所有键值
@@ -274,7 +325,7 @@
                     }
                 });
                 layer.close(index);
-            })
+            });
 
             //console.log(data);
         });

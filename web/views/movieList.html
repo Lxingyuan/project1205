@@ -157,7 +157,7 @@
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                 //console.log(res);
                 //得到当前页码
-                console.log("页码:" + curr);
+                //console.log("页码:" + curr);
                 //得到数据总量
                 //console.log("总量:" + count);
             }
@@ -476,24 +476,26 @@
                 }
             }
             //验证通过，修改数据库
-            $.ajax({
-                url: "/movie.do?action=updateMovie",
-                data: {movieId: data.movieId, columnName: field, columnValue: value},
-                type: "GET",
-                async: false,
-                dataType: "text",//返回的数据类型
-                success: function (data) {
-                    if (data == "true") {
-                        layer.msg('更新成功');
-                    } else {
-                        table.reload('demo', {
-                            page: {
-                                curr: recodePage
-                            }
-                        });
-                        layer.msg('更新失败');
+            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: "/movie.do?action=updateMovie",
+                    data: {movieId: data.movieId, columnName: field, columnValue: value},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('更新成功');
+                        } else {
+                            table.reload('demo', {
+                                page: {
+                                    curr: recodePage
+                                }
+                            });
+                            layer.msg('更新失败');
+                        }
                     }
-                }
+                });
             });
             //console.log(data);
         });
