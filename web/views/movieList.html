@@ -43,8 +43,8 @@
     </script>
 </head>
 <body>
-
 <div class="layui-fluid">
+    <!--<iframe height=498 width=510 src='//player.bilibili.com/player.html?aid=800740377&bvid=BV1Ey4y1i7jE&cid=268920902&page=1' frameborder=0 allowfullscreen="true"></iframe>-->
     <div class="layui-card">
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
@@ -100,7 +100,9 @@
 <script type="text/html" id="imgTpl">
     <img src=" {{ d.picAddress }} " width="100%">
 </script>
-
+<script type="text/html" id="imgTp2">
+    <img src=" {{ d.postAddress }} " width="100%">
+</script>
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
@@ -109,8 +111,13 @@
     </div>
 </script>
 
+<script type="text/html" id="videoAddress">
+    <a class="layui-btn layui-btn-xs" lay-event="showVideo">显示视频</a>
+</script>
+
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="showMessage">显示</a>
 </script>
 
 
@@ -134,8 +141,8 @@
                 {type: 'numbers'}
                 , {type: 'checkbox'}
                 , {field: 'movieId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
-                , {field: 'movieName', title: '电影名', width: 160, edit: 'text'}
-                , {field: 'type', title: '类型', width: 170, edit: 'text'}
+                , {field: 'movieName', title: '电影名', width: 130, edit: 'text'}
+                , {field: 'type', title: '类型', width: 150, edit: 'text'}
                 , {
                     field: 'picAddress',
                     title: '图片预览',
@@ -144,13 +151,22 @@
                     unresize: true,
                     event: 'updateImg'
                 }
-                , {field: 'director', title: '导演', width: 180, edit: 'text'}
-                , {field: 'protagonist', title: '主演', width: 200, edit: 'text'}
-                , {field: 'showTime', title: '上映年份', width: 120, sort: true, edit: 'text'}
-                , {field: 'content', title: '电影详细介绍', width: 210, event: 'content'}
+                , {
+                    field: 'postAddress',
+                    title: '大海报预览',
+                    width: 130,
+                    templet: '#imgTp2',
+                    unresize: true,
+                    event: 'postAddress'
+                }
+                , {field: 'director', title: '导演', width: 130, edit: 'text'}
+                , {field: 'protagonist', title: '主演', width: 170, edit: 'text'}
+                , {field: 'showTime', title: '上映年份', width: 90, sort: true, edit: 'text'}
+                , {field: 'content', title: '电影详细介绍', width: 150, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, totalRow: true, edit: 'text'}
+                , {field: 'videoAddress', title: '预告片', width: 100, sort: true, templet: '#videoAddress'}
                 //, {templet: setPic, title: '学生照片', align: 'center', width: '12%' }
-                , {fixed: 'right', title: '操作', width: 110, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                , {fixed: 'right', title: '操作', width: 140, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {
                 //如果是异步请求数据方式，res即为接口返回的信息。
@@ -287,6 +303,36 @@
             } else if (layEvent === 'showMessage') { //输出一行信息
                 console.log(data)
             }
+            else if (layEvent === 'showVideo') { //显示视频
+                //console.log(data)
+                layer.open({
+                    type: 1,
+                    title: data.movieName + '的预告片',
+                    area: ['1100px', '700px'],
+                    shade: 0.1,
+                    maxmin: true,
+                    offset: ['3%', '12%'],
+                    content: '<div style="padding: 10px 40px;">                                    <form id="f1" >\n' +
+                    '                                        <div>\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
+                    '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
+                    '                                                <iframe height=600 width=1000 src="' + data.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
+                    '                                            <input type="text" id="videoAddress0" name="videoAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
+                    '                                        </div>\n' +
+                    '                                    </form></div>'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+                });
+                //修改视频地址按钮事件
+                $(document).on("click", "#editVideo", function () {
+                    console.log(123);
+                });
+            }
             else if (layEvent === 'content') {//富文本编辑器
                 //layer.msg("213")
                 //console.log(data.content);
@@ -337,6 +383,92 @@
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
                     '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
                     '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.picAddress + '"/>\n' +
+                    '                                        </div>\n' +
+                    '                                        <button type="button" id="chuan">确认上传</button>\n' +
+                    '                                    </form></div>'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+
+                });
+                //选择图片按钮事件
+                $(document).on("change", "#chooseImage", function () {
+                    var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                        fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                        src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+                    // 检查是否是图片
+                    if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                        layer.msg('文件格式必须为：png/jpg/jpeg!');
+                        //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                        return false;
+                    } else {
+                        //layer.msg("filePath：" + filePath);
+                        $('#cropedBigImg').attr('src', src);
+                    }
+                });
+                //上传图片按钮事件
+                $(document).on("click", "#chuan", function () {
+                    //var filepath=$("#chooseImage").val();
+                    //layer.msg()
+                    var formData = new FormData(document.getElementById("f1"));
+                    //上传的文件名
+                    var fileName = formData.get("fileName").name.split(".")[0];
+                    var fileHouZhui = formData.get("fileName").name.split(".")[1];
+                    //检查是否上传了文件
+                    if (typeof fileName == "undefined" || fileName == null || fileName == "") {
+                        layer.msg("请先上传文件！");
+                        return false;
+                    }
+                    //检查文件后缀
+                    if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
+                        layer.msg("请上传正确格式的图片！");
+                        return false;
+                    }
+                    $.ajax({
+                        url: "/picUpload",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        dataType: "text",
+                        success: function (data) {
+                            layer.closeAll();
+                            //layer.msg(123);
+                            if (data == "true") {
+                                layer.msg("更新成功！");
+                                table.reload('demo', {
+                                    page: {
+                                        curr: recodePage
+                                    }
+                                });
+                            } else {
+                                layer.msg("更新失败！");
+                            }
+                        }
+                    });
+                });
+            }
+            //点击上传大海报
+            else if (layEvent === 'postAddress') {
+                //layer.msg(layEvent);
+
+                layer.open({
+                    type: 1,
+                    title: '修改“' + data.movieName + '”的大海报图片',
+                    area: ['1100px', '700px'],
+                    shade: 0.1,
+                    maxmin: true,
+                    offset: ['3%', '12%'],
+                    content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
+                    '                                        <div>\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
+                    '                                            <input type="hidden" name="columnName" value="postAddress">\n' +
+                    '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 900px;height: 600px;" src="' + data.postAddress + '"/>\n' +
                     '                                        </div>\n' +
                     '                                        <button type="button" id="chuan">确认上传</button>\n' +
                     '                                    </form></div>'
