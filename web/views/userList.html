@@ -447,7 +447,12 @@
                 }
             }
             //验证通过，修改数据库
-            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm("您确定修改吗?",{
+                btn: ['确认', '取消']
+                ,icon: 3,
+                title: '提示'
+            }, function () {
+                // 按钮1的事件
                 $.ajax({
                     url: "/user.do?action=updateUser",
                     data: {userId: data.userId, columnName: field, columnValue: value},
@@ -467,8 +472,14 @@
                         }
                     }
                 });
-                layer.close(index);
-            })
+            }, function(){
+                // 按钮2的事件
+                table.reload('demo', {
+                    page: {
+                        curr: recodePage
+                    }
+                });
+            });
 
             //console.log(data);
         });

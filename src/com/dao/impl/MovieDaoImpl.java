@@ -73,6 +73,12 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
     }
 
     @Override
+    public Movie queryMovieById(Integer id) {
+        String sql = "select * from movie where movieId=?";
+        return queryForOne(Movie.class, sql, id);
+    }
+
+    @Override
     public List<Movie> queryMovieByHits() {
         String sql = "select * from movie ORDER BY Hits DESC";
         return queryForList(Movie.class, sql);

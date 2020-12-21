@@ -29,6 +29,8 @@ public interface MovieService {
 
     //按导演查询电影
     Movie queryMovieByDirector(String director);
+    //按id查询电影
+    Movie queryMovieById(Integer id);
 
     //按主演查询电影
     Movie queryMovieByProtagonist(String protagonist);

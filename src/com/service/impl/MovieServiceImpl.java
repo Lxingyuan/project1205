@@ -48,6 +48,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Movie queryMovieById(Integer id) {
+        return movieDao.queryMovieById(id);
+    }
+
+    @Override
     public Movie queryMovieByProtagonist(String protagonist) {
         return movieDao.queryMovieByProtagonist(protagonist);
     }

@@ -36,7 +36,8 @@ public interface MovieDao {
 
     //按上映年份查询电影
     Movie queryMovieByShowTime(String showTime);
-
+    //按id查询电影
+    Movie queryMovieById(Integer id);
     //按浏览次数查询电影
     List<Movie> queryMovieByHits();
 

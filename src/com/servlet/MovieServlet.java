@@ -86,11 +86,11 @@ public class MovieServlet extends BaseServlet {
         String columnName=request.getParameter("columnName");
         //要更新的字段值
         String columnValue=request.getParameter("columnValue");
-        System.out.println("columnValue替换前:"+columnValue);
+        //System.out.println("columnValue替换前:"+columnValue);
         //columnValue=columnValue.replace("'", "\\'");
         //columnValue=columnValue.replace("\"", "\\\"");
         columnValue=columnValue.replace("\\", "\\\\");
-        System.out.println("columnValue替换后:"+columnValue);
+        //System.out.println("columnValue替换后:"+columnValue);
         System.out.println(movieId+" "+columnName+" "+columnValue);
         Integer result=movieService.updateMovieColumnValue(Integer.parseInt(movieId),columnName,columnValue);
         if(result<0){
@@ -138,8 +138,8 @@ public class MovieServlet extends BaseServlet {
 
     public void addMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Movie movie=new Movie();
-        movie.setContent("0");
         movie.setHits(0);
+        movie.setPostAddress("/static/images/2.jpg");
         if (ServletFileUpload.isMultipartContent(request)) {
             // 创建FileItemFactory 工厂实现类
             FileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -192,6 +192,15 @@ public class MovieServlet extends BaseServlet {
             response.getWriter().write("true");
         }else {
             response.getWriter().write("false");
+        }
+    }
+    public void queryMovieById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieId=request.getParameter("movieId");
+        Movie movie=movieService.queryMovieById(Integer.parseInt(movieId));
+        if(movie==null){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
         }
     }
 }

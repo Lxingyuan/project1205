@@ -9,6 +9,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <style>
         .layui-table-cell {
             height: 100px;
@@ -164,7 +165,7 @@
                 , {field: 'showTime', title: '上映年份', width: 90, sort: true, edit: 'text'}
                 , {field: 'content', title: '电影详细介绍', width: 150, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, totalRow: true, edit: 'text'}
-                , {field: 'videoAddress', title: '预告片', width: 100, sort: true, templet: '#videoAddress'}
+                , {field: 'videoAddress', title: '预告片', width: 100, templet: '#videoAddress'}
                 //, {templet: setPic, title: '学生照片', align: 'center', width: '12%' }
                 , {fixed: 'right', title: '操作', width: 140, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
@@ -330,7 +331,37 @@
                 });
                 //修改视频地址按钮事件
                 $(document).on("click", "#editVideo", function () {
-                    console.log(123);
+                    //console.log($("#videoAddress0").val());
+                    layer.confirm("您确定修改吗?",{
+                        btn: ['确认', '取消']
+                        ,icon: 3,
+                        title: '提示'
+                    }, function () {
+                        // 按钮1的事件
+                        $.ajax({
+                            url: "/movie.do?action=updateMovie",
+                            data: {movieId: data.movieId, columnName: "videoAddress", columnValue: $("#videoAddress0").val()},
+                            type: "GET",
+                            async: false,
+                            dataType: "text",//返回的数据类型
+                            success: function (data) {
+                                if (data == "true") {
+                                    layer.msg('更新成功');
+                                    layer.closeAll();
+                                    table.reload('demo', {
+                                        page: {
+                                            curr: recodePage
+                                        }
+                                    });
+                                } else {
+                                    layer.msg('更新失败');
+                                }
+                            }
+                        });
+                    }, function(){
+                        // 按钮2的事件
+                    });
+
                 });
             }
             else if (layEvent === 'content') {//富文本编辑器
@@ -545,7 +576,7 @@
                 , data = obj.data //得到所在行所有键值
                 , field = obj.field //得到字段
                 , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
-            console.log(recodePage);
+            //console.log(recodePage);
             //修改type字段
             if (field == "type") {
                 //以&分隔的中文
@@ -601,7 +632,13 @@
                 }
             }
             //验证通过，修改数据库
-            layer.confirm('您确定修改吗?', {icon: 3, title: '提示'}, function (index) {
+            layer.confirm("您确定修改吗?",{
+                btn: ['确认', '取消']
+                ,icon: 3,
+                title: '提示'
+            }, function () {
+                //alert("确认")
+                // 按钮1的事件
                 $.ajax({
                     url: "/movie.do?action=updateMovie",
                     data: {movieId: data.movieId, columnName: field, columnValue: value},
@@ -619,6 +656,13 @@
                             });
                             layer.msg('更新失败');
                         }
+                    }
+                });
+            }, function(){
+                // 按钮2的事件
+                table.reload('demo', {
+                    page: {
+                        curr: recodePage
                     }
                 });
             });
