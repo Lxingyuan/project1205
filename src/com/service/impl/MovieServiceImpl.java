@@ -58,8 +58,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie queryMovieByHits(Integer hits) {
-        return movieDao.queryMovieByHits(hits);
+    public List<Movie> queryMovieByHits() {
+        return movieDao.queryMovieByHits();
     }
 
     @Override

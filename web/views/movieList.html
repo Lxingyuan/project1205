@@ -287,7 +287,7 @@
             } else if (layEvent === 'showMessage') { //输出一行信息
                 console.log(data)
             }
-            else if (layEvent === 'content') {
+            else if (layEvent === 'content') {//富文本编辑器
                 //layer.msg("213")
                 //console.log(data.content);
                 layer.open({
@@ -317,7 +317,6 @@
                     yes: function () {
                         layer.closeAll();
                     }
-
                 });
             }
             //点击上传图片
@@ -325,18 +324,12 @@
                 //layer.msg(layEvent);
 
                 layer.open({
-                    type: 1
-                    ,
-                    title: '修改“' + data.movieName + '”的图片'
-                    ,
-                    area: ['500px', '590px']
-                    ,
-                    shade: 0.1
-                    ,
-                    maxmin: true
-                    ,
-                    offset: ['10%', '35%']
-                    ,
+                    type: 1,
+                    title: '修改“' + data.movieName + '”的图片',
+                    area: ['500px', '590px'],
+                    shade: 0.1,
+                    maxmin: true,
+                    offset: ['10%', '35%'],
                     content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
                     '                                        <div>\n' +
                     '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
@@ -521,7 +514,6 @@
         });
 
     });
-
 </script>
 
 </body>

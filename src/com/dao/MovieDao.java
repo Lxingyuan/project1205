@@ -38,7 +38,7 @@ public interface MovieDao {
     Movie queryMovieByShowTime(String showTime);
 
     //按浏览次数查询电影
-    Movie queryMovieByHits(Integer hits);
+    List<Movie> queryMovieByHits();
 
     Integer queryPageTotalCounts();
 

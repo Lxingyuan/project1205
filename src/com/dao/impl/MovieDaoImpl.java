@@ -73,9 +73,9 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
     }
 
     @Override
-    public Movie queryMovieByHits(Integer hits) {
-        String sql = "select * from movie where Hits=?";
-        return queryForOne(Movie.class, sql, hits);
+    public List<Movie> queryMovieByHits() {
+        String sql = "select * from movie ORDER BY Hits DESC";
+        return queryForList(Movie.class, sql);
     }
 
     //查询当前表的总记录条数

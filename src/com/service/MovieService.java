@@ -4,6 +4,8 @@ import com.entity.Movie;
 import com.utils.Page;
 import com.utils.Page2;
 
+import java.util.List;
+
 /**
  * 作者：林星源
  * 日期: 2020/12/10 14:41
@@ -35,7 +37,7 @@ public interface MovieService {
     Movie queryMovieByShowTime(String showTime);
 
     //按浏览次数查询电影
-    Movie queryMovieByHits(Integer hits);
+    List<Movie> queryMovieByHits();
 
     //电影分页
     Page<Movie> queryMovieByPage(int pageNo, int pageSize);
