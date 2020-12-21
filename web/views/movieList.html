@@ -123,6 +123,12 @@
 
 
 <script>
+    function checkSpace() {
+        if (event.keyCode == 32) {
+            event.returnValue = false;
+            layer.msg("不能输入空格哦！")
+        }
+    }
     layui.use('table', function () {
         var table = layui.table;
         var form = layui.form;
@@ -319,7 +325,7 @@
                     '                                            <input type="hidden" name="tableName" value="movie">\n' +
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
                     '                                                <iframe height=600 width=1000 src="' + data.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
-                    '                                            <input type="text" id="videoAddress0" name="videoAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
+                    '                                            <input onKeypress="checkSpace()" type="text" id="videoAddress0" name="videoAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
                     '                                        </div>\n' +
                     '                                    </form></div>'
                     ,
@@ -331,6 +337,10 @@
                 });
                 //修改视频地址按钮事件
                 $(document).on("click", "#editVideo", function () {
+                    if($("#videoAddress0").val()==""){
+                        layer.msg('请输入地址！');
+                        return;
+                    }
                     //console.log($("#videoAddress0").val());
                     layer.confirm("您确定修改吗?",{
                         btn: ['确认', '取消']
