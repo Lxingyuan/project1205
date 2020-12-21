@@ -15,27 +15,12 @@ public class Movie {
     private String protagonist;
     private String showTime;
     private String picAddress;
+    private String postAddress;
+    private String videoAddress;
     private String content;
     private Integer hits;
     private Date createTime;
     private Date updateTime;
-
-    public Movie() {
-    }
-
-    public Movie(Integer movieId, String movieName, String type, String director, String protagonist, String showTime, String picAddress, String content, Integer hits, Date createTime, Date updateTime) {
-        this.movieId = movieId;
-        this.movieName = movieName;
-        this.type = type;
-        this.director = director;
-        this.protagonist = protagonist;
-        this.showTime = showTime;
-        this.picAddress = picAddress;
-        this.content = content;
-        this.hits = hits;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
 
     @Override
     public String toString() {
@@ -47,11 +32,48 @@ public class Movie {
                 ", protagonist='" + protagonist + '\'' +
                 ", showTime='" + showTime + '\'' +
                 ", picAddress='" + picAddress + '\'' +
+                ", postAddress='" + postAddress + '\'' +
+                ", videoAddress='" + videoAddress + '\'' +
                 ", content='" + content + '\'' +
                 ", hits=" + hits +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public Movie() {
+    }
+
+    public Movie(Integer movieId, String movieName, String type, String director, String protagonist, String showTime, String picAddress, String postAddress, String videoAddress, String content, Integer hits, Date createTime, Date updateTime) {
+        this.movieId = movieId;
+        this.movieName = movieName;
+        this.type = type;
+        this.director = director;
+        this.protagonist = protagonist;
+        this.showTime = showTime;
+        this.picAddress = picAddress;
+        this.postAddress = postAddress;
+        this.videoAddress = videoAddress;
+        this.content = content;
+        this.hits = hits;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public String getPostAddress() {
+        return postAddress;
+    }
+
+    public void setPostAddress(String postAddress) {
+        this.postAddress = postAddress;
+    }
+
+    public String getVideoAddress() {
+        return videoAddress;
+    }
+
+    public void setVideoAddress(String videoAddress) {
+        this.videoAddress = videoAddress;
     }
 
     public Integer getMovieId() {

@@ -18,14 +18,14 @@ import java.util.List;
 public class MovieDaoImpl extends BaseDao implements MovieDao {
     @Override
     public int insertMovie(Movie movie) {
-        String sql = "insert into movie (MovieName,Type,Director,Protagonist,ShowTime,PicAddress,Content,Hits)values(?,?,?,?,?,?,?,?)";
-        return update(sql, movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getContent(), movie.getHits());
+        String sql = "insert into movie (MovieName,Type,Director,Protagonist,ShowTime,PicAddress,PostAddress,VideoAddress,Content,Hits)values(?,?,?,?,?,?,?,?,?,?)";
+        return update(sql, movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getPostAddress(), movie.getVideoAddress(), movie.getContent(), movie.getHits());
     }
 
     @Override
     public int updateMovie(Movie movie) {
-        String sql = "update movie set UpdateTime=?,MovieName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,Content=?,Hits=? where MovieId = ?";
-        return update(sql, movie.getUpdateTime(), movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getContent(), movie.getHits(), movie.getMovieId());
+        String sql = "update movie set UpdateTime=?,MovieName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,PostAddress=?,VideoAddress=?,Content=?,Hits=? where MovieId = ?";
+        return update(sql, movie.getUpdateTime(), movie.getMovieName(), movie.getType(), movie.getDirector(), movie.getProtagonist(), movie.getShowTime(), movie.getPicAddress(), movie.getPostAddress(), movie.getVideoAddress(), movie.getContent(), movie.getHits(), movie.getMovieId());
     }
 
     @Override
