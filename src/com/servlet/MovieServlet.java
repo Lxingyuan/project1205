@@ -29,7 +29,7 @@ import java.util.List;
  */
 @WebServlet("/movie.do")
 public class MovieServlet extends BaseServlet {
-    MovieService movieService=new MovieServiceImpl();
+    MovieService movieService = new MovieServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,7 +51,7 @@ public class MovieServlet extends BaseServlet {
     public void queryMovieList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
         Page2<Movie> page = movieService.queryMovieByPage2();
-        System.out.println("page:"+page);
+        System.out.println("page:" + page);
         Gson gson = new Gson();
         //转成字符串
         String jsonStr = gson.toJson(page);
@@ -60,48 +60,50 @@ public class MovieServlet extends BaseServlet {
     }
 
     public void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] idNum=request.getParameterValues("idNum[]");
-        boolean flag=true;
+        String[] idNum = request.getParameterValues("idNum[]");
+        boolean flag = true;
         Integer result;
         //String idNum2 = request.getParameter("idNum");
         //System.out.println("idNum:"+idNum2);
-        for (int i = 0; i <idNum.length ; i++) {
+        for (int i = 0; i < idNum.length; i++) {
             //System.out.print(idNum[i]+" ");
-            result=movieService.deleteMovie(Integer.parseInt(idNum[i]));
+            result = movieService.deleteMovie(Integer.parseInt(idNum[i]));
             //删除失败
-            if(result<0){
-                flag=false;
+            if (result < 0) {
+                flag = false;
                 break;
             }
         }
-        if(flag==true){
+        if (flag == true) {
             response.getWriter().write("true");
-        }else {
+        } else {
             response.getWriter().write("false");
         }
     }
+
     public void updateMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId=request.getParameter("movieId");
+        String movieId = request.getParameter("movieId");
         //要更新的字段名
-        String columnName=request.getParameter("columnName");
+        String columnName = request.getParameter("columnName");
         //要更新的字段值
-        String columnValue=request.getParameter("columnValue");
+        String columnValue = request.getParameter("columnValue");
         //System.out.println("columnValue替换前:"+columnValue);
         //columnValue=columnValue.replace("'", "\\'");
         //columnValue=columnValue.replace("\"", "\\\"");
-        columnValue=columnValue.replace("\\", "\\\\");
+        columnValue = columnValue.replace("\\", "\\\\");
         //System.out.println("columnValue替换后:"+columnValue);
-        System.out.println(movieId+" "+columnName+" "+columnValue);
-        Integer result=movieService.updateMovieColumnValue(Integer.parseInt(movieId),columnName,columnValue);
-        if(result<0){
+        System.out.println(movieId + " " + columnName + " " + columnValue);
+        Integer result = movieService.updateMovieColumnValue(Integer.parseInt(movieId), columnName, columnValue);
+        if (result < 0) {
             response.getWriter().write("false");
-        }else {
+        } else {
             response.getWriter().write("true");
         }
     }
 
     /**
      * 限定条件查询
+     *
      * @param request
      * @param response
      * @throws ServletException
@@ -109,16 +111,16 @@ public class MovieServlet extends BaseServlet {
      */
     public void queryMovieListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //电影名称
-        String movieName=request.getParameter("movieName");
+        String movieName = request.getParameter("movieName");
         //电影类型
-        String type=request.getParameter("type");
+        String type = request.getParameter("type");
         //主演
-        String protagonist=request.getParameter("protagonist");
+        String protagonist = request.getParameter("protagonist");
         //上映年份
-        String showTime=request.getParameter("showTime");
+        String showTime = request.getParameter("showTime");
         //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
-        Page2<Movie> page = movieService.queryMovieByPage2(movieName,type,protagonist,showTime);
-        System.out.println("page2:"+page);
+        Page2<Movie> page = movieService.queryMovieByPage2(movieName, type, protagonist, showTime);
+        System.out.println("page2:" + page);
         Gson gson = new Gson();
         //转成字符串
         String jsonStr = gson.toJson(page);
@@ -137,7 +139,7 @@ public class MovieServlet extends BaseServlet {
     }
 
     public void addMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Movie movie=new Movie();
+        Movie movie = new Movie();
         movie.setHits(0);
         movie.setPostAddress("/static/images/2.jpg");
         if (ServletFileUpload.isMultipartContent(request)) {
@@ -156,24 +158,24 @@ public class MovieServlet extends BaseServlet {
                         System.out.println("普通项 name:" + fileItem.getFieldName());
                         //参数UTF-8解决乱码
                         System.out.println("value = " + fileItem.getString("UTF-8"));
-                        if("movieName".equals(fileItem.getFieldName())){
+                        if ("movieName".equals(fileItem.getFieldName())) {
                             movie.setMovieName(fileItem.getString("UTF-8"));
-                        }else if("type".equals(fileItem.getFieldName())){
+                        } else if ("type".equals(fileItem.getFieldName())) {
                             movie.setType(fileItem.getString("UTF-8"));
-                        }else if("director".equals(fileItem.getFieldName())){
+                        } else if ("director".equals(fileItem.getFieldName())) {
                             movie.setDirector(fileItem.getString("UTF-8"));
-                        }else if("protagonist".equals(fileItem.getFieldName())){
+                        } else if ("protagonist".equals(fileItem.getFieldName())) {
                             movie.setProtagonist(fileItem.getString("UTF-8"));
-                        }else if("showTime".equals(fileItem.getFieldName())){
+                        } else if ("showTime".equals(fileItem.getFieldName())) {
                             movie.setShowTime(fileItem.getString("UTF-8"));
-                        }else if("content".equals(fileItem.getFieldName())){
+                        } else if ("content".equals(fileItem.getFieldName())) {
                             movie.setContent(fileItem.getString("UTF-8"));
                         }
                     } else {
                         //上传的文件
                         System.out.println("文件项的name:" + fileItem.getFieldName());
                         System.out.println("上传的文件名:" + fileItem.getName());
-                        Long time=System.currentTimeMillis();
+                        Long time = System.currentTimeMillis();
                         fileItem.write(new File("D:\\project1205\\images\\" + time + fileItem.getName()));
                         //要保存时到数据库的文件名
                         String fileName = "http://localhost:8765/images\\" + time + fileItem.getName();
@@ -186,21 +188,31 @@ public class MovieServlet extends BaseServlet {
                 e.printStackTrace();
             }
         }
-        Integer result=movieService.insertMovie(movie);
-        System.out.println("result:"+result);
-        if(result>0){
+        Integer result = movieService.insertMovie(movie);
+        System.out.println("result:" + result);
+        if (result > 0) {
             response.getWriter().write("true");
-        }else {
+        } else {
             response.getWriter().write("false");
         }
     }
+
     public void queryMovieById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId=request.getParameter("movieId");
-        Movie movie=movieService.queryMovieById(Integer.parseInt(movieId));
-        if(movie==null){
+        String movieId = request.getParameter("movieId");
+        Movie movie = movieService.queryMovieById(Integer.parseInt(movieId));
+        if (movie == null) {
             response.getWriter().write("false");
-        }else {
+        } else {
             response.getWriter().write("true");
         }
+    }
+
+    public void queryMovieByHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        List<Movie> list = movieService.queryMovieByHits();
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(list);
+        response.getWriter().write(jsonStr);
     }
 }
