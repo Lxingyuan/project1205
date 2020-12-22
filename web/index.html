@@ -104,7 +104,22 @@
 </head>
 <body style="width: auto">
 
-<!-- END header -->
+<ul class="layui-nav">
+    <li class="layui-nav-item">
+        <a href="">控制台<span class="layui-badge">9</span></a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="">个人中心<span class="layui-badge-dot"></span></a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="">
+        <a href="javascript:;"><img src="/static/images/person_1.jpg" class="layui-nav-img">我</a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">修改信息</a></dd>
+            <dd><a href="javascript:;">安全管理</a></dd>
+            <dd><a href="javascript:;">退了</a></dd>
+        </dl>
+    </li>
+</ul>
 
 <div class="container" style="height: 600px;margin-top: 80px;margin-bottom: 50px" align="center">
     <div class="layui-carousel" id="test10" style="height: 500px">
@@ -438,6 +453,15 @@
         $('.demoTest .layui-btn').on('click', function () {
             var othis = $(this), type = othis.data('type');
             active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+    layui.use('element', function(){
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        //监听导航点击
+        element.on('nav(demo)', function(elem){
+            //console.log(elem)
+            layer.msg(elem.text());
         });
     });
 </script>
