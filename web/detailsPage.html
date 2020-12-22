@@ -22,7 +22,7 @@
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
     <script type="text/javascript"  src="static/js/getUrlParam.js"></script>
-    
+
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
 
@@ -44,7 +44,9 @@
             }
             return null;
         }
+
         $(function () {
+
             $("#logOut").on("click",function () {
                 var name=readCookie("adminName");
                 //当前是管理员退出系统
@@ -103,6 +105,7 @@
                 $("#register").hide();
                 //显示登录信息
                 $("#userMessage").show();
+                $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
                 $.ajax({
                     url: "/admin.do",
                     data: {action: "findAdminByName",adminName:name},
@@ -127,6 +130,8 @@
                     $("#register").hide();
                     //显示登录信息
                     $("#userMessage").show();
+                    //添加“修改密码”
+                    $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
                     $.ajax({
                         url: "/user.do",
                         data: {action: "findUserByName",userName:name},
@@ -144,29 +149,33 @@
                     });
                 }
             }
-        });
-        var movieId=UrlParm.parm("movieId");
-        $.ajax({
-            url: "movie.do",
-            data: {action: "queryMovieByMovieId", movieId: movieId},
-            type: "GET",
-            dataType: "text",
-            success: function (data) {
-                let jsonObj = JSON.parse(data);
-                $(".mb-4").append(jsonObj.movieName)
-                $(".bio-body").append("<img  style=\"width: 275px;height: 350px\"\n >" +
-                    "<center><h2>海报图</h2></center>")
-                $(".bio-body>img").attr("src",jsonObj.picAddress);
 
-            }
-        })
+
+            var movieId=UrlParm.parm("movieId");
+            $.ajax({
+                url: "movie.do",
+                data: {action: "queryMovieByMovieId", movieId: movieId},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    $(".mb-4").append(jsonObj.movieName)
+                    $(".bio-body").append("<img  style=\"width: 275px;height: 350px\"\n >" +
+                        "<center><h2>海报图</h2></center>")
+                    $(".bio-body>img").attr("src",jsonObj.picAddress);
+
+                }
+            });
+
+        });
+
     </script>
 </head>
 <body>
 <!--导航栏-->
 <ul class="layui-nav" id="top">
     <li class="layui-nav-item">
-        <a href="">首页
+        <a href="/index.html">首页
             <!--<span class="layui-badge">9</span>-->
         </a>
     </li>
@@ -175,13 +184,13 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
-    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage" >
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
         <a href="javascript:;">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
             <span id="userNameSpan"></span>
         </a>
-        <dl class="layui-nav-child">
-            <dd><a href="javascript:;">修改信息</a></dd>
+        <dl class="layui-nav-child" id="dl01">
+            <dd><a href="/updateUserMessage.html">修改信息</a></dd>
             <dd><a href="javascript:;" id="logOut">注销</a></dd>
         </dl>
     </li>
@@ -363,9 +372,9 @@
             <div class="col-md-12 col-lg-4 sidebar">
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                        <div class="bio-body">
+                    <div class="bio-body">
 
-                        </div>
+                    </div>
 
                 </div>
                 <!-- END sidebar-box -->

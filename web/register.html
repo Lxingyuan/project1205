@@ -279,7 +279,18 @@
                 $("#loginDiv").hide();
                 $("#registerDiv").show();
             });
-
+            //去找回密码
+            $("#toFindPassword").bind("click", function () {
+                //console.log("点击了发送验证码")
+                $("#loginDiv").hide();
+                $("#findPasswordDiv").show();
+            });
+            //去注册2
+            $("#toRegister2").bind("click", function () {
+                //console.log("点击了发送验证码")
+                $("#findPasswordDiv").hide();
+                $("#registerDiv").show();
+            });
             //登录按钮
             $("#loginButton").bind("click", function () {
                 //console.log("后端:" + code);
@@ -366,6 +377,9 @@
         <h1>&nbsp;&nbsp;&nbsp;&nbsp;<b>欢迎登录</b></h1>
         <span class="sp1">没有账号?</span>
         <span><a href="#" style="text-decoration: none" id="toRegister">注册</a></span>
+        <br>
+        <span class="sp1">忘记密码?</span>
+        <span><a href="#" style="text-decoration: none" id="toFindPassword">找回密码</a></span>
         <form>
             <div class="div4">
                 <span>用户名:</span>
@@ -379,6 +393,22 @@
             </div>
             <button id="loginButton" type="button" class="btn btn-lg btn-success"
                     style="width: 300px;margin-left: 84px;margin-top: 50px">登录
+            </button>
+        </form>
+    </div>
+    <div class="div3" style="display: none;height: 500px" id="findPasswordDiv">
+        <br>
+        <h1>&nbsp;&nbsp;&nbsp;&nbsp;<b>输入手机号找回</b></h1>
+        <span class="sp1">无法找回?</span>
+        <span><a href="#" style="text-decoration: none" id="toRegister2">重新注册</a></span>
+        <br>
+        <form>
+            <div class="div4">
+                <span>手机号:</span>
+                <input class="form-control" placeholder="请输入手机号" name="telephone2" id="telephone2">
+            </div>
+            <button id="submitButton2" type="button" class="btn btn-lg btn-success"
+                    style="width: 300px;margin-left: 84px;margin-top: 50px">找回
             </button>
         </form>
     </div>
