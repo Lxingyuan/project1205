@@ -52,15 +52,9 @@
                 dataType: "text",
                 success: function (data) {
                     //alert(data);
-                    var index = 1;
                     var jsonObj = JSON.parse(data);
                     //jsonObj.data表示json字符串中key为data对应的值
                     //console.log(jsonObj.data.length);
-                    // $("#img"+i).attr("src", jsonObj.data[i].postAddress);
-                    //console.log(jsonObj.data[0].postAddress);
-                    /*$("#img1").attr("src", jsonObj.data[0].postAddress);
-                    $("#img2").attr("src", jsonObj.data[1].postAddress);
-                    $("#img3").attr("src", jsonObj.data[2].postAddress);*/
                     for (let i = 0; i < 3; i++) {
                         $("#img"+(i+1)).attr("src", jsonObj.data[i].postAddress);
                         $("#img"+(i+1)).attr("title", jsonObj.data[i].movieName);
