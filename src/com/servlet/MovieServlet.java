@@ -128,6 +128,15 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
+    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
 
     public void addMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Movie movie = new Movie();
@@ -197,27 +206,13 @@ public class MovieServlet extends BaseServlet {
             response.getWriter().write("true");
         }
     }
-    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html;charset=utf-8");
-        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
-        Gson gson = new Gson();
-        String jsonStr = gson.toJson(page);
-        response.getWriter().write(jsonStr);
-    }
+
     public void queryMovieByHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         List<Movie> list = movieService.queryMovieByHits();
-        Page2<Movie> page=new Page2<>();
-        page.setCode(0);
-        page.setMsg("");
-        page.setCount(list.size());
-        page.setData(list);
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(page);
+        String jsonStr = gson.toJson(list);
         response.getWriter().write(jsonStr);
-//        System.out.println("jsonStr:"+jsonStr);
     }
 }
