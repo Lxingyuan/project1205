@@ -20,6 +20,8 @@ public interface CommentDao {
 
     int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
 
+
+    List<Comment> queryCommentByTime();
     //删除评论信息
     int deleteComment(Integer commentId);
 

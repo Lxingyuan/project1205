@@ -164,4 +164,14 @@ public class NoticeServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+//根据公告创建时间查询
+    public void queryNoticeByTime(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Notice notice =noticeService.queryNoticeByTime();
+        System.out.println(notice);
+        Gson gson = new Gson();
+        //转成字符串
+        String jsonStr = gson.toJson(notice);
+        //写入返回信息
+        response.getWriter().write(jsonStr);
+    }
 }

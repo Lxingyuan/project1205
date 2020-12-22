@@ -28,6 +28,8 @@ public interface NoticeService {
     //根据用户user搜索公告
     Notice queryNoticeByUser(String noticeUser);
 
+    Notice queryNoticeByTime();
+
     Page<Notice> queryNoticeByPage(int pageNo, int pageSize);
 
     Page2<Notice> queryNoticeByPage2();

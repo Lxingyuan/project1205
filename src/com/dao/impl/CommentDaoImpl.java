@@ -34,6 +34,12 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     @Override
+    public List<Comment> queryCommentByTime() {
+        String sql="SELECT * FROM comment ORDER BY CreateTime DESC";
+        return  queryForList(Comment.class,sql);
+    }
+
+    @Override
     public int deleteComment(Integer commentId) {
         String sql = "delete from comment where CommentId = ?";
         return update(sql, commentId);

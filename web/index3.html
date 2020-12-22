@@ -82,8 +82,8 @@
             for (let i = 0; i < jsonObj.items.length; i++) {
                 console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
-                let blogentry = $("<a href='detailsPage.html' class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
-                let img = $("<img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/>");
+                let blogentry = $("<div  class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
+                let img = $("<a  href='detailsPage.html'><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
                 postmeta.append("<span class=\"category\">"+jsonObj.items[i].movieName+"</span>");

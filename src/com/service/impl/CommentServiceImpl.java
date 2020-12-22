@@ -33,6 +33,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> queryCommentByTime() {
+        return commentDao.queryCommentByTime();
+    }
+
+    @Override
     public Page<Comment> queryCommentByPage(int pageNo, int pageSize) {
         Page<Comment> page = new Page<>();
         //设置当前页码

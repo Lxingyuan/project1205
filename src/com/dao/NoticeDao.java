@@ -28,6 +28,8 @@ public interface NoticeDao {
     //根据用户user搜索公告
     Notice queryNoticeByUser(String noticeUser);
 
+    Notice queryNoticeByTime();
+
     //分页专用
     Integer queryPageTotalCounts();
 

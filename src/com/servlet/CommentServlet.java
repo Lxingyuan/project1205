@@ -2,6 +2,7 @@ package com.servlet;
 
 import com.dao.BaseDao;
 import com.entity.Comment;
+import com.entity.Movie;
 import com.google.gson.Gson;
 import com.service.CommentService;
 import com.service.impl.CommentServiceImpl;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 作者：林星源
@@ -100,6 +102,20 @@ public class CommentServlet  extends BaseServlet {
         //转成字符串
         String jsonStr = gson.toJson(page);
         //写入返回信息
+        response.getWriter().write(jsonStr);
+    }
+
+    //根据影评创建时间查询
+    public void queryCommentByTime(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<Comment> list =commentService.queryCommentByTime();
+        System.out.println(list);
+        Page2<Comment> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(list.size());
+        page.setData(list);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
     }
 }

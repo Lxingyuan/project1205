@@ -57,6 +57,11 @@ public class NoticeDaoImpl extends BaseDao implements NoticeDao {
         return queryForOne(Notice.class, sql, noticeUser);
     }
 
+    public Notice queryNoticeByTime(){
+        String sql="SELECT * FROM notice ORDER BY CreateTime DESC LIMIT 1";
+        return  queryForOne(Notice.class,sql);
+    }
+
     @Override
     public Integer queryPageTotalCounts() {
         String sql = "select count(1) from notice";

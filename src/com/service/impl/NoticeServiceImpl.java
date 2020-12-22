@@ -49,6 +49,11 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    public Notice queryNoticeByTime() {
+        return noticeDao.queryNoticeByTime();
+    }
+
+    @Override
     public Page<Notice> queryNoticeByPage(int pageNo, int pageSize) {
         Page<Notice> page = new Page<>();
         //设置当前页码

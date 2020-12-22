@@ -237,9 +237,10 @@ public class MovieServlet extends BaseServlet {
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
         System.out.println(movieId);
         Movie movieObj = movieService.queryMovieById(movieId);
+        System.out.println(movieObj);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(movieObj);
         response.getWriter().write(jsonStr);
-
     }
+
 }

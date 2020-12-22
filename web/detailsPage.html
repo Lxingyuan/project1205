@@ -14,27 +14,188 @@
     <link rel="stylesheet" href="static/fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
 
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+
+    <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./static/js/jquery.min.js"></script>
+    <script type="text/javascript"  src="static/js/getUrlParam.js"></script>
+    
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
 
     <script type="text/javascript">
+        /**
+         *@param name 键值
+         * @return 通过键值获取到对应的数据，如果没有则返回null
+         **/
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(";");
+
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while(c.charAt(0) == " ")
+                    c = c.substring(1, c.length);
+                if(c.indexOf(nameEQ) == 0)
+                    return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        $(function () {
+            $("#logOut").on("click",function () {
+                var name=readCookie("adminName");
+                //当前是管理员退出系统
+                if(name!=null){
+                    $.ajax({
+                        url: "/admin.do",
+                        data: {action: "adminLogOut"},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.msg("退出成功！");
+                                window.location.reload();
+                            }
+                            else {
+                                layer.msg("退出失败！");
+                            }
+                        }
+                    });
+
+                    window.location.reload();
+                    return false;
+
+                }else {
+                    //用户的退出操作
+                    $.ajax({
+                        url: "/user.do",
+                        data: {action: "userLogOut"},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.msg("退出成功！");
+                                window.location.reload();
+                            }
+                            else {
+                                layer.msg("退出失败！");
+                            }
+                        }
+                    });
+                    return false;
+                }
+            });
+
+            var name=readCookie("adminName");
+            console.log("adminName:"+readCookie("adminName"));
+            console.log("userName:"+readCookie("userName"));
+            //管理员已登录
+            if(name!=null){
+                //隐藏“登录”和“注册”
+                $("#login").hide();
+                $("#register").hide();
+                //显示登录信息
+                $("#userMessage").show();
+                $.ajax({
+                    url: "/admin.do",
+                    data: {action: "findAdminByName",adminName:name},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        console.log("data:" + data);//data代表服务器回传的数据
+                        var jsonObj = JSON.parse(data);
+                        //右上头像
+                        $("#userNameSpan").html(jsonObj.userName);
+                        //右上用户名
+                        $("#userHeadPic").attr("src",jsonObj.headPic)
+                    }
+                });
+
+            }else {
+                var name=readCookie("userName");
+                //用户已登录
+                if(name!=null){
+                    $("#login").hide();
+                    $("#register").hide();
+                    //显示登录信息
+                    $("#userMessage").show();
+                    $.ajax({
+                        url: "/user.do",
+                        data: {action: "findUserByName",userName:name},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            console.log("data:" + data);//data代表服务器回传的数据
+                            var jsonObj = JSON.parse(data);
+                            //右上头像
+                            $("#userNameSpan").html(jsonObj.userName);
+                            //右上用户名
+                            $("#userHeadPic").attr("src",jsonObj.headPic)
+                        }
+                    });
+                }
+            }
+        });
+        var movieId=UrlParm.parm("movieId");
         $.ajax({
             url: "movie.do",
-            data: {action: "queryMovieById", movieId: movieId},
+            data: {action: "queryMovieByMovieId", movieId: movieId},
             type: "GET",
             dataType: "text",
             success: function (data) {
-                hotMovieinit(data);
+                let jsonObj = JSON.parse(data);
+                $(".mb-4").append(jsonObj.movieName)
+                $(".bio-body").append("<img  style=\"width: 275px;height: 350px\"\n >" +
+                    "<center><h2>海报图</h2></center>")
+                $(".bio-body>img").attr("src",jsonObj.picAddress);
+
             }
         })
-
     </script>
 </head>
 <body>
 <!--导航栏-->
-
-</header>
+<ul class="layui-nav" id="top">
+    <li class="layui-nav-item">
+        <a href="">首页
+            <!--<span class="layui-badge">9</span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="">个人中心
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage" >
+        <a href="javascript:;">
+            <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
+            <span id="userNameSpan"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">修改信息</a></dd>
+            <dd><a href="javascript:;" id="logOut">注销</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="login">
+        <a href="/register.html">
+            注册
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
+        <a href="/register.html">
+            登录
+        </a>
+    </li>
+</ul>
 <!-- END header -->
 
 <section class="site-section py-lg">
@@ -42,10 +203,10 @@
 
         <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content">
-                <h1 class="mb-4">There’s a Cool New Way for Men to Wear Socks and Sandals</h1>
+                <h1 class="mb-4"></h1>
                 <div class="post-meta">
                     <span class="category">Food</span>
-                    <span class="mr-2">March 15, 2018 </span> &bullet;
+                    <span class="mr-xl-2 text-black 2">March 15, 2018: </span> &bullet;
                     <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
                 </div>
                 <div class="post-content-body">
@@ -59,38 +220,6 @@
                         Aperiam vel aut, ex exercitationem eos consequuntur eaque culpa totam, deserunt, aspernatur quae
                         eveniet hic provident ullam tempora error repudiandae sapiente illum rerum itaque voluptatem.
                         Commodi, sequi.</p>
-                    <div class="row mb-5">
-                        <div class="col-md-12 mb-4 element-animate">
-                            <img src="static/images/img_7.jpg" alt="Image placeholder" class="img-fluid">
-                        </div>
-                        <div class="col-md-6 mb-4 element-animate">
-                            <img src="static/images/img_9.jpg" alt="Image placeholder" class="img-fluid">
-                        </div>
-                        <div class="col-md-6 mb-4 element-animate">
-                            <img src="static/images/img_11.jpg" alt="Image placeholder" class="img-fluid">
-                        </div>
-                    </div>
-                    <p>Quibusdam autem, quas molestias recusandae aperiam molestiae modi qui ipsam vel. Placeat tenetur
-                        veritatis tempore quos impedit dicta, error autem, quae sint inventore ipsa quidem. Quo
-                        voluptate quisquam reiciendis, minus, animi minima eum officia doloremque repellat eos, odio
-                        doloribus cum.</p>
-                    <p>Temporibus quo dolore veritatis doloribus delectus dolores perspiciatis recusandae ducimus, nisi
-                        quod, incidunt ut quaerat, magnam cupiditate. Aut, laboriosam magnam, nobis dolore fugiat
-                        impedit necessitatibus nisi cupiditate, quas repellat itaque molestias sit libero voluptas
-                        eveniet omnis illo ullam dolorem minima.</p>
-                    <p>Porro amet accusantium libero fugit totam, deserunt ipsa, dolorem, vero expedita illo similique
-                        saepe nisi deleniti. Cumque, laboriosam, porro! Facilis voluptatem sequi nulla quidem, provident
-                        eius quos pariatur maxime sapiente illo nostrum quibusdam aliquid fugiat! Earum quod fuga id
-                        officia.</p>
-                    <p>Illo magnam at dolore ad enim fugiat ut maxime facilis autem, nulla cumque quis commodi eos nisi
-                        unde soluta, ipsa eius aspernatur sint atque! Nihil, eveniet illo ea, mollitia fuga accusamus
-                        dolor dolorem perspiciatis rerum hic, consectetur error rem aspernatur!</p>
-
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus magni explicabo id
-                        molestiae, minima quas assumenda consectetur, nobis neque rem, incidunt quam tempore perferendis
-                        provident obcaecati sapiente, animi vel expedita omnis quae ipsa! Obcaecati eligendi sed odio
-                        labore vero reiciendis facere accusamus molestias eaque impedit, consequuntur quae fuga vitae
-                        fugit?</p>
                 </div>
 
 
@@ -232,32 +361,12 @@
             <!-- END main-content -->
 
             <div class="col-md-12 col-lg-4 sidebar">
-                <div class="sidebar-box search-form-wrap">
-                    <form action="#" class="search-form">
-                        <div class="form-group">
-                            <span class="icon fa fa-search"></span>
-                            <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
-                        </div>
-                    </form>
-                </div>
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                    <div class="bio text-center">
-                        <img src="static/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
                         <div class="bio-body">
-                            <h2>Meagan Smith</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem facilis sunt
-                                repellendus excepturi beatae porro debitis voluptate nulla quo veniam fuga sit molestias
-                                minus.</p>
-                            <p><a href="#" class="btn btn-primary btn-sm">Read my bio</a></p>
-                            <p class="social">
-                                <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
-                                <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
-                                <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
-                                <a href="#" class="p-2"><span class="fa fa-youtube-play"></span></a>
-                            </p>
+
                         </div>
-                    </div>
+
                 </div>
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
@@ -341,58 +450,6 @@
     </div>
 </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="mb-3 ">Related Post</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-lg-4">
-                <a href="#" class="a-block d-flex align-items-center height-md"
-                   style="background-image: url('static/images/img_2.jpg'); ">
-                    <div class="text">
-                        <div class="post-meta">
-                            <span class="category">Lifestyle</span>
-                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                        </div>
-                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <a href="#" class="a-block d-flex align-items-center height-md"
-                   style="background-image: url('static/images/img_3.jpg'); ">
-                    <div class="text">
-                        <div class="post-meta">
-                            <span class="category">Travel</span>
-                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                        </div>
-                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <a href="#" class="a-block d-flex align-items-center height-md"
-                   style="background-image: url('static/images/img_4.jpg'); ">
-                    <div class="text">
-                        <div class="post-meta">
-                            <span class="category">Food</span>
-                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                        </div>
-                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-
-
-</section>
 <!-- END section -->
 
 <footer class="site-footer">
@@ -508,8 +565,18 @@
 <script src="static/js/owl.carousel.min.js"></script>
 <script src="static/js/jquery.waypoints.min.js"></script>
 <script src="static/js/jquery.stellar.min.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
-
+        //监听导航点击
+        element.on('nav(demo)', function(elem){
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+</script>
 <script src="static/js/main.js"></script>
 </body>
 </html>
