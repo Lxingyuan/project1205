@@ -328,4 +328,11 @@ public class UserServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+    public void findUserByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userName=request.getParameter("userName");
+        User user=userService.queryUserByName(userName);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(user);
+        response.getWriter().write(jsonStr);
+    }
 }

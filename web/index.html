@@ -116,7 +116,11 @@
                     dataType: "text",//返回的数据类型
                     success: function (data) {
                         console.log("data:" + data);//data代表服务器回传的数据
-
+                        var jsonObj = JSON.parse(data);
+                        //右上头像
+                        $("#userNameSpan").html(jsonObj.userName);
+                        //右上用户名
+                        $("#userHeadPic").attr("src",jsonObj.headPic)
                     }
                 });
 
@@ -128,8 +132,21 @@
                     $("#register").hide();
                     //显示登录信息
                     $("#userMessage").show();
-                }else {
-
+                    $.ajax({
+                        url: "/user.do",
+                        data: {action: "findUserByName",userName:name},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            console.log("data:" + data);//data代表服务器回传的数据
+                            var jsonObj = JSON.parse(data);
+                            //右上头像
+                            $("#userNameSpan").html(jsonObj.userName);
+                            //右上用户名
+                            $("#userHeadPic").attr("src",jsonObj.headPic)
+                        }
+                    });
                 }
             }
         });
@@ -249,7 +266,7 @@
     </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage" >
         <a href="javascript:;">
-            <img src="/static/images/noLogin.jpg" class="layui-nav-img">
+            <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
             <span id="userNameSpan"></span>
         </a>
         <dl class="layui-nav-child">
