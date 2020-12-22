@@ -19,6 +19,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -147,22 +148,52 @@ public class UserServlet extends BaseServlet {
         String password = request.getParameter("password");
         User user = userService.login(new User(username, password));
         Admin admin = adminService.login(new Admin(username, password));
-        System.out.println("UserServlet:user:" + user);
-        System.out.println("UserServlet:admin:" + admin);
+        //System.out.println("UserServlet:user:" + user);
+        //System.out.println("UserServlet:admin:" + admin);
         if (user != null) {
             //登录成功
             response.getWriter().write("true");
             request.getSession().setAttribute("user", user);
+            //保存cookie
+            Cookie cookie = new Cookie("userName",user.getUserName());
+            cookie.setMaxAge(60*60);
+            response.addCookie(cookie);
         } else if(admin!=null){
             response.getWriter().write("true");
             request.getSession().setAttribute("admin", admin);
+            //保存cookie
+            Cookie cookie = new Cookie("adminName",admin.getUserName());
+            cookie.setMaxAge(60*60);
+            response.addCookie(cookie);
         }
         else {
             response.getWriter().write("false");
         }
     }
+
+    /**
+     * 用户退出登录
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void userLogOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().removeAttribute("user");
+        // 获取Cookies数组
+        Cookie[] cookies = request.getCookies();
+        // 迭代查找并清除Cookie
+        for (Cookie cookie: cookies) {
+            if (cookie.getName().equals("userName")) {
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+        response.getWriter().write("true");
+    }
+
+
     public void queryUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
         Page2<User> page = userService.queryUserByPage2();
         System.out.println("page:"+page);
         Gson gson = new Gson();

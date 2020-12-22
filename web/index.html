@@ -30,6 +30,110 @@
         }
     </style>
     <script type="text/javascript">
+
+        /**
+         *@param name 键值
+         * @return 通过键值获取到对应的数据，如果没有则返回null
+         **/
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(";");
+
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while(c.charAt(0) == " ")
+                    c = c.substring(1, c.length);
+                if(c.indexOf(nameEQ) == 0)
+                    return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        $(function () {
+            hotMovie(1);
+            rotation();
+
+            $("#logOut").on("click",function () {
+                var name=readCookie("adminName");
+                //当前是管理员退出系统
+                if(name!=null){
+                    $.ajax({
+                        url: "/admin.do",
+                        data: {action: "adminLogOut"},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.msg("退出成功！");
+                                window.location.reload();
+                            }
+                            else {
+                                layer.msg("退出失败！");
+                            }
+                        }
+                    });
+                    window.location.reload();
+                }else {
+                    //用户的退出操作
+                    $.ajax({
+                        url: "/user.do",
+                        data: {action: "userLogOut"},
+                        type: "GET",
+                        async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.msg("退出成功！");
+                                window.location.reload();
+                            }
+                            else {
+                                layer.msg("退出失败！");
+                            }
+                        }
+                    });
+
+                }
+            });
+
+            var name=readCookie("adminName");
+            console.log("adminName:"+readCookie("adminName"));
+            console.log("userName:"+readCookie("userName"));
+            //管理员已登录
+            if(name!=null){
+                //隐藏“登录”和“注册”
+                $("#login").hide();
+                $("#register").hide();
+                //显示登录信息
+                $("#userMessage").show();
+                $.ajax({
+                    url: "/admin.do",
+                    data: {action: "findAdminByName",adminName:name},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        console.log("data:" + data);//data代表服务器回传的数据
+
+                    }
+                });
+
+            }else {
+                var name=readCookie("userName");
+                //用户已登录
+                if(name!=null){
+                    $("#login").hide();
+                    $("#register").hide();
+                    //显示登录信息
+                    $("#userMessage").show();
+                }else {
+
+                }
+            }
+        });
+
         var currentPage = 1;
 
         function hotMovie(pageNo) {
@@ -106,7 +210,7 @@
             }
 
             for (let i = 0; i < jsonObj.items.length; i++) {
-                console.log(jsonObj.items[i]);
+                //console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
                 //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
                 let blogentry = $("<a href=\"movie.do?action=queryMovieByName&movieName=" + jsonObj.items[i].movieName + "\" class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
@@ -125,10 +229,6 @@
             }
         }
 
-        $(function () {
-            hotMovie(1);
-            rotation();
-        });
     </script>
 </head>
 
@@ -136,7 +236,7 @@
 
 <body style="width: auto">
 
-<ul class="layui-nav">
+<ul class="layui-nav" id="top">
     <li class="layui-nav-item">
         <a href="">首页
             <!--<span class="layui-badge">9</span>-->
@@ -147,13 +247,25 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
-    <li class="layui-nav-item" lay-unselect="" style="float: right">
-        <a href="javascript:;"><img src="/static/images/person_1.jpg" class="layui-nav-img">我</a>
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage" >
+        <a href="javascript:;">
+            <img src="/static/images/noLogin.jpg" class="layui-nav-img">
+            <span id="userNameSpan"></span>
+        </a>
         <dl class="layui-nav-child">
             <dd><a href="javascript:;">修改信息</a></dd>
-            <dd><a href="javascript:;">安全管理</a></dd>
-            <dd><a href="javascript:;">注销</a></dd>
+            <dd><a href="javascript:;" id="logOut">注销</a></dd>
         </dl>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="login">
+        <a href="/register.html">
+            注册
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
+        <a href="/register.html">
+            登录
+        </a>
     </li>
 </ul>
 

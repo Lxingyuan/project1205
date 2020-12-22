@@ -221,4 +221,6 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
 //        System.out.println("jsonStr:"+jsonStr);
     }
+
+
 }

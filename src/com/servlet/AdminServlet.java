@@ -133,4 +133,19 @@ public class AdminServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+
+    /**
+     * 查找一个admin
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void findAdminByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String adminName = request.getParameter("adminName");
+        Admin admin=adminService.queryAdminByName(adminName);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(admin);
+        response.getWriter().write(jsonStr);
+    }
 }
