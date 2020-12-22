@@ -180,6 +180,7 @@
                         $("#img"+(i+1)).attr("src", jsonObj.data[i].postAddress);
                         $("#img"+(i+1)).attr("title", jsonObj.data[i].movieName);
                     }
+                    $("#popularMovie").attr("src",jsonObj.data[0].picAddress)
                 }
             });
         }
@@ -230,15 +231,15 @@
                 //console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
                 //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
-                let blogentry = $("<a href=\"movie.do?action=queryMovieByName&movieName=" + jsonObj.items[i].movieName + "\" class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
+                let blogentry = $("<a href=\"movie.do?action=queryMovieByMovieId&movieid=" + jsonObj.items[i].movieId + "\" class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
                 let img = $("<img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/>");
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
-                postmeta.append("<span class=\"category\">" + jsonObj.items[i].movieName + "</span>");
-                postmeta.append("<span class=\"mr-2\">March,15,2018</span>");
-                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>3</span>")
+                postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
+                postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
+                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.items[i].hits+"</span>")
                 blogbody.append(postmeta);
-                blogbody.append("<h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>");
+                blogbody.append("<center><h2>"+ jsonObj.items[i].movieName +"</h2></center>");
                 blogentry.append(img);
                 blogentry.append(blogbody);
                 colmd6.append(blogentry);
@@ -311,9 +312,9 @@
                 <ul class="pagination">
                 </ul>
             </div>
-
             <!-- END main-content -->
 
+            <!--搜索框-->
             <div class="col-md-12 col-lg-4 sidebar">
                 <div class="sidebar-box search-form-wrap">
                     <form action="#" class="search-form">
@@ -326,7 +327,7 @@
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
                     <div class="bio text-center">
-                        <img src="static/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
+                        <img id="popularMovie" src="static/images/person_1.jpg" alt="Image Placeholder" class="img-fluid">
                         <div class="bio-body">
                             <h2>Meagan Smith</h2>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem facilis sunt

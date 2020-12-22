@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -211,7 +212,7 @@ public class MovieServlet extends BaseServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         List<Movie> list = movieService.queryMovieByHits();
-        Page2<Movie> page=new Page2<>();
+        Page2<Movie> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         page.setCount(list.size());
@@ -222,5 +223,15 @@ public class MovieServlet extends BaseServlet {
 //        System.out.println("jsonStr:"+jsonStr);
     }
 
+    public void queryMovieByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+        System.out.println(movieId);
+        Movie movieObj = movieService.queryMovieById(movieId);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(movieObj);
+        response.getWriter().write(jsonStr);
 
+    }
 }
