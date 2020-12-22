@@ -211,8 +211,14 @@ public class MovieServlet extends BaseServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         List<Movie> list = movieService.queryMovieByHits();
+        Page2<Movie> page=new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(list.size());
+        page.setData(list);
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(list);
+        String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
+//        System.out.println("jsonStr:"+jsonStr);
     }
 }
