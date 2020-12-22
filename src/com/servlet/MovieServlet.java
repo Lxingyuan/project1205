@@ -59,7 +59,15 @@ public class MovieServlet extends BaseServlet {
         //写入返回信息
         response.getWriter().write(jsonStr);
     }
-
+    public void deleteMovieById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String movieId = request.getParameter("movieId");
+        Integer result = movieService.deleteMovie(Integer.parseInt(movieId));
+        if (result < 0) {
+            response.getWriter().write("false");
+        } else {
+            response.getWriter().write("true");
+        }
+    }
     public void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] idNum = request.getParameterValues("idNum[]");
         boolean flag = true;

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>修改个人信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<ul class="layui-nav" id="top">
+    <li class="layui-nav-item">
+        <a href="">首页
+            <!--<span class="layui-badge">9</span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="">个人中心
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
+        <a href="javascript:;">
+            <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
+            <span id="userNameSpan"></span>
+        </a>
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;">修改信息</a></dd>
+            <dd><a href="javascript:;" id="logOut">注销</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="login">
+        <a href="/register.html">
+            注册
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
+        <a href="/register.html">
+            登录
+        </a>
+    </li>
+</ul>
+<div align="center">
+    <div style="border: 1px solid red;width: 1000px;margin-top: 30px;" align="left">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">输入框</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码框</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">辅助文字</div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择框</label>
+                <div class="layui-input-block">
+                    <select name="city" lay-verify="required">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">复选框</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="like[write]" title="写作">
+                    <input type="checkbox" name="like[read]" title="阅读" checked>
+                    <input type="checkbox" name="like[dai]" title="发呆">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开关</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="switch" lay-skin="switch">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">单选框</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="男" title="男">
+                    <input type="radio" name="sex" value="女" title="女" checked>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">文本域</label>
+                <div class="layui-input-block">
+                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+    /**
+     *@param name 键值
+     * @return 通过键值获取到对应的数据，如果没有则返回null
+     **/
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == " ")
+                c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    $(function () {
+
+        $("#logOut").on("click", function () {
+            var name = readCookie("adminName");
+            //当前是管理员退出系统
+            if (name != null) {
+                $.ajax({
+                    url: "/admin.do",
+                    data: {action: "adminLogOut"},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            layer.msg("退出成功！");
+                            window.location.reload();
+                        }
+                        else {
+                            layer.msg("退出失败！");
+                        }
+                    }
+                });
+                window.location.reload();
+            } else {
+                //用户的退出操作
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "userLogOut"},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            layer.msg("退出成功！");
+                            window.location.reload();
+                        }
+                        else {
+                            layer.msg("退出失败！");
+                        }
+                    }
+                });
+
+            }
+        });
+
+        var name = readCookie("adminName");
+        console.log("adminName:" + readCookie("adminName"));
+        console.log("userName:" + readCookie("userName"));
+        //管理员已登录
+        if (name != null) {
+            //隐藏“登录”和“注册”
+            $("#login").hide();
+            $("#register").hide();
+            //显示登录信息
+            $("#userMessage").show();
+            $.ajax({
+                url: "/admin.do",
+                data: {action: "findAdminByName", adminName: name},
+                type: "GET",
+                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                dataType: "text",//返回的数据类型
+                success: function (data) {
+                    console.log("data:" + data);//data代表服务器回传的数据
+                    var jsonObj = JSON.parse(data);
+                    //右上头像
+                    $("#userNameSpan").html(jsonObj.userName);
+                    //右上用户名
+                    $("#userHeadPic").attr("src", jsonObj.headPic)
+                }
+            });
+
+        } else {
+            var name = readCookie("userName");
+            //用户已登录
+            if (name != null) {
+                $("#login").hide();
+                $("#register").hide();
+                //显示登录信息
+                $("#userMessage").show();
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "findUserByName", userName: name},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        console.log("data:" + data);//data代表服务器回传的数据
+                        var jsonObj = JSON.parse(data);
+                        //右上头像
+                        $("#userNameSpan").html(jsonObj.userName);
+                        //右上用户名
+                        $("#userHeadPic").attr("src", jsonObj.headPic)
+                    }
+                });
+            }
+        }
+    });
+    layui.use('element', function(){
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        //监听导航点击
+        element.on('nav(demo)', function(elem){
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+</script>
+
+</body>
+</html>

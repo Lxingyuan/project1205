@@ -29,6 +29,7 @@
             height: 450px;
         }
     </style>
+    <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
     <script type="text/javascript">
 
         /**
@@ -52,7 +53,28 @@
         $(function () {
             hotMovie(1);
             rotation();
-
+            $("body").on("click",".deleteMovie",function () {
+                //alert($(this).children("input").val());
+                var movieId=$(this).children("input").val();
+                layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
+                    $.ajax({
+                        url: "/movie.do?action=deleteMovieById",
+                        data: {movieId:movieId},
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            //console.log("data:" + data);//data代表服务器回传的数据
+                            if (data == "true") {
+                                layer.msg('删除成功！');
+                                window.location.reload();
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+                    });
+                });
+            });
             $("#logOut").on("click",function () {
                 var name=readCookie("adminName");
                 //当前是管理员退出系统
@@ -231,8 +253,8 @@
                 //console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
                 //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
-                let blogentry = $("<a href=\"movie.do?action=queryMovieByMovieId&movieid=" + jsonObj.items[i].movieId + "\" class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
-                let img = $("<img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/>");
+                let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
+                let img = $("<a href=\"movie.do?action=queryMovieByMovieId&movieid="+jsonObj.items[i].movieId+"\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
                 postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
@@ -240,6 +262,9 @@
                 postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.items[i].hits+"</span>")
                 blogbody.append(postmeta);
                 blogbody.append("<center><h2>"+ jsonObj.items[i].movieName +"</h2></center>");
+                if(readCookie("adminName")!=null){
+                    blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.items[i].movieId+"'>"+ "删除" +"</a></center>");
+                }
                 blogentry.append(img);
                 blogentry.append(blogbody);
                 colmd6.append(blogentry);
@@ -271,7 +296,7 @@
             <span id="userNameSpan"></span>
         </a>
         <dl class="layui-nav-child">
-            <dd><a href="javascript:;">修改信息</a></dd>
+            <dd><a href="/updateUserMessage.html">修改信息</a></dd>
             <dd><a href="javascript:;" id="logOut">注销</a></dd>
         </dl>
     </li>
