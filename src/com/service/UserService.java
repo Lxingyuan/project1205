@@ -21,7 +21,7 @@ public interface UserService {
     int insertUser(User user);
     //更新信息
     int update(User user);
-
+    int updateUser2(User user);
     int deleteUser(Integer userId);
 
     User queryUserById(Integer id);
@@ -36,7 +36,9 @@ public interface UserService {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
+    User queryUserByQQ(Integer qq);
 
+    User queryUserByEmail(String email);
     //电影分页2
     Page2<User> queryUserByPage2();
 

@@ -198,7 +198,7 @@ public class MovieServlet extends BaseServlet {
             }
         }
         Integer result = movieService.insertMovie(movie);
-        System.out.println("result:" + result);
+        //System.out.println("result:" + result);
         if (result > 0) {
             response.getWriter().write("true");
         } else {

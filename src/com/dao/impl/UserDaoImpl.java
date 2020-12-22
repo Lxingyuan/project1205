@@ -33,8 +33,14 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     //更新用户
     @Override
     public int updateUser(User user) {
-        String sql = "update user set UpdateTime = ?,UserName = ?,UserPassword = ?,Telephone = ?,QQ = ?,Email = ?,Sex = ?,RegisterTime = ?,HeadPic = ? where UserId = ?";
-        return update(sql, user.getUpdateTime(), user.getUserName(), user.getUserPassword(), user.getTelephone(), user.getQq(), user.getEmail(), user.getSex(), user.getRegisterTime(), user.getHeadPic(), user.getUserId());
+        String sql = "update user set UserName = ?,UserPassword = ?,Telephone = ?,QQ = ?,Email = ?,Sex = ?,RegisterTime = ?,HeadPic = ? where UserId = ?";
+        return update(sql, user.getUserName(), user.getUserPassword(), user.getTelephone(), user.getQq(), user.getEmail(), user.getSex(), user.getRegisterTime(), user.getHeadPic(), user.getUserId());
+    }
+
+    @Override
+    public int updateUser2(User user) {
+        String sql = "update user set Telephone = ?,QQ = ?,Email = ?,Sex = ?,HeadPic = ? where UserName = ?";
+        return update(sql, user.getTelephone(),user.getQq(),user.getEmail(),user.getSex(),user.getHeadPic(),user.getUserName());
     }
 
     @Override
@@ -95,6 +101,19 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         return queryForOne(User.class, sql, telephone);
     }
 
+    @Override
+    public User queryUserByQQ(Integer qq) {
+        String sql = "select * from user where qq=?";
+        return queryForOne(User.class, sql, qq);
+    }
+
+    @Override
+    public User queryUserByEmail(String email) {
+        String sql = "select * from user where email=?";
+        return queryForOne(User.class, sql, email);
+    }
+
+    @Override
     public List<User> queryAllUser() {
         String sql = "select * from user";
         return queryForList(User.class, sql);

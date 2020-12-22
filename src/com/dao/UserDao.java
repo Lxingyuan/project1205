@@ -15,7 +15,7 @@ public interface UserDao {
     int insertUser(User user);
 
     int updateUser(User user);
-
+    int updateUser2(User user);
     //修改某个字段的电影信息
     int updateUserColumnValue(Integer userId,String columnName,String columnValue);
 
@@ -34,6 +34,10 @@ public interface UserDao {
     User queryUserByUsername(String username);
 
     User queryUserByTelephone(String telephone);
+
+    User queryUserByQQ(Integer qq);
+
+    User queryUserByEmail(String email);
 
     List<User> queryAllUser();
 

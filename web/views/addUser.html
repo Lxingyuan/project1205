@@ -22,7 +22,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-block">
-                <input onKeypress="checkSpace()" type="text" id="userPassword" name="userPassword" lay-verify="userPassword" autocomplete="off"
+                <input onKeypress="checkSpace()" type="text" id="userPassword" name="userPassword"
+                       lay-verify="userPassword" autocomplete="off"
                        placeholder="请输入密码"
                        class="layui-input">
             </div>
@@ -61,18 +62,19 @@
                        placeholder="请输入QQ号码"
                        class="layui-input">
             </div>
-        </div><div class="layui-form-item">
-        <label class="layui-form-label">电子邮箱</label>
-        <div class="layui-input-block">
-            <input onKeypress="checkSpace()" type="text" id="email" name="email"
-                   lay-verify="email" autocomplete="off"
-                   placeholder="请输入电子邮箱"
-                   class="layui-input">
         </div>
-    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电子邮箱</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="email" name="email"
+                       lay-verify="email" autocomplete="off"
+                       placeholder="请输入电子邮箱"
+                       class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
+                <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
                 <button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
             </div>
         </div>
@@ -99,6 +101,7 @@
                 return false;
             }
         }
+
         $(document).on("blur", "#userName", function () {
             var type = $("#userName").val();
             //为空返回
@@ -106,7 +109,7 @@
                 return false;
             }
             //layer.msg(type);
-            var $zz =  /^(\w|[\u4e00-\u9fa5]){4,16}$/;
+            var $zz = /^(\w|[\u4e00-\u9fa5]){4,16}$/;
             if ($zz.test(type) == false) {
                 layer.msg('用户名类型格式不对！(4~16位字母或中文！)');
             }
@@ -118,7 +121,7 @@
                 return false;
             }
             //layer.msg(type);
-            var $zz =  /^\w{4,10}$/;
+            var $zz = /^\w{4,10}$/;
             if ($zz.test(type) == false) {
                 layer.msg('密码类型格式不对！(4~10位字母或下划线！)');
             }
@@ -239,7 +242,6 @@
                 type: "POST",
                 dataType: "text",
                 success: function (data) {
-
                     window.parent.layer.closeAll();
                     window.parent.location.reload();
                     if (data == "true") {

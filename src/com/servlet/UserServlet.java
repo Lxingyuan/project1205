@@ -192,7 +192,6 @@ public class UserServlet extends BaseServlet {
         response.getWriter().write("true");
     }
 
-
     public void queryUserList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Page2<User> page = userService.queryUserByPage2();
         System.out.println("page:"+page);
@@ -328,11 +327,119 @@ public class UserServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+
     public void findUserByName(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userName=request.getParameter("userName");
         User user=userService.queryUserByName(userName);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(user);
         response.getWriter().write(jsonStr);
+    }
+    public void findUserByTelephone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String telephone=request.getParameter("telephone");
+        String userName=request.getParameter("userName");
+        User user=userService.queryUserByTelephone(telephone);
+        if(user!=null&&(user.getUserName().equals(userName)==false)){
+            //与其它用户手机号冲突
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+    public void findUserByQQ(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String qq=request.getParameter("qq");
+//        System.out.println(qq);
+        String userName=request.getParameter("userName");
+        User user=userService.queryUserByQQ(Integer.parseInt(qq));
+        if(user!=null&&(user.getUserName().equals(userName)==false)){
+            //与其它用户冲突
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+    public void findUserByEmail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email=request.getParameter("email");
+        String userName=request.getParameter("userName");
+        User user=userService.queryUserByEmail(email);
+        if(user!=null&&(user.getUserName().equals(userName)==false)){
+            //与其它用户冲突
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+
+    /**
+     * 用户前台修改自己信息
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void updateUser2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        User user=new User();
+        if (ServletFileUpload.isMultipartContent(request)) {
+            // 创建FileItemFactory 工厂实现类
+            FileItemFactory fileItemFactory = new DiskFileItemFactory();
+            //创建用于解析上传数据的工具类
+            ServletFileUpload servletFileUpload = new ServletFileUpload(fileItemFactory);
+            try {
+                //解析上传的数据 得到每一个表单项FileItem
+                List<FileItem> list = servletFileUpload.parseRequest(request);
+                //循环判断，每一个表单项 是普通类型 还是上传的文件
+                for (FileItem fileItem :
+                        list) {
+                    if (fileItem.isFormField()) {
+                        //普通表单项
+                        System.out.println("普通表单项name = " + fileItem.getFieldName());
+                        //参数UTF-8解决乱码
+                        System.out.println("value = " + fileItem.getString("UTF-8"));
+                        if("telephone".equals(fileItem.getFieldName())){
+                            user.setTelephone(fileItem.getString("UTF-8"));
+                        }else if("QQ".equals(fileItem.getFieldName())){
+                            user.setQq(fileItem.getString("UTF-8"));
+                        }else if("email".equals(fileItem.getFieldName())){
+                            user.setEmail(fileItem.getString("UTF-8"));
+                        }else if("sex".equals(fileItem.getFieldName())){
+                            user.setSex(fileItem.getString("UTF-8"));
+                        }else if("userName".equals(fileItem.getFieldName())){
+                            user.setUserName(fileItem.getString("UTF-8"));
+                        }
+                    } else {
+                        //上传的文件
+                        System.out.println("文件项的 name:" + fileItem.getFieldName());
+                        System.out.println("上传的文件名:" + fileItem.getName());
+                        Long time = System.currentTimeMillis();
+                        fileItem.write(new File("D:\\project1205\\images\\" + time + fileItem.getName()));
+                        //要保存时到数据库的文件名
+                        String fileName = "http://localhost:8765/images\\" + time + fileItem.getName();
+                        user.setHeadPic(fileName);
+                    }
+                }
+            } catch (FileUploadException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Integer result = userService.updateUser2(user);
+        System.out.println("updateUser2result:" + result);
+        if (result > 0) {
+            response.getWriter().write("true");
+        } else {
+            response.getWriter().write("false");
+        }
+    }
+    public void updatePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        String columnName = request.getParameter("columnName");
+        String columnValue = request.getParameter("columnValue");
+        Integer result = userService.updateUserColumnValue(Integer.parseInt(id), columnName,columnValue);
+        if (result > 0) {
+            response.getWriter().write("true");
+        } else {
+            response.getWriter().write("false");
+        }
     }
 }

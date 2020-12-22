@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updateUser2(User user) {
+        return userDao.updateUser2(user);
+    }
+
+    @Override
     public int deleteUser(Integer userId) {
         return userDao.deleteUser(userId);
     }
@@ -94,6 +99,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User queryUserByTelephone(String telephone) {
         return userDao.queryUserByTelephone(telephone);
+    }
+
+    @Override
+    public User queryUserByQQ(Integer qq) {
+        return userDao.queryUserByQQ(qq);
+    }
+
+    @Override
+    public User queryUserByEmail(String email) {
+        return userDao.queryUserByEmail(email);
     }
 
     @Override

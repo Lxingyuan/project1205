@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>修改个人信息</title>
+    <title>Layui</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -13,7 +13,7 @@
 <body>
 <ul class="layui-nav" id="top">
     <li class="layui-nav-item">
-        <a href="">首页
+        <a href="/index.html">首页
             <!--<span class="layui-badge">9</span>-->
         </a>
     </li>
@@ -27,8 +27,8 @@
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
             <span id="userNameSpan"></span>
         </a>
-        <dl class="layui-nav-child">
-            <dd><a href="javascript:;">修改信息</a></dd>
+        <dl class="layui-nav-child" id="dl01">
+            <dd><a href="/updateUserMessage.html">修改信息</a></dd>
             <dd><a href="javascript:;" id="logOut">注销</a></dd>
         </dl>
     </li>
@@ -43,80 +43,75 @@
         </a>
     </li>
 </ul>
-<div align="center">
-    <div style="border: 1px solid red;width: 1000px;margin-top: 30px;" align="left">
-        <form class="layui-form" action="">
+<div style="margin: 20px 60px;display: none" id="adminDiv" align="center">
+    <h1>管理员请到后台修改自己的信息！</h1>
+</div>
+<div style="width: 1000px;border: 1px dashed #929ca8;margin-top: 20px;margin-left: 25%">
+    <h2 style="text-align: center"><b>修改您的信息</b></h2>
+    <div style="margin: 10px 60px;display: none;border: 1px dashed #bec8d4;padding: 10px" id="userDiv" >
+        <form class="layui-form" action="" id="f1">
+            <input type="hidden" id="userName" name="userName">
             <div class="layui-form-item">
-                <label class="layui-form-label">输入框</label>
+                <label class="layui-form-label">手机号码</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    <input onKeypress="checkSpace()" type="text" id="telephone" name="telephone" lay-verify="telephone"
+                           autocomplete="off" placeholder="请输入手机号码" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">密码框</label>
-                <div class="layui-input-inline">
-                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                <label class="layui-form-label">QQ</label>
+                <div class="layui-input-block">
+                    <input onKeypress="checkSpace()" type="text" id="QQ" name="QQ" lay-verify="QQ" autocomplete="off"
+                           placeholder="请输入QQ"
+                           class="layui-input">
                 </div>
-                <div class="layui-form-mid layui-word-aux">辅助文字</div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">选择框</label>
+                <label class="layui-form-label">电子邮箱</label>
                 <div class="layui-input-block">
-                    <select name="city" lay-verify="required">
+                    <input onKeypress="checkSpace()" type="text" id="email" name="email" lay-verify="email" autocomplete="off" placeholder="请输入电子邮箱"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block" id="sexDiv">
+                    <input type="radio" class="sex" name="sex" value="男" title="男">
+                    <div class="layui-unselect layui-form-radio">
+                        <i class="layui-anim layui-icon"></i>
+                        <div>男</div>
+                    </div>
+                    <input type="radio" class="sex" name="sex" value="女" title="女">
+                    <div class="layui-unselect layui-form-radio layui-form-radioed">
+                        <i class="layui-anim layui-icon"></i>
+                        <div>女</div>
+                    </div>
+                </div>
+            </div>
 
-                    </select>
-                </div>
-            </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">复选框</label>
+                <label class="layui-form-label">头像</label>
                 <div class="layui-input-block">
-                    <input type="checkbox" name="like[write]" title="写作">
-                    <input type="checkbox" name="like[read]" title="阅读" checked>
-                    <input type="checkbox" name="like[dai]" title="发呆">
+                    <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"
+                           lay-verify="chooseImage"><br>
+                    <img id="cropedBigImg2" style="width: 200px;" src="/static/images/person_1.jpg"/>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">开关</label>
-                <div class="layui-input-block">
-                    <input type="checkbox" name="switch" lay-skin="switch">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">单选框</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="sex" value="男" title="男">
-                    <input type="radio" name="sex" value="女" title="女" checked>
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">文本域</label>
-                <div class="layui-input-block">
-                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
-                </div>
-            </div>
+
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
                 </div>
             </div>
         </form>
     </div>
-
 </div>
+
+
 <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
 <script src="/layuiadmin/layui/layui.js"></script>
 <script>
-    //Demo
-    layui.use('form', function(){
-        var form = layui.form;
-
-        //监听提交
-        form.on('submit(formDemo)', function(data){
-            layer.msg(JSON.stringify(data.field));
-            return false;
-        });
-    });
     /**
      *@param name 键值
      * @return 通过键值获取到对应的数据，如果没有则返回null
@@ -135,7 +130,184 @@
         return null;
     }
 
+    //退出按钮事件
+
+    //不允许输入空格
+    function checkSpace() {
+        if (event.keyCode == 32) {
+            event.returnValue = false;
+            layer.msg("不能输入空格哦！")
+        }
+    }
+    //判断字符串是否为空
+    function isEmptyOrBlank(str) {
+        if (str == null || str.length == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //检查手机号格式
+    function checkTelephone1(){
+        var telephone=$("#telephone").val();
+        console.log(telephone);
+        var $zz = /^\d{11}$/;
+        console.log($zz.test(telephone));
+        if ($zz.test(telephone) == false) {
+            return false;
+        }
+    }
+    //检查qq格式
+    function checkQQ1(){
+        var qq=$("#QQ").val();
+        var $zz = /^[1-9][0-9]{4,14}$/;
+        if ($zz.test(qq) == false) {
+            return false;
+        }
+    }
+    //检查email格式
+    function checkEmail1(){
+        var email=$("#email").val();
+        var $zz = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+        if ($zz.test(email) == false) {
+            return false;
+        }
+    }
+    //手机号是否冲突
+    function checkTelephone2(){
+        var telephone=$("#telephone").val();
+        var userName=readCookie("userName");
+        var flag=false;
+        $.ajax({
+            url: "/user.do",
+            data: {action: "findUserByTelephone", telephone: telephone,userName:userName},
+            type: "GET",
+            async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+            dataType: "text",//返回的数据类型
+            success: function (data) {
+                //console.log(data);
+                if(data=="false"){
+                    //手机号冲突
+                    flag=false;
+                }else {
+                    flag=true;
+                }
+            }
+        });
+        return flag;
+    }
+    //qq是否冲突
+    function checkQQ2(){
+        var qq=$("#QQ").val();
+        var userName=readCookie("userName");
+        var flag=false;
+        $.ajax({
+            url: "/user.do",
+            data: {action: "findUserByQQ", qq: qq,userName:userName},
+            type: "GET",
+            async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+            dataType: "text",//返回的数据类型
+            success: function (data) {
+                if(data=="false"){
+                    flag=false;
+                }else {
+                    flag=true;
+                }
+            }
+        });
+        return flag;
+    }
+    //邮箱是否冲突
+    function checkEmail2(){
+        var email=$("#email").val();
+        var userName=readCookie("userName");
+        var flag=false;
+        $.ajax({
+            url: "/user.do",
+            data: {action: "findUserByEmail", email: email,userName:userName},
+            type: "GET",
+            async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+            dataType: "text",//返回的数据类型
+            success: function (data) {
+                //console.log(data);
+                if(data=="false"){
+                    flag=false;
+                }else {
+                    flag=true;
+                }
+            }
+        });
+        return flag;
+    }
+
     $(function () {
+        var name = readCookie("adminName");
+        console.log("adminName:" + readCookie("adminName"));
+        console.log("userName:" + readCookie("userName"));
+        //管理员已登录
+        if (name != null) {
+            //隐藏“登录”和“注册”
+            $("#login").hide();
+            $("#register").hide();
+            //显示登录信息
+            $("#userMessage").show();
+            $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
+            $.ajax({
+                url: "/admin.do",
+                data: {action: "findAdminByName", adminName: name},
+                type: "GET",
+                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                dataType: "text",//返回的数据类型
+                success: function (data) {
+                    console.log("data:" + data);//data代表服务器回传的数据
+                    var jsonObj = JSON.parse(data);
+                    //右上头像
+                    $("#userNameSpan").html(jsonObj.userName);
+                    //右上用户名
+                    $("#userHeadPic").attr("src", jsonObj.headPic);
+                    $("#adminDiv").show();
+                }
+            });
+
+        } else if (name == null) {
+            var name = readCookie("userName");
+            //用户已登录
+            if (name != null) {
+                $("#login").hide();
+                $("#register").hide();
+                //显示登录信息
+                $("#userMessage").show();
+                $("#userName").val(name);
+                //添加“修改密码”
+                $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "findUserByName", userName: name},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        console.log("data:" + data);//data代表服务器回传的数据
+                        var jsonObj = JSON.parse(data);
+                        $("#userNameSpan").html(jsonObj.userName);
+                        $("#userHeadPic").attr("src", jsonObj.headPic);
+                        $("#userDiv").show();
+                        //表单信息回填
+                        $("#telephone").val(jsonObj.telephone);
+                        $("#QQ").val(jsonObj.qq);
+                        $("#email").val(jsonObj.email);
+                        $("#cropedBigImg2").attr("src",jsonObj.headPic);
+                        if(jsonObj.sex=="男"){
+                            $("#sexDiv > input :eq(0)").attr("checked", true);
+                        }else {
+                            $("#sexDiv > input :eq(1)").attr("checked", true);
+                        }
+                        //console.log($(".sex:checked").val());
+                    }
+                });
+            }
+        }
+
 
         $("#logOut").on("click", function () {
             var name = readCookie("adminName");
@@ -149,16 +321,18 @@
                     dataType: "text",//返回的数据类型
                     success: function (data) {
                         //console.log("data:" + data);//data代表服务器回传的数据
+                        //alert(data)
                         if (data == "true") {
-                            layer.msg("退出成功！");
-                            window.location.reload();
+                            layer.msg('退出成功!');
+                            window.location.href = '/index.html';
+                            window.event.returnValue = false;
                         }
                         else {
                             layer.msg("退出失败！");
                         }
                     }
                 });
-                window.location.reload();
+                return false;
             } else {
                 //用户的退出操作
                 $.ajax({
@@ -170,80 +344,161 @@
                     success: function (data) {
                         //console.log("data:" + data);//data代表服务器回传的数据
                         if (data == "true") {
-                            layer.msg("退出成功！");
-                            window.location.reload();
+                            layer.msg('退出成功!');
+                            window.location.href = '/index.html';
+                            window.event.returnValue = false;
                         }
                         else {
                             layer.msg("退出失败！");
                         }
                     }
                 });
-
+                return false;
             }
         });
 
-        var name = readCookie("adminName");
-        console.log("adminName:" + readCookie("adminName"));
-        console.log("userName:" + readCookie("userName"));
-        //管理员已登录
-        if (name != null) {
-            //隐藏“登录”和“注册”
-            $("#login").hide();
-            $("#register").hide();
-            //显示登录信息
-            $("#userMessage").show();
+
+        $("#telephone").on("blur",function () {
+            if($(this).val()==""){
+                return;
+            }
+            if(checkTelephone1()==false){
+                layer.msg("手机格式不对！")
+            }
+            if(checkTelephone2()==false){
+                layer.msg("手机号冲突！")
+            }
+        });
+
+        $("#QQ").on("blur",function () {
+            if($(this).val()==""){
+                return;
+            }
+            if(checkQQ1()==false){
+                layer.msg("qq格式不对！")
+            }
+            if(checkQQ2()==false){
+                layer.msg("qq号冲突！")
+            }
+        });
+
+        $("#email").on("blur",function () {
+            if($(this).val()==""){
+                return;
+            }
+            if(checkEmail1()==false){
+                layer.msg("邮箱格式不对！")
+            }
+            if(checkEmail2()==false){
+                layer.msg("邮箱冲突！")
+            }
+        });
+
+        $(document).on("change", "#chooseImage", function () {
+            var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+            // 检查是否是图片
+            if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                layer.msg('文件格式必须为：png/jpg/jpeg!');
+                //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                return false;
+            } else {
+                //layer.msg("filePath：" + filePath);
+                $('#cropedBigImg2').attr('src', src);
+            }
+        });
+
+
+    });
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+
+
+        //提交时验证规则
+        form.verify({
+            telephone: function () {
+                if(checkTelephone1()==false){
+                    return '手机格式不对！';
+                }
+                if(checkTelephone2()==false){
+                    return '手机号冲突！';
+                }
+            }
+            ,QQ: function () {
+                if(checkQQ1()==false){
+                    return 'qq格式不对！';
+                }
+                if(checkQQ2()==false){
+                    return 'qq号冲突！';
+                }
+            }
+            ,email: function () {
+                if(checkEmail1()==false){
+                    return '邮箱格式不对！';
+                }
+                if(checkEmail2()==false){
+                    return '邮箱地址冲突！';
+                }
+            }
+            ,chooseImage: function (value) {
+                var formData = new FormData(document.getElementById("f1"));
+                //var fileName = formData.get("fileName").name.split(".")[0];
+                var fileHouZhui = formData.get("fileName").name.split(".")[1];
+                //console.log(fileName)
+                if (value.length < 1) {
+                    return '请上传图片！';
+                }
+                //检查文件后缀
+                if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
+                    return '请上传正确格式的图片';
+                }
+            }
+        });
+
+        //验证通过，提交
+        form.on('submit(demo1)', function (data) {
+            /*layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });*/
+            var formData = new FormData(document.getElementById("f1"));
+            //var fileName = formData.get("fileName").name;
             $.ajax({
-                url: "/admin.do",
-                data: {action: "findAdminByName", adminName: name},
-                type: "GET",
-                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
-                dataType: "text",//返回的数据类型
+                url: "/user.do?action=updateUser2",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                dataType: "text",
                 success: function (data) {
-                    console.log("data:" + data);//data代表服务器回传的数据
-                    var jsonObj = JSON.parse(data);
-                    //右上头像
-                    $("#userNameSpan").html(jsonObj.userName);
-                    //右上用户名
-                    $("#userHeadPic").attr("src", jsonObj.headPic)
+                    //console.log(data);
+                    if (data == "true") {
+                        layer.msg("修改成功！");
+                    } else {
+                        layer.msg("修改失败！");
+                    }
+                    window.location.reload();
                 }
             });
 
-        } else {
-            var name = readCookie("userName");
-            //用户已登录
-            if (name != null) {
-                $("#login").hide();
-                $("#register").hide();
-                //显示登录信息
-                $("#userMessage").show();
-                $.ajax({
-                    url: "/user.do",
-                    data: {action: "findUserByName", userName: name},
-                    type: "GET",
-                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
-                    dataType: "text",//返回的数据类型
-                    success: function (data) {
-                        console.log("data:" + data);//data代表服务器回传的数据
-                        var jsonObj = JSON.parse(data);
-                        //右上头像
-                        $("#userNameSpan").html(jsonObj.userName);
-                        //右上用户名
-                        $("#userHeadPic").attr("src", jsonObj.headPic)
-                    }
-                });
-            }
-        }
-    });
-    layui.use('element', function(){
-        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+            return false;
+        });
 
+    });
+
+    layui.use('element', function () {
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
         //监听导航点击
-        element.on('nav(demo)', function(elem){
+        element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });
     });
 </script>
-
 </body>
 </html>
