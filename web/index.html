@@ -17,6 +17,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
 
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
@@ -33,7 +34,7 @@
 
         function hotMovie(pageNo) {
             $.ajax({
-                url: "http://localhost:8765/movie.do",
+                url: "movie.do",
                 data: {action: "queryMoviePage", pageNo: pageNo},
                 type: "GET",
                 dataType: "text",
@@ -43,17 +44,20 @@
             });
         }
 
-        function rotation1() {
+        function rotation() {
             $.ajax({
-                url: "http://localhost:8765/movie.do",
+                url: "movie.do",
                 data: {action: "queryMovieByHits"},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
-                    let index = 1;
-                    let jsonObj = JSON.parse(data);
+                    //alert(data);
+                    var jsonObj = JSON.parse(data);
+                    //jsonObj.data表示json字符串中key为data对应的值
+                    //console.log(jsonObj.data.length);
                     for (let i = 0; i < 3; i++) {
-                        $("a.a-block d-flex align-items-center height-lg:eq(0)").attr({style: "background-image: url('static/images/img_1.jpg');"});
+                        $("#img"+(i+1)).attr("src", jsonObj.data[i].postAddress);
+                        $("#img"+(i+1)).attr("title", jsonObj.data[i].movieName);
                     }
                 }
             });
@@ -62,47 +66,18 @@
         function changepage(i) {
             currentPage = i;
             hotMovie(i);
-        };
+        }
 
         function hotMovieinit(data) {
+            //alert(data);
+            //console.log(data);
             let index = 1;
             let jsonObj = JSON.parse(data);
-            let lastbutton = "<li class=\"page-item\"><a class=\"page-link\" id='last'>Prev</a></li>";
-            let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
-            $("#hotMovie").empty();
-            $(".pagination").empty();
-            if (currentPage!=1) {
-                $(".pagination").append(lastbutton);
-                $("#last").on('click',function () {
-                    changepage(currentPage - 1);
-                })
-            }
-
-            if(currentPage<=3) {
-                index = 1;
-            }else if(currentPage>3&&currentPage<(jsonObj.pageTotal-1)) {
-                index = currentPage - 3;
-            }else if(currentPage>=jsonObj.pageTotal-1)
-            {
-                index = jsonObj.pageTotal - 5;
-            }
-            for (let i = index; i <= index+5; i++) {
-                if (i == currentPage) {
-                    $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
-                } else {
-                    $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
-                }
-            }
-
-            if(currentPage!=jsonObj.pageTotal) {
-                $(".pagination").append(nextbutton);
-                $("#next").on('click',function () {
-                    changepage(currentPage + 1);
-                })
-            }
-
+            let nextbutton = "<li type='button' class='btn btn-default' id='next'>prev</li> ";
+            let lastbutton = "<li type='button' class='btn btn-default' id='last'>next</li> ";
+            //alert(jsonObj.items.length);
             for (let i = 0; i < jsonObj.items.length; i++) {
-                console.log(jsonObj.items[i]);
+                //console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
                 //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
                 let blogentry = $("<a href=\"movie.do?action=queryMovieByName&movieName=" + jsonObj.items[i].movieName + "\" class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></a>")
@@ -113,7 +88,7 @@
                 postmeta.append("<span class=\"mr-2\">March,15,2018</span>");
                 postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>3</span>")
                 blogbody.append(postmeta);
-                blogbody.append("<h2>There’s a Cool New Way for Men to Wear Socks and Sandals</h2>");
+                blogbody.append("<h2>" + jsonObj.items[i].content + "</h2>");
                 blogentry.append(img);
                 blogentry.append(blogbody);
                 colmd6.append(blogentry);
@@ -123,6 +98,7 @@
 
         $(function () {
             hotMovie(1);
+            rotation();
         });
     </script>
 </head>
@@ -130,31 +106,16 @@
 
 <!-- END header -->
 
-<section class="site-section pt-5">  <!--轮播图-->
-    <div class="container">
-        <div class="row" id="rotation">
-            <div class="col-md-12">
-                <div class="owl-carousel owl-theme home-slider">
-                    <div>
-                        <a href="blog-single.html" class="a-block d-flex align-items-center height-lg"
-                        >
-                        </a>
-                    </div>
-                    <div>
-                        <a href="blog-single.html" class="a-block d-flex align-items-center height-lg"
-                        >
-                        </a>
-                    </div>
-                    <div>
-                        <a href="blog-single.html" class="a-block d-flex align-items-center height-lg"
-                           style="background-image: url('static/images/img_1.jpg'); ">
-                        </a>
-                    </div>
-                </div>
-            </div>
+<div class="container" style="height: 600px;margin-top: 80px;margin-bottom: 50px" align="center">
+    <div class="layui-carousel" id="test10" style="height: 500px">
+        <div carousel-item="">
+            <div><img width="100%" src="" id="img1"></div>
+            <div><img width="100%" src="" id="img2"></div>
+            <div><img width="100%" src="" id="img3"></div>
         </div>
     </div>
-</section>
+</div>
+
 <!-- END section -->
 
 <section class="site-section py-sm">
@@ -165,11 +126,22 @@
             </div>
         </div>
         <div class="row blog-entries">
-            <div class="col-md-12 col-lg-8 main-content" id="pageBody">
+            <div class="col-md-12 col-lg-8 main-content">
                 <div class="row" id="hotMovie">
                 </div>
-                <ul class="pagination">
-                </ul>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <nav aria-label="Page navigation" class="text-center">
+                            <ul class="pagination">
+                                <li class="page-item  active"><a class="page-link" href="#">Prev</a></li>
+                                <li class="page-item  active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
 
             <!-- END main-content -->
@@ -399,8 +371,75 @@
 <script src="static/js/owl.carousel.min.js"></script>
 <script src="static/js/jquery.waypoints.min.js"></script>
 <script src="static/js/jquery.stellar.min.js"></script>
-
-
 <script src="static/js/main.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+
+        //常规轮播
+        carousel.render({
+            elem: '#test1'
+            , arrow: 'always'
+        });
+
+        //改变下时间间隔、动画类型、高度
+        carousel.render({
+            elem: '#test2'
+            , interval: 1800
+            , anim: 'fade'
+            , height: '120px'
+        });
+
+        //设定各种参数
+        var ins3 = carousel.render({
+            elem: '#test3'
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '100%'
+            , height: '100%'
+            , interval: 5000
+        });
+
+
+
+        var $ = layui.$, active = {
+            set: function (othis) {
+                var THIS = 'layui-bg-normal'
+                    , key = othis.data('key')
+                    , options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function () {
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function () {
+            var value = this.value
+                , options = {};
+            if (!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+
+        //其它示例
+        $('.demoTest .layui-btn').on('click', function () {
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+</script>
 </body>
 </html>
