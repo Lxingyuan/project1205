@@ -15,12 +15,20 @@ import java.util.List;
  */
 public class UserDaoImpl extends BaseDao implements UserDao {
 
-    //增加用户
+    //注册用户
     @Override
-    public int insertUser(User user) {
+    public int registerUser(User user) {
         String sql = "insert into user (UserName,UserPassword,Telephone)values(?,?,?)";
+
         return update(sql, user.getUserName(), user.getUserPassword(), user.getTelephone());
     }
+
+    @Override
+    public int insertUser(User user) {
+        String sql = "insert into user (UserName,UserPassword,HeadPic,Sex,Telephone,QQ,Email)values(?,?,?,?,?,?,?)";
+        return update(sql, user.getUserName(), user.getUserPassword(), user.getHeadPic(), user.getSex(), user.getTelephone(), user.getQq(), user.getEmail());
+    }
+
 
     //更新用户
     @Override

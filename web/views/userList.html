@@ -71,18 +71,10 @@
             </div>
         </div>
         <div class="layui-card-body">
-            <!--            <div style="padding-bottom: 10px;" class="layui-btn-container">
-                            <button class="layui-btn layuiadmin-btn-useradmin" id="deleteButton" lay-event="delete">删除</button>
-                            <button class="layui-btn layuiadmin-btn-useradmin" lay-event="add">添加</button>
-                            <button class="layui-btn layuiadmin-btn-useradmin" id="msg" lay-event="msg">获取信息</button>
-                        </div>-->
-
             <div class="layui-table-box">
                 <table id="demo" lay-filter="test">
                 </table>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -102,7 +94,6 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
 </script>
 
 <script>
@@ -116,16 +107,25 @@
             , toolbar: '#toolbarDemo'
             , url: '/user.do?action=queryUserList' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            , page: true //开启分页
+            , page: {
+                limit: 10,//指定每页显示的条数
+                limits: [5, 10, 20, 30, 40, 50, 999]//每页条数
+            } //开启分页
             , height: 600
-            , limits: [5, 10, 20, 30, 40, 50]
             , cols: [[ //表头
                 {type: 'numbers'}
                 , {type: 'checkbox'}
                 , {field: 'userId', title: 'ID', width: 80, sort: true, unresize: true,}
                 , {field: 'userName', title: '用户名', width: 100, edit: 'text'}
                 , {field: 'userPassword', title: '用户密码', width: 150, edit: 'text'}
-                , {field: 'headPic', title: '头像', width: 100, templet: '#imgTpl', unresize: true, event: 'updateImg'}
+                , {
+                    field: 'headPic',
+                    title: '头像',
+                    width: 100,
+                    templet: '#imgTpl',
+                    unresize: true,
+                    event: 'updateImg'
+                }
                 , {field: 'sex', title: '性别', width: 100, edit: 'text'}
                 , {field: 'telephone', title: '电话', width: 130, edit: 'text'}
                 , {field: 'qq', title: 'QQ', width: 120, edit: 'text'}
@@ -219,6 +219,28 @@
             switch (obj.event) {
                 case 'add':
                     layer.msg('新增');
+                    layer.open({
+                    type: 2
+                    ,
+                    title: '新增用户'
+                    ,
+                    area: ['600px', '700px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['5%', '30%']
+                    ,
+                    content: '/views/addUser.html'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+
+                });
                     break;
                 case 'delete':
                     var checkStatus = table.checkStatus('demo');

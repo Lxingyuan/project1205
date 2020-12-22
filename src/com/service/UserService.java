@@ -18,6 +18,7 @@ public interface UserService {
     //登录
     User login(User user);
 
+    int insertUser(User user);
     //更新信息
     int update(User user);
 

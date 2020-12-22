@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div style="margin: 20px 60px;">
+    <form class="layui-form" action="" id="f1">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="userName" name="userName" lay-verify="userName"
+                       autocomplete="off" placeholder="请输入用户名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="userPassword" name="userPassword" lay-verify="userPassword" autocomplete="off"
+                       placeholder="请输入密码"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">头像</label>
+            <div class="layui-input-block">
+                <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"
+                       lay-verify="chooseImage"><br>
+                <img id="cropedBigImg2" style="width: 200px;height: 210px;" src="/static/images/person_1.jpg"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="sex" name="sex" lay-verify="sex"
+                       autocomplete="off"
+                       placeholder="请输入性别"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="telephone" name="telephone"
+                       lay-verify="telephone" autocomplete="off"
+                       placeholder="请输入电话"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">QQ</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="qq" name="qq"
+                       lay-verify="qq" autocomplete="off"
+                       placeholder="请输入QQ号码"
+                       class="layui-input">
+            </div>
+        </div><div class="layui-form-item">
+        <label class="layui-form-label">电子邮箱</label>
+        <div class="layui-input-block">
+            <input onKeypress="checkSpace()" type="text" id="email" name="email"
+                   lay-verify="email" autocomplete="off"
+                   placeholder="请输入电子邮箱"
+                   class="layui-input">
+        </div>
+    </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    //不允许输入空格
+    function checkSpace() {
+        if (event.keyCode == 32) {
+            event.returnValue = false;
+            layer.msg("不能输入空格哦！")
+        }
+    }
+
+    $(function () {
+        //判断字符串是否为空
+        function isEmptyOrBlank(str) {
+            if (str == null || str.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        $(document).on("blur", "#userName", function () {
+            var type = $("#userName").val();
+            //为空返回
+            if (isEmptyOrBlank(type)) {
+                return false;
+            }
+            //layer.msg(type);
+            var $zz =  /^(\w|[\u4e00-\u9fa5]){4,16}$/;
+            if ($zz.test(type) == false) {
+                layer.msg('用户名类型格式不对！(4~16位字母或中文！)');
+            }
+        });
+        $(document).on("blur", "#userPassword", function () {
+            var type = $("#userPassword").val();
+            //为空返回
+            if (isEmptyOrBlank(type)) {
+                return false;
+            }
+            //layer.msg(type);
+            var $zz =  /^\w{4,10}$/;
+            if ($zz.test(type) == false) {
+                layer.msg('密码类型格式不对！(4~10位字母或下划线！)');
+            }
+        });
+        $(document).on("change", "#chooseImage", function () {
+            var filePath = $(this).val(), //获取到input的value，里面是文件的路径
+                fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                src = window.URL.createObjectURL(this.files[0]); //转成可以在本地预览的格式
+            // 检查是否是图片
+            if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+                layer.msg('文件格式必须为：png/jpg/jpeg!');
+                //$('#cropedBigImg').attr('src', "/static/images/person_1.jpg");
+                return false;
+            } else {
+                //layer.msg("filePath：" + filePath);
+                $('#cropedBigImg2').attr('src', src);
+            }
+        });
+        $(document).on("blur", "#telephone", function () {
+            var type = $("#telephone").val();
+            //为空返回
+            if (isEmptyOrBlank(type)) {
+                return false;
+            }
+
+        });
+        $(document).on("blur", "#qq", function () {
+            var type = $("#qq").val();
+            //为空返回
+            if (isEmptyOrBlank(type)) {
+                return false;
+            }
+
+        });
+        $(document).on("blur", "#email", function () {
+            var type = $("#email").val();
+            //为空返回
+            if (isEmptyOrBlank(type)) {
+                return false;
+            }
+            //layer.msg(type);
+            var $zz = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if ($zz.test(type) == false) {
+                layer.msg('email类型格式不对！');
+            }
+        });
+    });
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        //提交时验证规则
+        form.verify({
+            userName: function (value) {
+                if (value.length < 1) {
+                    return '请输入用户名！';
+                }
+                var $zz = /^(\w|[\u4e00-\u9fa5]){4,16}$/;
+                if ($zz.test(value) == false) {
+                    return '用户名类型格式不对！(4~16位字母或中文！)';
+                }
+            }
+            , userPassword: function (value) {
+                if (value.length < 1) {
+                    return '请输入用户密码！';
+                }
+                var $zz = /^\w{4,10}$/;
+                if ($zz.test(value) == false) {
+                    return '密码类型格式不对！(4~10位字母或下划线！)';
+                }
+            }
+            , chooseImage: function (value) {
+                var formData = new FormData(document.getElementById("f1"));
+                //var fileName = formData.get("fileName").name.split(".")[0];
+                var fileHouZhui = formData.get("fileName").name.split(".")[1];
+                //console.log(fileName)
+                if (value.length < 1) {
+                    return '请上传图片！';
+                }
+                //检查文件后缀
+                if (fileHouZhui != "png" && fileHouZhui != "jpg" && fileHouZhui != "jpeg") {
+                    return '请上传正确格式的图片';
+                }
+            }
+            , telephone: function (value) {
+                if (value.length < 1) {
+                    return '请输入电话！';
+                }
+
+            }
+            , qq: function (value) {
+                if (value.length < 1) {
+                    return '请输入QQ！';
+                }
+
+            }
+            , email: function (value) {
+                if (value.length < 1) {
+                    return '请输入email！';
+                }
+                var $zz = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if ($zz.test(value) == false) {
+                    return 'email类型格式不对！';
+                }
+            }
+
+        });
+
+        //验证通过，提交
+        form.on('submit(demo1)', function (data) {
+            var formData = new FormData(document.getElementById("f1"));
+            $.ajax({
+                url: "/user.do?action=addUser",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+
+                    window.parent.layer.closeAll();
+                    window.parent.location.reload();
+                    if (data == "true") {
+                        layer.msg("新增成功！");
+                    } else {
+                        layer.msg("新增失败！");
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

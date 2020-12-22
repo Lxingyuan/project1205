@@ -29,6 +29,7 @@ public interface MovieService {
 
     //按导演查询电影
     Movie queryMovieByDirector(String director);
+
     //按id查询电影
     Movie queryMovieById(Integer id);
 
@@ -49,13 +50,15 @@ public interface MovieService {
 
     /**
      * 按条件查询
+     *
      * @param movieName
      * @param type
      * @param protagonist
      * @param showTime
      * @return
      */
-    Page2<Movie> queryMovieByPage2(String movieName,String type,String protagonist,String showTime);
+    Page2<Movie> queryMovieByPage2(String movieName, String type, String protagonist, String showTime);
+
     //修改某个字段的电影信息
-    int updateMovieColumnValue(Integer movieId,String columnName,String columnValue);
+    int updateMovieColumnValue(Integer movieId, String columnName, String columnValue);
 }

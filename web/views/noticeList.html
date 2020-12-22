@@ -22,20 +22,6 @@
         }
     </style>
     <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            function init() {
-                var myDate = new Date();
-                //获取当前年
-                var year = myDate.getFullYear();
-                for (var i = year; i >= 1950; i--) {
-                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
-                }
-            }
-
-            init();
-        });
-    </script>
 </head>
 <body>
 
@@ -106,22 +92,25 @@
     layui.use('table', function () {
         var table = layui.table;
         var form = layui.form;
+        var laytpl = layui.laytpl;
         //第一个实例
         table.render({
             elem: '#demo'
             , toolbar: '#toolbarDemo'
             , url: '/notice.do?action=queryNoticeList' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            , page: true //开启分页
+            , page: {
+                limit: 10,//指定每页显示的条数
+                limits: [5, 10, 20, 30, 40, 50, 999]//每页条数
+            } //开启分页
             , height: 700
-            , limits: [5, 10, 20, 30, 40, 50]
             , cols: [[ //表头
                 {type: 'numbers'}
                 , {type: 'checkbox'}
                 , {field: 'noticeId', title: 'ID', width: 60, sort: true}
                 , {field: 'noticeHead', title: '公告标题', width: 130, sort: true, edit: 'text'}
-                , {field: 'noticeContent', title: '公告内容', width: 200, sort: true, edit: 'text'}
                 , {field: 'noticeUser', title: '公告发出人', width: 400, edit: 'text'}
+                , {field: 'noticeContent', title: '公告内容', width: 200, sort: true, edit: 'text'}
                 , {
                     field: 'createTime',
                     title: '创建时间',
@@ -208,6 +197,28 @@
             switch (obj.event) {
                 case 'add':
                     layer.msg('新增');
+                    layer.open({
+                        type: 2
+                        ,
+                        title: '新增公告'
+                        ,
+                        area: ['600px', '700px']
+                        ,
+                        shade: 0.1
+                        ,
+                        maxmin: true
+                        ,
+                        offset: ['5%', '30%']
+                        ,
+                        content: '/views/addNotice.html'
+                        ,
+                        btn: ['关闭']
+                        ,
+                        yes: function () {
+                            layer.closeAll();
+                        }
+
+                    });
                     break;
                 case 'delete':
                     var checkStatus = table.checkStatus('demo');
@@ -264,6 +275,7 @@
         table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
             //删除
             if (layEvent === 'del') {
                 var idNum = new Array();
@@ -292,6 +304,37 @@
                 });
             } else if (layEvent === 'edit') { //编辑
                 console.log(data)
+            }else if (layEvent === 'noticeContent') {//富文本编辑器
+                //layer.msg("213")
+                //console.log(data.content);
+                layer.open({
+                    type: 2
+                    ,
+                    title: '修改公告内容'
+                    ,
+                    area: ['700px', '500px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['5%', '30%']
+                    ,
+                    content: '/views/editNoticeContent.html'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
+                        //console.log(data.content);
+                        let body = layer.getChildFrame('body', index);
+                        body.find("#noticeContent").html(data.noticeContent);
+                        body.find("#id").val(data.noticeId);
+                        layui.form.render();
+                    },
+                    yes: function () {
+                        layer.closeAll();
+                    }
+                });
             }
         });
         //监听单元格编辑

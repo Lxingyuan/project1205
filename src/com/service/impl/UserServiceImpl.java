@@ -19,13 +19,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int register(User user) {
-        return userDao.insertUser(user);
+        return userDao.registerUser(user);
     }
 
     @Override
     public User login(User user) {
         return userDao.queryUserByNameAndPassword(user);
     }
+
+    @Override
+    public int insertUser(User user) {
+        return userDao.insertUser(user);
+    }
+
 
     @Override
     public int update(User user) {

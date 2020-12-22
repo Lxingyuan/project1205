@@ -90,7 +90,6 @@
         <div class="layui-card-body">
             <div class="layui-table-box">
                 <table id="demo" lay-filter="test">
-
                 </table>
             </div>
         </div>
@@ -139,7 +138,7 @@
             , url: '/movie.do?action=queryMovieList' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: {
-                limit: 10,//指定每页显示的条数
+                limit: 5,//指定每页显示的条数
                 limits: [5, 10, 20, 30, 40, 50, 999]//每页条数
             }
             , height: 600
@@ -233,7 +232,6 @@
                         yes: function () {
                             layer.closeAll();
                         }
-
                     });
                     break;
                 case 'delete':
@@ -698,9 +696,7 @@
                 }
             });
         });
-
     });
 </script>
-
 </body>
 </html>

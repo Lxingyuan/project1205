@@ -16,8 +16,8 @@ import java.util.List;
 public class NoticeDaoImpl extends BaseDao implements NoticeDao {
     @Override
     public int insertNotice(Notice notice) {
-        String sql = "insert into notice (NoticeId,NoticeHead,NoticeContent,NoticeUser)values(?,?,?,?)";
-        return update(sql, notice.getNoticeId(), notice.getNoticeHead(), notice.getNoticeContent(), notice.getNoticeUser());
+        String sql = "insert into notice (NoticeHead,NoticeContent,NoticeUser)values(?,?,?)";
+        return update(sql, notice.getNoticeHead(), notice.getNoticeContent(), notice.getNoticeUser());
     }
 
     @Override

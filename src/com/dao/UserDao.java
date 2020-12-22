@@ -10,6 +10,8 @@ import java.util.List;
  * 描述:
  */
 public interface UserDao {
+    int registerUser(User user);
+
     int insertUser(User user);
 
     int updateUser(User user);
