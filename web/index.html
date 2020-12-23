@@ -4,13 +4,10 @@
     <title>影视创作论坛</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
-
     <link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/css/animate.css">
     <link rel="stylesheet" href="static/css/owl.carousel.min.css">
-
     <link rel="stylesheet" href="static/fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
@@ -18,10 +15,8 @@
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
-
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
-
 
     <style>
         .imgdetial {
@@ -182,6 +177,7 @@
         });
 
         var currentPage = 1;
+
         function showNotice() {
             $.ajax({
                 url: "http://localhost:8765/notice.do",
@@ -223,6 +219,7 @@
                 }
             });
         }
+
         function hotMovie(pageNo) {
             $.ajax({
                 url: "http://localhost:8765/movie.do",
@@ -262,7 +259,7 @@
             currentPage = i;
             hotMovie(i);
 
-        };
+        }
 
         function hotMovieinit(data) {
             let index = 1;

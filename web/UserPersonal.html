@@ -9,6 +9,21 @@
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <link rel="stylesheet" href="static/css/animate.css">
+    <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="static/fonts/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./static/js/jquery.min.js"></script>
 </head>
 <body>
 <ul class="layui-nav" id="top">
@@ -46,9 +61,43 @@
 <div style="margin: 20px 60px;display: none" id="adminDiv" align="center">
     <h2 style="text-align: center"><b>管理员个人空间！</b></h2>
 </div>
-<div style="width: 1000px;border: 1px dashed #929ca8;margin-top: 20px;margin-left: 25%;display: none;" id="userDiv">
-    <h2 style="text-align: center"><b>用户个人空间！</b></h2>
+<div style="border: 1px dashed #929ca8;margin-top: 20px;margin-left: 200px;margin-right: 200px; display: none;"
+     id="userDiv">
+    <h2 style="text-align: center;padding: 10px">
+        <b><span>TA</span>的个人空间</b>
+    </h2>
+    <div class="layui-row">
+        <div class="layui-col-md3" style="background: #ced8e4">
+            <div class="grid-demo grid-demo-bg1">
+                <img src="/static/images/person_1.jpg" width="300px" id="UserBigPic"
+                     style="border-radius:150px;margin: 40px">
+                <center>
+                    <b style="font-size: 20px">用户名:<span class="BigUserName"></span></b>
+                    <br>
+                    <b style="font-size: 20px">邮箱:<span class="UserEmail"></span></b>
+                    <br>
+                    <i class="layui-icon layui-icon-home" style="font-size: 30px; color: #1E9FFF;"></i>
+                    <a href="#" style="font-size: 20px">发邮件</a>
+                </center>
+            </div>
+        </div>
+        <div class="layui-col-md9" style="background: #9cabb4">
+            <div class="grid-demo">
+                <br><center><b style="font-size: 20px;color: black;">TA喜欢的电影</b></center><br>
+                <div class="row" id="hotMovie">
+                </div>
+                <ul class="pagination">
+                </ul>
+            </div>
 
+
+            <div class="grid-demo">
+                <center><b style="font-size: 20px;color: black;">TA的评论记录</b></center>
+
+            </div>
+        </div>
+
+    </div>
 </div>
 
 
@@ -72,9 +121,86 @@
         }
         return null;
     }
+    var currentPage = 1;
+    function changepage(i) {
+        currentPage = i;
+        hotMovie(i);
 
+    }
 
-    function initTop(){
+    function hotMovieinit(data) {
+        let index = 1;
+        let jsonObj = JSON.parse(data);
+        let lastbutton = "<li class=\"page-item\"><a class=\"page-link\" id='last'>Prev</a></li>";
+        let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
+        $("#hotMovie").empty();
+        $(".pagination").empty();
+        if (currentPage!=1) {
+            $(".pagination").append(lastbutton);
+            $("#last").on('click',function () {
+                changepage(currentPage - 1);
+            })
+        }
+
+        if(currentPage<=3) {
+            index = 1;
+        }else if(currentPage>3&&currentPage<(jsonObj.pageTotal-1)) {
+            index = currentPage - 2;
+        }else if(currentPage>=jsonObj.pageTotal-1)
+        {
+            index = jsonObj.pageTotal - 4;
+        }
+        for (let i = index; i <= index+4; i++) {
+            if (i == currentPage) {
+                $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+            } else {
+                $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+            }
+        }
+
+        if(currentPage!=jsonObj.pageTotal) {
+            $(".pagination").append(nextbutton);
+            $("#next").on('click',function () {
+                changepage(currentPage + 1);
+            })
+        }
+
+        for (let i = 0; i < jsonObj.items.length; i++) {
+            //console.log(jsonObj.items[i]);
+            let colmd6 = $("<div class=\"col-md-3\" style=\"margin-left: 60px;height: 500px\"></div>");
+            //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
+            let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
+            let img = $("<a href=\"detailsPage.html?movieId="+jsonObj.items[i].movieId+"\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
+            let blogbody = $("<div class=\"blog-content-body\"></div>");
+            let postmeta = $("<div class=\"post-meta\"></div>");
+            postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
+            postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
+            postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.items[i].hits+"</span>")
+            blogbody.append(postmeta);
+            blogbody.append("<center><h2>"+ jsonObj.items[i].movieName +"</h2></center>");
+            if(readCookie("adminName")!=null){
+                blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.items[i].movieId+"'>"+ "删除" +"</a></center>");
+            }
+            blogentry.append(img);
+            blogentry.append(blogbody);
+            colmd6.append(blogentry);
+            $("#hotMovie").append(colmd6);
+        }
+    }
+
+    function hotMovie(pageNo) {
+        $.ajax({
+            url: "http://localhost:8765/movie.do",
+            data: {action: "queryMoviePage", pageNo: pageNo},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                hotMovieinit(data);
+            }
+        });
+    }
+
+    function initTop() {
         var name = readCookie("adminName");
         console.log("adminName:" + readCookie("adminName"));
         console.log("userName:" + readCookie("userName"));
@@ -111,7 +237,7 @@
                 $("#register").hide();
                 //显示登录信息
                 $("#userMessage").show();
-                $("#userName").val(name);
+                $(".BigUserName").html(name);
                 //添加“修改密码”
                 $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
                 $.ajax({
@@ -127,15 +253,8 @@
                         $("#userHeadPic").attr("src", jsonObj.headPic);
                         $("#userDiv").show();
                         //表单信息回填
-                        $("#telephone").val(jsonObj.telephone);
-                        $("#QQ").val(jsonObj.qq);
-                        $("#email").val(jsonObj.email);
-                        $("#cropedBigImg2").attr("src",jsonObj.headPic);
-                        if(jsonObj.sex=="男"){
-                            $("#sexDiv > input :eq(0)").attr("checked", true);
-                        }else {
-                            $("#sexDiv > input :eq(1)").attr("checked", true);
-                        }
+                        $("#UserBigPic").attr("src", jsonObj.headPic);
+                        $(".UserEmail").html(jsonObj.email);
                         //console.log($(".sex:checked").val());
                     }
                 });
@@ -191,11 +310,14 @@
 
     }
 
+    function initRightTop(){
+        hotMovie(1);
+    }
 
     $(function () {
 
         initTop();
-
+        initRightTop()
 
     });
 
@@ -228,7 +350,6 @@
             , height: '100%'
             , interval: 5000
         });
-
 
 
         var $ = layui.$, active = {
