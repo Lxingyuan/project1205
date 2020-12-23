@@ -235,17 +235,18 @@ public class MovieServlet extends BaseServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        System.out.println(movieId);
         Movie movieObj = movieService.queryMovieById(movieId);
-        System.out.println(movieObj);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(movieObj);
         response.getWriter().write(jsonStr);
     }
 
     public void addMovieHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        Integer hits=movieService.addMovieHits(movieId);
+        int movieId = Integer.parseInt(request.getParameter("movieId"));
+        int hits=movieService.addMovieHits(movieId);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(hits);
+        response.getWriter().write(jsonStr);
     }
 
 }

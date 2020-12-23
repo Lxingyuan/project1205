@@ -30,4 +30,8 @@ public interface CommentService {
     Page2<Comment> queryCommentByPage2(String movieName,String commentUser,String commentContent);
 
     int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
+
+    Integer queryTotalCommentByMovieId(Integer movieId);
+
+    List<Comment> queryCommentByMovieId(Integer movieId);
 }

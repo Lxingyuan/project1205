@@ -79,6 +79,16 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
         }
         return queryForList(Comment.class, sql);
     }
+
+    public Integer queryTotalCommentByMovieId(Integer movieId) {
+        String sql = "select count(1) from comment where movieId ='"+movieId+"'";
+        return Math.toIntExact((Long) queryForSingleValue(sql));
+    }
+
+    public List<Comment> queryCommentByMovieId(Integer movieId) {
+        String sql="SELECT * FROM comment where movieId = '"+movieId+"'";
+        return  queryForList(Comment.class,sql);
+    }
 }
 
 
