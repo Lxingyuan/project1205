@@ -57,5 +57,5 @@ public interface MovieDao {
      */
     List<Movie> queryAllMovie(String movieName, String type, String protagonist, String showTime);
 
-    Integer addMovieHits(Integer movieId);
+    int addMovieHits(Integer movieId);
 }

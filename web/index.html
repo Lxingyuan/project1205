@@ -186,8 +186,8 @@
                 dataType: "text",
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
-                    let noticeHead=$("<h1>"+jsonObj.noticeHead+"</h1>");
-                    let noticeBody=$("<h5>"+jsonObj.noticeContent+"</h5>");
+                    let noticeHead=$("<h2>"+jsonObj.noticeHead+"</h2>");
+                    let noticeBody=$("<p>"+jsonObj.noticeContent+"</p>");
                     let noticeUser=$("<p>"+jsonObj.createTime+"</p>");
                     $("#notice").append(noticeHead);
                     $("#notice").append(noticeBody);
@@ -250,7 +250,7 @@
                     }
                     $("#popularMovie").attr("src",jsonObj.data[0].picAddress);
                     for(let j=0;j<5;j++){
-                        $(".categories").append("<li><a href='#'>"+jsonObj.data[j].movieName+"</a></li>")
+                        $(".categories").append("<li><a href=\"detailsPage.html?movieId="+jsonObj.data[j].movieId+"\">"+jsonObj.data[j].movieName+"</a></li>")
                     }
                 }
             });
@@ -420,7 +420,7 @@
                 <!-- END sidebar-box -->
 
                 <div class="sidebar-box">
-                    <h2 class="heading">热门电影</h2>
+                    <h2 class="heading">高浏览电影</h2>
                     <ul class="categories">
                     </ul>
                 </div>

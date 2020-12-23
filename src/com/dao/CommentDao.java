@@ -33,5 +33,7 @@ public interface CommentDao {
 
     List<Comment> queryAllComment(String movieName,String commentUser,String commentContent);
 
+    Integer queryTotalCommentByMovieId(Integer movieId);
 
+    List<Comment> queryCommentByMovieId(Integer movieId);
 }

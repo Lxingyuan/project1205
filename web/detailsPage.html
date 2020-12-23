@@ -156,6 +156,11 @@
             var movieId=UrlParm.parm("movieId");
             $.ajax({
                 url: "movie.do",
+                data: {action: "addMovieHits", movieId: movieId},
+                type: "GET",
+            });
+            $.ajax({
+                url: "movie.do",
                 data: {action: "queryMovieByMovieId", movieId: movieId},
 
                 type: "GET",
@@ -163,12 +168,12 @@
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
                     let hits=jsonObj.hits;
+
                     $(".mb-4").append(jsonObj.movieName)
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center><a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a></center>");
                     $(".bio-body>img").attr("src",jsonObj.picAddress);
-                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
-
+                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type.replaceAll("&"," ")+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist.replaceAll("&"," ")+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
                     $("#showMovie").on("click",function () {
                         layer.open({
                             type: 1,
@@ -188,6 +193,28 @@
                     })
                 }
             });
+//求总评论数
+            $.ajax({
+                url: "comment.do",
+                data: {action: "queryTotalCommentByMovieId", movieId: movieId},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    $("#commentNum").append(jsonObj);
+                }
+            })
+            //获取数据库评论情况
+            $.ajax({
+                url: "comment.do",
+                data: {action: "queryCommentByMovieId", movieId: movieId},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    $(".comment-list").append(jsonObj);
+                }
+            })
         });
 
     </script>
@@ -240,7 +267,8 @@
                 <!--分隔符-->
 
                 <div class="pt-5">
-                    <h3 class="mb-5">6 Comments</h3>
+                    <h3 class="mb-5" id="commentNum">总评论数：</h3>
+
                     <ul class="comment-list">
                         <li class="comment">
                             <div class="vcard">

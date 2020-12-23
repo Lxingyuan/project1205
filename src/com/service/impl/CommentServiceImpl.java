@@ -92,5 +92,15 @@ public class CommentServiceImpl implements CommentService {
         return commentDao.updateCommentColumnValue(commentId, columnName, columnValue);
     }
 
+    @Override
+    public Integer queryTotalCommentByMovieId(Integer movieId) {
+        return commentDao.queryTotalCommentByMovieId(movieId);
+    }
+
+    @Override
+    public List<Comment> queryCommentByMovieId(Integer movieId) {
+        return commentDao.queryCommentByMovieId(movieId);
+    }
+
 
 }

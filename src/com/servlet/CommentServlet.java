@@ -118,4 +118,25 @@ public class CommentServlet  extends BaseServlet {
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
     }
+
+    public void queryTotalCommentByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+        int totalNum=commentService.queryTotalCommentByMovieId(movieId);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(totalNum);
+        response.getWriter().write(jsonStr);
+
+    }
+    public void queryCommentByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+        List<Comment> comments=commentService.queryCommentByMovieId(movieId);
+        Page2<Comment> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(comments.size());
+        page.setData(comments);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(comments);
+        response.getWriter().write(jsonStr);
+    }
 }
