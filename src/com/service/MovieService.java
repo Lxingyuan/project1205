@@ -61,4 +61,6 @@ public interface MovieService {
 
     //修改某个字段的电影信息
     int updateMovieColumnValue(Integer movieId, String columnName, String columnValue);
+
+    int addMovieHits(Integer movieId);
 }

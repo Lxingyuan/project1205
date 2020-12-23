@@ -47,6 +47,8 @@
 
         $(function () {
 
+
+
             $("#logOut").on("click",function () {
                 var name=readCookie("adminName");
                 //当前是管理员退出系统
@@ -155,6 +157,7 @@
             $.ajax({
                 url: "movie.do",
                 data: {action: "queryMovieByMovieId", movieId: movieId},
+
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -162,14 +165,31 @@
                     let hits=jsonObj.hits;
 
                     $(".mb-4").append(jsonObj.movieName)
-                    $(".bio-body").append("<img  style=\"width: 275px;height: 350px\"\n >" +
-                        "<center><h2>海报图</h2></center>");
+                    $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
+                    $(".bio-body").append("<center><a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a></center>");
                     $(".bio-body>img").attr("src",jsonObj.picAddress);
                     $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type.replaceAll("&"," ")+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist.replaceAll("&"," ")+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
-
+                    $("#showMovie").on("click",function () {
+                        layer.open({
+                            type: 1,
+                            title: jsonObj.movieName + '的预告片',
+                            area: ['1100px', '700px'],
+                            shade: 0.1,
+                            maxmin: true,
+                            offset: ['3%', '12%'],
+                            content: '<div style="padding: 10px 40px;"><form id="f1" ><div>' +
+                            '<iframe height=600 width=1000 src="' + jsonObj.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
+                            '</div></form></div>',
+                            btn: ['关闭'],
+                            yes: function () {
+                                layer.closeAll();
+                            }
+                        });
+                    })
                 }
             });
 
+            alert(name);
         });
 
     </script>
@@ -219,7 +239,7 @@
                 <div class="mr-xl-2 text-black" id="movieMassage">
 
                 </div>
-<!--分隔符-->
+                <!--分隔符-->
 
                 <div class="pt-5">
                     <h3 class="mb-5">6 Comments</h3>

@@ -243,4 +243,9 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
+    public void addMovieHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+        Integer hits=movieService.addMovieHits(movieId);
+    }
+
 }

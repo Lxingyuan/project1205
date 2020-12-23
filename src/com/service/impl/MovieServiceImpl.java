@@ -120,4 +120,9 @@ public class MovieServiceImpl implements MovieService {
     public int updateMovieColumnValue(Integer movieId, String columnName, String columnValue) {
         return movieDao.updateMovieColumnValue(movieId, columnName, columnValue);
     }
+
+    @Override
+    public int addMovieHits(Integer movieId) {
+        return movieDao.addMovieHits(movieId);
+    }
 }

@@ -192,6 +192,7 @@
                     $("#notice").append(noticeHead);
                     $("#notice").append(noticeBody);
                     $("#notice").append(noticeUser);
+
                 }
             });
         }
@@ -207,7 +208,7 @@
                     for(var i=0;i<5;i++){
                         $("#newComment").append("<li><a href=\"\">\n" +
                             "<div class=\"text\">\n" +
-                            "<h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>\n" +
+                            "<h4>"+jsonObj.data[i].commentHead+"</h4>\n" +
                             "<div class=\"post-meta\">\n" +
                             "<span class=\"mr-2\">"+jsonObj.data[i].commentContent+"</span> &bullet;\n" +
                             "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
@@ -281,15 +282,26 @@
                 index = currentPage - 2;
             }else if(currentPage>=jsonObj.pageTotal-1)
             {
-                index = jsonObj.pageTotal - 4;
+                index = jsonObj.pageTotal - 4  ;
             }
-            for (let i = index; i <= index+4; i++) {
-                if (i == currentPage) {
-                    $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
-                } else {
-                    $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+            if(jsonObj.pageTota>5){
+                for (let i = index; i <= index+4; i++) {
+                    if (i == currentPage) {
+                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                    } else {
+                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                    }
+                }
+            }else {
+                for (let i = 1; i <= jsonObj.pageTotal; i++) {
+                    if (i == currentPage) {
+                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                    } else {
+                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                    }
                 }
             }
+
 
             if(currentPage!=jsonObj.pageTotal) {
                 $(".pagination").append(nextbutton);

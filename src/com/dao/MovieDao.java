@@ -56,4 +56,6 @@ public interface MovieDao {
      * @return
      */
     List<Movie> queryAllMovie(String movieName, String type, String protagonist, String showTime);
+
+    Integer addMovieHits(Integer movieId);
 }
