@@ -248,7 +248,6 @@
                         $("#img" + (i + 1)).attr("src", jsonObj.data[i].postAddress);
                         $("#img" + (i + 1)).attr("title", jsonObj.data[i].movieName);
                         $("#a"+(i+1)).attr('href',"detailsPage.html?movieId="+jsonObj.data[i].movieId);
-
                     }
                     $("#popularMovie").attr("src", jsonObj.data[0].picAddress);
                     for (let j = 0; j < 5; j++) {

@@ -17,4 +17,14 @@ public class FavouriteMovieServiceImpl implements FavouriteMovieService {
     public List<FavouriteMovie> queryFavouriteMovie(String userName) {
         return favouriteMovieDao.queryFavouriteMovie(userName);
     }
+
+    @Override
+    public Integer insert(FavouriteMovie favouriteMovie) {
+        return favouriteMovieDao.insert(favouriteMovie);
+    }
+
+    @Override
+    public int deleteFavouriteMovie(Integer movieId, String userName) {
+        return favouriteMovieDao.deleteFavouriteMovie(movieId,userName);
+    }
 }

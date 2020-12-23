@@ -21,7 +21,7 @@
 
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
-    <script type="text/javascript"  src="static/js/getUrlParam.js"></script>
+    <script type="text/javascript" src="static/js/getUrlParam.js"></script>
 
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
@@ -35,11 +35,11 @@
             var nameEQ = name + "=";
             var ca = document.cookie.split(";");
 
-            for(var i = 0; i < ca.length; i++) {
+            for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while(c.charAt(0) == " ")
+                while (c.charAt(0) == " ")
                     c = c.substring(1, c.length);
-                if(c.indexOf(nameEQ) == 0)
+                if (c.indexOf(nameEQ) == 0)
                     return c.substring(nameEQ.length, c.length);
             }
             return null;
@@ -48,11 +48,10 @@
         $(function () {
 
 
-
-            $("#logOut").on("click",function () {
-                var name=readCookie("adminName");
+            $("#logOut").on("click", function () {
+                var name = readCookie("adminName");
                 //当前是管理员退出系统
-                if(name!=null){
+                if (name != null) {
                     $.ajax({
                         url: "/admin.do",
                         data: {action: "adminLogOut"},
@@ -74,7 +73,7 @@
                     window.location.reload();
 
 
-                }else {
+                } else {
                     //用户的退出操作
                     $.ajax({
                         url: "/user.do",
@@ -98,11 +97,11 @@
                 }
             });
 
-            var name=readCookie("adminName");
-            console.log("adminName:"+readCookie("adminName"));
-            console.log("userName:"+readCookie("userName"));
+            var name = readCookie("adminName");
+            console.log("adminName:" + readCookie("adminName"));
+            console.log("userName:" + readCookie("userName"));
             //管理员已登录
-            if(name!=null){
+            if (name != null) {
                 //隐藏“登录”和“注册”
                 $("#login").hide();
                 $("#register").hide();
@@ -111,7 +110,7 @@
                 $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
                 $.ajax({
                     url: "/admin.do",
-                    data: {action: "findAdminByName",adminName:name},
+                    data: {action: "findAdminByName", adminName: name},
                     type: "GET",
                     async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                     dataType: "text",//返回的数据类型
@@ -121,14 +120,14 @@
                         //右上头像
                         $("#userNameSpan").html(jsonObj.userName);
                         //右上用户名
-                        $("#userHeadPic").attr("src",jsonObj.headPic)
+                        $("#userHeadPic").attr("src", jsonObj.headPic)
                     }
                 });
 
-            }else {
-                var name=readCookie("userName");
+            } else {
+                var name = readCookie("userName");
                 //用户已登录
-                if(name!=null){
+                if (name != null) {
                     $("#login").hide();
                     $("#register").hide();
                     //显示登录信息
@@ -137,7 +136,7 @@
                     $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
                     $.ajax({
                         url: "/user.do",
-                        data: {action: "findUserByName",userName:name},
+                        data: {action: "findUserByName", userName: name},
                         type: "GET",
                         async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                         dataType: "text",//返回的数据类型
@@ -147,13 +146,13 @@
                             //右上头像
                             $("#userNameSpan").html(jsonObj.userName);
                             //右上用户名
-                            $("#userHeadPic").attr("src",jsonObj.headPic)
+                            $("#userHeadPic").attr("src", jsonObj.headPic)
                         }
                     });
                 }
             }
 
-            var movieId=UrlParm.parm("movieId");
+            var movieId = UrlParm.parm("movieId");
             $.ajax({
                 url: "movie.do",
                 data: {action: "addMovieHits", movieId: movieId},
@@ -167,14 +166,18 @@
                 dataType: "text",
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
-                    let hits=jsonObj.hits;
-
-                    $(".mb-4").append(jsonObj.movieName)
+                    let hits = jsonObj.hits;
+                    var movieId=jsonObj.movieId;
+                    $(".mb-4").append(jsonObj.movieName);
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
-                    $(".bio-body").append("<center><a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a></center>");
-                    $(".bio-body>img").attr("src",jsonObj.picAddress);
-                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
-                    $("#showMovie").on("click",function () {
+                    $(".bio-body").append("<center>" +
+                        "<a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a>" +
+                        "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='like' style='color: black;margin-left: 5px'>喜欢</a>" +
+                        "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
+                        "</center>");
+                    $(".bio-body>img").attr("src", jsonObj.picAddress);
+                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>导演：<span>" + jsonObj.director + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>上映年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
+                    $("#showMovie").on("click", function () {
                         layer.open({
                             type: 1,
                             title: jsonObj.movieName + '的预告片',
@@ -191,6 +194,55 @@
                             }
                         });
                     })
+                    //判断用户是否喜欢了当前电影
+                    $.ajax({
+                        url: "/movie.do",
+                        data: {action: "queryMoviePageLimit", userName: readCookie("userName")},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            //console.log(data);
+                            let jsonObj = JSON.parse(data);
+                            var flag=false;
+                            for (let i = 0; i < jsonObj.data.length; i++) {
+                                //console.log(jsonObj.data[i].movieId);
+                                //当前用户喜欢的电影中有这个电影的id
+                                if (jsonObj.data[i].movieId == movieId) {
+                                    //把“喜欢”隐藏
+                                    $("#like").hide();
+                                    flag=true;
+                                    break;
+                                }
+                            }
+                            //没有喜欢这个电影
+                            if(flag==false){
+                                //把“取消喜欢”隐藏
+                                $("#unLike").hide();
+                            }
+
+                        }
+                    });
+                    $("#like").on("click", function () {
+                        //layer.msg("喜欢")
+                        $.ajax({
+                            url: "/favouriteMovie.do",
+                            data: {action: "insert", movieId: movieId, userName: readCookie("userName"),},
+                            type: "GET",
+                            dataType: "text",
+                            success: function (data) {
+                                if(data=="true"){
+                                    layer.msg("标记喜欢成功！");
+                                    window.location.reload();
+                                }else {
+                                    layer.msg("标记喜欢失败！")
+                                }
+
+                            }
+                        });
+                    });
+                    $("#unLike").on("click", function () {
+                        //layer.msg("取消喜欢")
+                    });
                 }
             });
 //求总评论数
@@ -636,7 +688,6 @@
         });
 
 
-
         var $ = layui.$, active = {
             set: function (othis) {
                 var THIS = 'layui-bg-normal'
@@ -671,11 +722,11 @@
             active[type] ? active[type].call(this, othis) : '';
         });
     });
-    layui.use('element', function(){
+    layui.use('element', function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
         //监听导航点击
-        element.on('nav(demo)', function(elem){
+        element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });
