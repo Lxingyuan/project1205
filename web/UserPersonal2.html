@@ -164,13 +164,13 @@
                 async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                 dataType: "text",//返回的数据类型
                 success: function (data) {
-                    //console.log("data:" + data);//data代表服务器回传的数据
+                    console.log("data:" + data);//data代表服务器回传的数据
                     var jsonObj = JSON.parse(data);
                     $("#userDiv").show();
                     //表单信息回填
                     $("#UserBigPic").attr("src", jsonObj.headPic);
                     $(".UserEmail").html(jsonObj.email);
-
+                    $(".BigUserName").html(jsonObj.userName);
                 }
             });
         } else if (name == null) {
@@ -182,7 +182,7 @@
                 $("#register").hide();
                 //显示登录信息
                 $("#userMessage").show();
-                $(".BigUserName").html(name);
+                //$(".BigUserName").html(name);
                 //添加“修改密码”
                 $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
                 //右上角登陆者的信息
@@ -212,6 +212,7 @@
                         //表单信息回填
                         $("#UserBigPic").attr("src", jsonObj.headPic);
                         $(".UserEmail").html(jsonObj.email);
+                        $(".BigUserName").html(jsonObj.userName);
                     }
                 });
             } else {
@@ -230,6 +231,7 @@
                         //表单信息回填
                         $("#UserBigPic").attr("src", jsonObj.headPic);
                         $(".UserEmail").html(jsonObj.email);
+                        $(".BigUserName").html(jsonObj.userName);
                         //console.log($(".sex:checked").val());
                     }
                 });
@@ -311,9 +313,6 @@
                     postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.data[i].hits + "</span>")
                     blogbody.append(postmeta);
                     blogbody.append("<center><h2>" + jsonObj.data[i].movieName + "</h2></center>");
-                    if (readCookie("adminName") != null) {
-                        blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='" + jsonObj.data[i].movieId + "'>" + "删除" + "</a></center>");
-                    }
                     blogentry.append(img);
                     blogentry.append(blogbody);
                     colmd6.append(blogentry);
