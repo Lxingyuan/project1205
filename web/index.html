@@ -35,11 +35,11 @@
             var nameEQ = name + "=";
             var ca = document.cookie.split(";");
 
-            for(var i = 0; i < ca.length; i++) {
+            for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while(c.charAt(0) == " ")
+                while (c.charAt(0) == " ")
                     c = c.substring(1, c.length);
-                if(c.indexOf(nameEQ) == 0)
+                if (c.indexOf(nameEQ) == 0)
                     return c.substring(nameEQ.length, c.length);
             }
             return null;
@@ -51,13 +51,13 @@
             showNotice();
             showMovieComment();
             //删除按钮事件
-            $("body").on("click",".deleteMovie",function () {
+            $("body").on("click", ".deleteMovie", function () {
                 //alert($(this).children("input").val());
-                var movieId=$(this).children("input").val();
+                var movieId = $(this).children("input").val();
                 layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
                     $.ajax({
                         url: "/movie.do?action=deleteMovieById",
-                        data: {movieId:movieId},
+                        data: {movieId: movieId},
                         type: "GET",
                         async: false,
                         dataType: "text",//返回的数据类型
@@ -74,10 +74,10 @@
                 });
             });
             //退出按钮事件
-            $("#logOut").on("click",function () {
-                var name=readCookie("adminName");
+            $("#logOut").on("click", function () {
+                var name = readCookie("adminName");
                 //当前是管理员退出系统
-                if(name!=null){
+                if (name != null) {
                     $.ajax({
                         url: "/admin.do",
                         data: {action: "adminLogOut"},
@@ -96,7 +96,7 @@
                         }
                     });
                     window.location.reload();
-                }else {
+                } else {
                     //用户的退出操作
                     $.ajax({
                         url: "/user.do",
@@ -119,11 +119,11 @@
                 }
             });
 
-            var name=readCookie("adminName");
-            console.log("adminName:"+readCookie("adminName"));
-            console.log("userName:"+readCookie("userName"));
+            var name = readCookie("adminName");
+            console.log("adminName:" + readCookie("adminName"));
+            console.log("userName:" + readCookie("userName"));
             //管理员已登录
-            if(name!=null){
+            if (name != null) {
                 //隐藏“登录”和“注册”
                 $("#login").hide();
                 $("#register").hide();
@@ -133,7 +133,7 @@
                 $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
                 $.ajax({
                     url: "/admin.do",
-                    data: {action: "findAdminByName",adminName:name},
+                    data: {action: "findAdminByName", adminName: name},
                     type: "GET",
                     async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                     dataType: "text",//返回的数据类型
@@ -143,14 +143,14 @@
                         //右上头像
                         $("#userNameSpan").html(jsonObj.userName);
                         //右上用户名
-                        $("#userHeadPic").attr("src",jsonObj.headPic)
+                        $("#userHeadPic").attr("src", jsonObj.headPic)
                     }
                 });
 
-            }else {
-                var name=readCookie("userName");
+            } else {
+                var name = readCookie("userName");
                 //用户已登录
-                if(name!=null){
+                if (name != null) {
                     $("#login").hide();
                     $("#register").hide();
                     //显示登录信息
@@ -159,7 +159,7 @@
                     $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
                     $.ajax({
                         url: "/user.do",
-                        data: {action: "findUserByName",userName:name},
+                        data: {action: "findUserByName", userName: name},
                         type: "GET",
                         async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                         dataType: "text",//返回的数据类型
@@ -169,7 +169,7 @@
                             //右上头像
                             $("#userNameSpan").html(jsonObj.userName);
                             //右上用户名
-                            $("#userHeadPic").attr("src",jsonObj.headPic)
+                            $("#userHeadPic").attr("src", jsonObj.headPic)
                         }
                     });
                 }
@@ -186,9 +186,9 @@
                 dataType: "text",
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
-                    let noticeHead=$("<h2>"+jsonObj.noticeHead+"</h2>");
-                    let noticeBody=$("<p>"+jsonObj.noticeContent+"</p>");
-                    let noticeUser=$("<p>"+jsonObj.createTime+"</p>");
+                    let noticeHead = $("<h2>" + jsonObj.noticeHead + "</h2>");
+                    let noticeBody = $("<p>" + jsonObj.noticeContent + "</p>");
+                    let noticeUser = $("<p>" + jsonObj.createTime + "</p>");
                     $("#notice").append(noticeHead);
                     $("#notice").append(noticeBody);
                     $("#notice").append(noticeUser);
@@ -205,12 +205,12 @@
                 dataType: "text",
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
-                    for(var i=0;i<5;i++){
+                    for (var i = 0; i < 5; i++) {
                         $("#newComment").append("<li><a href=\"\">\n" +
                             "<div class=\"text\">\n" +
-                            "<h4>"+jsonObj.data[i].commentHead+"</h4>\n" +
+                            "<h4>" + jsonObj.data[i].commentHead + "</h4>\n" +
                             "<div class=\"post-meta\">\n" +
-                            "<span class=\"mr-2\">"+jsonObj.data[i].commentContent+"</span> &bullet;\n" +
+                            "<span class=\"mr-2\">" + jsonObj.data[i].commentContent + "</span> &bullet;\n" +
                             "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
                             "</div>\n" +
                             "</div>\n" +
@@ -245,12 +245,13 @@
                     //jsonObj.data表示json字符串中key为data对应的值
                     //console.log(jsonObj.data.length);
                     for (let i = 0; i < 3; i++) {
-                        $("#img"+(i+1)).attr("src", jsonObj.data[i].postAddress);
-                        $("#img"+(i+1)).attr("title", jsonObj.data[i].movieName);
+                        $("#img" + (i + 1)).attr("src", jsonObj.data[i].postAddress);
+                        $("#img" + (i + 1)).attr("title", jsonObj.data[i].movieName);
+                        $("#a"+(i+1)).attr('href',"detailsPage.html?movieId="+jsonObj.data[i].movieId);
                     }
-                    $("#popularMovie").attr("src",jsonObj.data[0].picAddress);
-                    for(let j=0;j<5;j++){
-                        $(".categories").append("<li><a href=\"detailsPage.html?movieId="+jsonObj.data[j].movieId+"\">"+jsonObj.data[j].movieName+"</a></li>")
+                    $("#popularMovie").attr("src", jsonObj.data[0].picAddress);
+                    for (let j = 0; j < 5; j++) {
+                        $(".categories").append("<li><a href=\"detailsPage.html?movieId=" + jsonObj.data[j].movieId + "\">" + jsonObj.data[j].movieName + "</a></li>")
                     }
                 }
             });
@@ -269,43 +270,42 @@
             let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
             $("#hotMovie").empty();
             $(".pagination").empty();
-            if (currentPage!=1) {
+            if (currentPage != 1) {
                 $(".pagination").append(lastbutton);
-                $("#last").on('click',function () {
+                $("#last").on('click', function () {
                     changepage(currentPage - 1);
                 })
             }
 
-            if(currentPage<=3) {
+            if (currentPage <= 3) {
                 index = 1;
-            }else if(currentPage>3&&currentPage<(jsonObj.pageTotal-1)) {
+            } else if (currentPage > 3 && currentPage < (jsonObj.pageTotal - 1)) {
                 index = currentPage - 2;
-            }else if(currentPage>=jsonObj.pageTotal-1)
-            {
-                index = jsonObj.pageTotal - 4  ;
+            } else if (currentPage >= jsonObj.pageTotal - 1) {
+                index = jsonObj.pageTotal - 4;
             }
-            if(jsonObj.pageTotal>5){
-                for (let i = index; i <= index+4; i++) {
+            if (jsonObj.pageTotal > 5) {
+                for (let i = index; i <= index + 4; i++) {
                     if (i == currentPage) {
-                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('" + i + "')\">" + i + "</a></li>");
                     } else {
-                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('" + i + "')\">" + i + "</a></li>");
                     }
                 }
-            }else {
+            } else {
                 for (let i = 1; i <= jsonObj.pageTotal; i++) {
                     if (i == currentPage) {
-                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                        $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('" + i + "')\">" + i + "</a></li>");
                     } else {
-                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
+                        $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('" + i + "')\">" + i + "</a></li>");
                     }
                 }
             }
 
 
-            if(currentPage!=jsonObj.pageTotal) {
+            if (currentPage != jsonObj.pageTotal) {
                 $(".pagination").append(nextbutton);
-                $("#next").on('click',function () {
+                $("#next").on('click', function () {
                     changepage(currentPage + 1);
                 })
             }
@@ -315,16 +315,16 @@
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
                 //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
                 let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-                let img = $("<a href=\"detailsPage.html?movieId="+jsonObj.items[i].movieId+"\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
+                let img = $("<a href=\"detailsPage.html?movieId=" + jsonObj.items[i].movieId + "\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
                 postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
                 postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
-                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.items[i].hits+"</span>")
+                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.items[i].hits + "</span>")
                 blogbody.append(postmeta);
-                blogbody.append("<center><h2>"+ jsonObj.items[i].movieName +"</h2></center>");
-                if(readCookie("adminName")!=null){
-                    blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.items[i].movieId+"'>"+ "删除" +"</a></center>");
+                blogbody.append("<center><h2>" + jsonObj.items[i].movieName + "</h2></center>");
+                if (readCookie("adminName") != null) {
+                    blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='" + jsonObj.items[i].movieId + "'>" + "删除" + "</a></center>");
                 }
                 blogentry.append(img);
                 blogentry.append(blogbody);
@@ -351,7 +351,7 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
-    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage" >
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
         <!--<a href="javascript:;">-->
         <a href="/UserPersonal.html">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
@@ -377,9 +377,9 @@
 <div class="container" style="height: 600px;margin-top: 80px;margin-bottom: 50px" align="center">
     <div class="layui-carousel" id="test10" style="height: 500px">
         <div carousel-item="">
-            <div><img width="100%" src="" id="img1"></div>
-            <div><img width="100%" src="" id="img2"></div>
-            <div><img width="100%" src="" id="img3"></div>
+            <div><a id="a1"><img width="100%" src="" id="img1"></a></div>
+            <div><a id="a2"><img width="100%" src="" id="img2"></a></div>
+            <div><a id="a3"><img width="100%" src="" id="img3"></a></div>
         </div>
     </div>
 </div>
@@ -609,7 +609,6 @@
         });
 
 
-
         var $ = layui.$, active = {
             set: function (othis) {
                 var THIS = 'layui-bg-normal'
@@ -644,11 +643,11 @@
             active[type] ? active[type].call(this, othis) : '';
         });
     });
-    layui.use('element', function(){
+    layui.use('element', function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
         //监听导航点击
-        element.on('nav(demo)', function(elem){
+        element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });

@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface FavouriteMovieDao {
     List<FavouriteMovie> queryFavouriteMovie(String userName);
+    Integer insert(FavouriteMovie favouriteMovie);
+    int deleteFavouriteMovie(Integer movieId,String userName);
 }

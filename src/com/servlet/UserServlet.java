@@ -431,6 +431,7 @@ public class UserServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+
     public void updatePassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         String columnName = request.getParameter("columnName");
@@ -442,4 +443,5 @@ public class UserServlet extends BaseServlet {
             response.getWriter().write("false");
         }
     }
+
 }
