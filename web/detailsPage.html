@@ -242,6 +242,21 @@
                     });
                     $("#unLike").on("click", function () {
                         //layer.msg("取消喜欢")
+                        $.ajax({
+                            url: "/favouriteMovie.do",
+                            data: {action: "deleteFavouriteMovie", movieId: movieId, userName: readCookie("userName"),},
+                            type: "GET",
+                            dataType: "text",
+                            success: function (data) {
+                                if(data=="true"){
+                                    layer.msg("取消喜欢成功！");
+                                    window.location.reload();
+                                }else {
+                                    layer.msg("取消喜欢失败！")
+                                }
+
+                            }
+                        });
                     });
                 }
             });
