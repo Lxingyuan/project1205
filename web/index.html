@@ -118,7 +118,7 @@
 
                 }
             });
-
+            //初始化头部菜单
             var name = readCookie("adminName");
             console.log("adminName:" + readCookie("adminName"));
             console.log("userName:" + readCookie("userName"));
@@ -173,7 +173,53 @@
                         }
                     });
                 }
+            }//初始化头部菜单结束
+            //投票界面
+            if(readCookie("userName")==null){
+                $("#vote").hide();
             }
+            //数据库查询当前用户是否已投票
+            $.ajax({
+                url: "/user.do",
+                data: {action: "findUserVoteOrNot", userName: name},
+                type: "GET",
+                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                dataType: "text",//返回的数据类型
+                success: function (data) {
+                    //console.log("data:" + data);//data代表服务器回传的数据
+                    //var jsonObj = JSON.parse(data);
+                    if(data=="false"){
+                        //未投票
+                    }else {
+                        //已投票，隐藏投票窗口
+                        $("#vote").hide();
+                    }
+                }
+            });
+            $("#vote").on("click",function () {
+                layer.open({
+                    type: 2
+                    ,
+                    title: '进行投票'
+                    ,
+                    area: ['600px', '700px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['10%', '34%']
+                    ,
+                    content: '/views/voteMovie.html'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            });
+
         });
 
         var currentPage = 1;
@@ -371,7 +417,11 @@
     </li>
 </ul>
 
-<div class="container" style="height: 600px;margin-top: 80px;margin-bottom: 50px" align="center">
+<div align="center" style="margin-top: 10px;" id="vote">
+    <h1><a href="javascript:;" style="color: #ff9f26">当前正在举行投票，点击查看！</a></h1>
+</div>
+
+<div class="container" style="height: 600px;margin-top: 10px;margin-bottom: 50px" align="center">
     <div class="layui-carousel" id="test10" style="height: 500px">
         <div carousel-item="">
             <div><a id="a1"><img width="100%" src="" id="img1"></a></div>
@@ -425,28 +475,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- END sidebar-box -->
-
-                <!--<div class="sidebar-box">
-                    <h3 class="heading">Tags</h3>
-                    <ul class="tags">
-                        <li><a href="#">Travel</a></li>
-                        <li><a href="#">Adventure</a></li>
-                        <li><a href="#">Food</a></li>
-                        <li><a href="#">Lifestyle</a></li>
-                        <li><a href="#">Business</a></li>
-                        <li><a href="#">Freelancing</a></li>
-                        <li><a href="#">Travel</a></li>
-                        <li><a href="#">Adventure</a></li>
-                        <li><a href="#">Food</a></li>
-                        <li><a href="#">Lifestyle</a></li>
-                        <li><a href="#">Business</a></li>
-                        <li><a href="#">Freelancing</a></li>
-                    </ul>
-                </div>-->
             </div>
-            <!-- END sidebar -->
-
         </div>
     </div>
 </section>

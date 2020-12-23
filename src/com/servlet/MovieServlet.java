@@ -5,8 +5,10 @@ import com.entity.Movie;
 import com.google.gson.Gson;
 import com.service.FavouriteMovieService;
 import com.service.MovieService;
+import com.service.UserService;
 import com.service.impl.FavouriteMovieServiceImpl;
 import com.service.impl.MovieServiceImpl;
+import com.service.impl.UserServiceImpl;
 import com.utils.Page;
 import com.utils.Page2;
 import org.apache.commons.fileupload.FileItem;
@@ -35,6 +37,7 @@ import java.util.List;
 public class MovieServlet extends BaseServlet {
     MovieService movieService = new MovieServiceImpl();
     FavouriteMovieService favouriteMovieService =new FavouriteMovieServiceImpl();
+    UserService userService=new UserServiceImpl();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -281,6 +284,30 @@ public class MovieServlet extends BaseServlet {
         Gson gson = new Gson();
         String jsonStr = gson.toJson(hits);
         response.getWriter().write(jsonStr);
+    }
+    public void addMovieVote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String string=request.getParameter("string");
+        String userName=request.getParameter("userName");
+        String [] strings=string.split(",");
+        Integer result=0;
+        for(int i = 0; i < strings.length; i++){
+            //System.out.println(strings[i]);
+            result=movieService.addMovieVote(Integer.parseInt(strings[i]));
+            if(result<0){
+                break;
+            }
+        }
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            Integer result2=userService.setUserVoteIsTrue(userName);
+            if(result2<0){
+                response.getWriter().write("false");
+            }else {
+                response.getWriter().write("true");
+            }
+
+        }
     }
     public void searchMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String searchMessage=request.getParameter("searchMessage");

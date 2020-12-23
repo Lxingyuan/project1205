@@ -138,4 +138,14 @@ public class UserServiceImpl implements UserService {
     public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
         return userDao.updateUserColumnValue(userId, columnName, columnValue);
     }
+
+    @Override
+    public User findUserVoteOrNot(String userName) {
+        return userDao.findUserVoteOrNot(userName);
+    }
+
+    @Override
+    public Integer setUserVoteIsTrue(String username) {
+        return userDao.setUserVoteIsTrue(username);
+    }
 }

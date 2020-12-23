@@ -21,6 +21,15 @@ public class Movie {
     private Integer hits;
     private Date createTime;
     private Date updateTime;
+    private Integer voteNum;
+
+    public Integer getVoteNum() {
+        return voteNum;
+    }
+
+    public void setVoteNum(Integer voteNum) {
+        this.voteNum = voteNum;
+    }
 
     @Override
     public String toString() {
@@ -38,14 +47,14 @@ public class Movie {
                 ", hits=" + hits +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", voteNum=" + voteNum +
                 '}';
     }
 
     public Movie() {
     }
 
-    public Movie(Integer movieId, String movieName, String type, String director, String protagonist, String showTime, String picAddress, String postAddress, String videoAddress, String content, Integer hits, Date createTime, Date updateTime) {
-        this.movieId = movieId;
+    public Movie(String movieName, String type, String director, String protagonist, String showTime, String picAddress, String postAddress, String videoAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
         this.movieName = movieName;
         this.type = type;
         this.director = director;
@@ -58,6 +67,7 @@ public class Movie {
         this.hits = hits;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.voteNum = voteNum;
     }
 
     public String getPostAddress() {

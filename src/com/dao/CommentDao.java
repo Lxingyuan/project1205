@@ -24,7 +24,8 @@ public interface CommentDao {
     List<Comment> queryCommentByTime();
     //删除评论信息
     int deleteComment(Integer commentId);
-
+    //删除评论信息
+    int deleteComment(Integer movieId,String commentUser);
     Integer queryPageTotalCounts();
 
     List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);

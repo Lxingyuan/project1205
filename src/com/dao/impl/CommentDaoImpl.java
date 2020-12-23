@@ -46,6 +46,12 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     @Override
+    public int deleteComment(Integer movieId, String commentUser) {
+        String sql = "delete from comment where movieId = ? and commentUser = ?";
+        return update(sql, movieId,commentUser);
+    }
+
+    @Override
     public Integer queryPageTotalCounts() {
         String sql = "select count(1) from comment";
         return Math.toIntExact((Long) queryForSingleValue(sql));

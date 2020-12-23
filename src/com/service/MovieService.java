@@ -64,5 +64,6 @@ public interface MovieService {
 
     int addMovieHits(Integer movieId);
 
+    Integer addMovieVote(Integer movieId);
     List<Movie> searchMovie(String searchMessage);
 }

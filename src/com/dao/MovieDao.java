@@ -59,5 +59,7 @@ public interface MovieDao {
 
     int addMovieHits(Integer movieId);
 
+
+
     List<Movie> searchMovie(String searchMessage);
 }

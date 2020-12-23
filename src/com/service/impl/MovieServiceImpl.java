@@ -131,6 +131,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Integer addMovieVote(Integer movieId) {
+        return movieDao.addMovieVote(movieId);
+    }
+
+    @Override
     public List<Movie> searchMovie(String searchMessage) {
         return movieDao.searchMovie(searchMessage);
     }

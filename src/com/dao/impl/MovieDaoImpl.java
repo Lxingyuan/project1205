@@ -136,4 +136,10 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
         String sql = "SELECT * FROM movie WHERE movieName LIKE '%"+searchMessage+"%' or type LIKE '%"+searchMessage+"%' or protagonist LIKE '%"+searchMessage+"%' or showTime LIKE '%"+searchMessage+"%'or director LIKE '%"+searchMessage+"%'";
         return queryForList(Movie.class, sql);
     }
+
+    @Override
+    public Integer addMovieVote(Integer movieId) {
+        String sql="UPDATE movie SET voteNum=voteNum+1 where movieId = ? ";
+        return update(sql,movieId);
+    }
 }

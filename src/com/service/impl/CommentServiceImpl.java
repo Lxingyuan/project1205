@@ -33,6 +33,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public int deleteComment(Integer movieId, String commentUser) {
+        return commentDao.deleteComment(movieId,commentUser);
+    }
+
+    @Override
     public List<Comment> queryCommentByTime() {
         return commentDao.queryCommentByTime();
     }

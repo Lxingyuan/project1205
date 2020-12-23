@@ -19,6 +19,15 @@ public class User {
     private String sex;
     private Date registerTime;
     private String headPic;
+    private Integer vote;
+
+    public Integer getVote() {
+        return vote;
+    }
+
+    public void setVote(Integer vote) {
+        this.vote = vote;
+    }
 
     public User() {
     }
@@ -47,6 +56,20 @@ public class User {
         this.headPic = headPic;
     }
 
+    public User(Date createTime, Date updateTime, String userName, String userPassword, String telephone, String qq, String email, String sex, Date registerTime, String headPic, Integer vote) {
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.telephone = telephone;
+        this.qq = qq;
+        this.email = email;
+        this.sex = sex;
+        this.registerTime = registerTime;
+        this.headPic = headPic;
+        this.vote = vote;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -61,6 +84,7 @@ public class User {
                 ", sex='" + sex + '\'' +
                 ", registerTime=" + registerTime +
                 ", headPic='" + headPic + '\'' +
+                ", vote=" + vote +
                 '}';
     }
 

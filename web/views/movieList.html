@@ -166,13 +166,13 @@
                     event: 'postAddress'
                 }
                 , {field: 'director', title: '导演', width: 130, edit: 'text'}
-                , {field: 'protagonist', title: '主演', width: 170, edit: 'text'}
+                , {field: 'protagonist', title: '主演', width: 130, edit: 'text'}
                 , {field: 'showTime', title: '上映年份', width: 100, sort: true, edit: 'text'}
                 , {field: 'content', title: '电影详细介绍', width: 150, event: 'content'}
-                , {field: 'hits', title: '浏览数', width: 100, sort: true, totalRow: true, edit: 'text'}
+                , {field: 'hits', title: '浏览数', width: 100, sort: true, edit: 'text'}
+                , {field: 'voteNum', title: '得票数', width: 100, sort: true, edit: 'text'}
                 , {field: 'videoAddress', title: '预告片', width: 100, templet: '#videoAddress'}
-                //, {templet: setPic, title: '学生照片', align: 'center', width: '12%' }
-                , {fixed: 'right', title: '操作', width: 140, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                , {fixed: 'right', title: '操作', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {
                 //如果是异步请求数据方式，res即为接口返回的信息。

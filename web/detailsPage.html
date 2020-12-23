@@ -204,8 +204,8 @@
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
                     let hits = jsonObj.hits;
-                    var movieId=jsonObj.movieId;
-                    $(".mb-4").append(jsonObj.movieName+" <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">"+jsonObj.hits+"</i>");
+                    var movieId = jsonObj.movieId;
+                    $(".mb-4").append(jsonObj.movieName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
                         "<a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a>" +
@@ -231,7 +231,7 @@
                             }
                         });
                     })
-                    if(readCookie("userName")==null){
+                    if (readCookie("userName") == null) {
                         $("#like").hide();
                         $("#unLike").hide();
                     }
@@ -245,19 +245,19 @@
                         success: function (data) {
                             //console.log(data);
                             let jsonObj = JSON.parse(data);
-                            var flag=false;
+                            var flag = false;
                             for (let i = 0; i < jsonObj.data.length; i++) {
                                 //console.log(jsonObj.data[i].movieId);
                                 //当前用户喜欢的电影中有这个电影的id
                                 if (jsonObj.data[i].movieId == movieId) {
                                     //把“喜欢”隐藏
                                     $("#like").hide();
-                                    flag=true;
+                                    flag = true;
                                     break;
                                 }
                             }
                             //没有喜欢这个电影
-                            if(flag==false){
+                            if (flag == false) {
                                 //把“取消喜欢”隐藏
                                 $("#unLike").hide();
                             }
@@ -272,10 +272,10 @@
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
-                                if(data=="true"){
+                                if (data == "true") {
                                     layer.msg("标记喜欢成功！");
                                     window.location.reload();
-                                }else {
+                                } else {
                                     layer.msg("标记喜欢失败！")
                                 }
 
@@ -290,10 +290,10 @@
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
-                                if(data=="true"){
+                                if (data == "true") {
                                     layer.msg("取消喜欢成功！");
                                     window.location.reload();
-                                }else {
+                                } else {
                                     layer.msg("取消喜欢失败！")
                                 }
 
@@ -312,7 +312,7 @@
                     let jsonObj = JSON.parse(data);
                     $("#commentNum").append(jsonObj);
                 }
-            })
+            });
             //获取数据库评论情况
             $.ajax({
                 url: "comment.do",
@@ -321,28 +321,74 @@
                 dataType: "text",
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
-                    for (var i=0;i<jsonObj.data.length;i++){
-                        $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img  alt=\"Image placeholder\"  src="+jsonObj.data[i].headPic+"></div>" +
-                            "                            <div class=\"comment-body\">\n" +
-                            "                                <h3>"+jsonObj.data[i].commentUser+"</h3>\n" +
-                            "                                <div class=\"meta\">"+jsonObj.data[i].createTime+"</div>\n" +
-                            "                                <p>"+jsonObj.data[i].commentContent+"</p>\n" +
-                            "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
-                            "                            </div>\n" +
-                            "                        </li>");
+                    for (var i = 0; i < jsonObj.data.length; i++) {
+                        //管理员增加删除按钮
+                        if (readCookie("adminName") != null) {
+                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
+                                "                            <div class=\"comment-body\">\n" +
+                                "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
+                                "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
+                                "                                   <a class='deleteComment' href='javascript:;' style='color: red;'>删除" +
+                                "<input type='hidden' value='" + jsonObj.data[i].movieId + "'>" +
+                                "                                   <span style='display: none'>"+jsonObj.data[i].commentUser+"</span>" +
+                                "                                   </a></div>\n" +
+                                "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
+                                "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                                "                            </div>\n" +
+                                "                        </li>");
+                        }
+                        else {
+                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
+                                "                            <div class=\"comment-body\">\n" +
+                                "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
+                                "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "</div>\n" +
+                                "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
+                                "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                                "                            </div>\n" +
+                                "                        </li>");
+                        }
+
                     }
 
+                    $(".deleteComment").on("click", function () {
+                        //alert(123)
+                        var movieId = $(this).children("input").val();
+                        var commentUser = $(this).children("span").html();
+                        //console.log(movieId + " " +commentUser);
+                        layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
+                            $.ajax({
+                                url: "comment.do",
+                                data: {action: "deleteComment2", movieId: movieId,commentUser:commentUser},
+                                type: "GET",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功！");
+                                        window.location.reload();
+                                    } else {
+                                        layer.msg("删除失败！")
+                                    }
+                                }
+                            });
+                        });
+
+
+                    })
                 }
             })
 
 
-
-            $("#submit").on("click",function () {
+            $("#submit").on("click", function () {
 
                 $.ajax({
                     url: "comment.do",
                     //回传评论数据
-                    data: {action: "addMovieComment", movieId: movieId,username:name,commentContent:$("#comment").val()},
+                    data: {
+                        action: "addMovieComment",
+                        movieId: movieId,
+                        username: name,
+                        commentContent: $("#comment").val()
+                    },
                     type: "GET",
                     dataType: "text",
                     success: function (data) {
@@ -421,7 +467,8 @@
 
                             <div class="form-group">
                                 <label for="comment">评论框</label>
-                                <textarea name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
+                                <textarea name="comment" id="comment" cols="30" rows="10"
+                                          class="form-control"></textarea>
                             </div>
                             <div class="form-group">
                                 <input type="button" value="提交评论" class="btn btn-primary" id="submit">
@@ -582,7 +629,6 @@
         });
 
 
-
         var $ = layui.$, active = {
             set: function (othis) {
                 var THIS = 'layui-bg-normal'
@@ -617,11 +663,11 @@
             active[type] ? active[type].call(this, othis) : '';
         });
     });
-    layui.use('element', function(){
+    layui.use('element', function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
 
         //监听导航点击
-        element.on('nav(demo)', function(elem){
+        element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });
