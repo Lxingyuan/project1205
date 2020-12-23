@@ -192,31 +192,6 @@
                     $("#notice").append(noticeHead);
                     $("#notice").append(noticeBody);
                     $("#notice").append(noticeUser);
-
-                }
-            });
-        }
-
-        function showMovieComment() {
-            $.ajax({
-                url: "http://localhost:8765/comment.do",
-                data: {action: "queryCommentByTime"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=\"\">\n" +
-                            "<div class=\"text\">\n" +
-                            "<h4>" + jsonObj.data[i].commentHead + "</h4>\n" +
-                            "<div class=\"post-meta\">\n" +
-                            "<span class=\"mr-2\">" + jsonObj.data[i].commentContent + "</span> &bullet;\n" +
-                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</a>\n" +
-                            "</li>");
-                    }
                 }
             });
         }
@@ -232,7 +207,29 @@
                 }
             });
         }
-
+        function showMovieComment() {
+            $.ajax({
+                url: "http://localhost:8765/comment.do",
+                data: {action: "queryCommentByTime"},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    var jsonObj = JSON.parse(data);
+                    for (var i = 0; i < 5; i++) {
+                        $("#newComment").append("<li><a href=detailsPage.html?movieId="+jsonObj.data[i].movieId+">\n" +
+                            "<div class=\"text\">\n" +
+                            "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
+                            "<div class=\"post-meta\">\n" +
+                            "<span class=\"mr-2\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
+                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "</a>\n" +
+                            "</li>");
+                    }
+                }
+            });
+        }
         function rotation() {
             $.ajax({
                 url: "movie.do",
@@ -401,14 +398,9 @@
             </div>
             <!-- END main-content -->
 
-            <!--搜索框-->
+
             <div class="col-md-12 col-lg-4 sidebar">
-                <form action="#" class="search-form">
-                    <div class="form-group">
-                        <span class="icon fa fa-search"></span>
-                        <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
-                    </div>
-                </form>
+
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
                     <CENTER><h1>公告</h1></CENTER>

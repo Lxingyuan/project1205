@@ -282,4 +282,18 @@ public class MovieServlet extends BaseServlet {
         String jsonStr = gson.toJson(hits);
         response.getWriter().write(jsonStr);
     }
+    public void searchMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String searchMessage=request.getParameter("searchMessage");
+        List<Movie> list =movieService.searchMovie(searchMessage);
+        Page2<Movie> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(list.size());
+        page.setData(list);
+        //System.out.println(movieList);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
+
 }

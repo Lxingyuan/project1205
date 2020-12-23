@@ -45,9 +45,47 @@
             return null;
         }
 
+        function showMovieComment() {
+            $.ajax({
+                url: "http://localhost:8765/comment.do",
+                data: {action: "queryCommentByTime"},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    var jsonObj = JSON.parse(data);
+                    for (var i = 0; i < 5; i++) {
+                        $("#newComment").append("<li><a href=detailsPage.html?movieId="+jsonObj.data[i].movieId+">\n" +
+                            "<div class=\"text\">\n" +
+                            "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
+                            "<div class=\"post-meta\">\n" +
+                            "<span class=\"mr-2\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
+                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
+                            "</div>\n" +
+                            "</div>\n" +
+                            "</a>\n" +
+                            "</li>");
+                    }
+                }
+            });
+        }
+        function rotation() {
+            $.ajax({
+                url: "movie.do",
+                data: {action: "queryMovieByHits"},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    var jsonObj = JSON.parse(data);
+                    for (let j = 0; j < 5; j++) {
+                        $(".categories").append("<li><a href=\"detailsPage.html?movieId=" + jsonObj.data[j].movieId + "\">" + jsonObj.data[j].movieName + "</a></li>")
+                    }
+                }
+            });
+        }
+
         $(function () {
-
-
+            showMovieComment();
+            rotation();
             $("#logOut").on("click", function () {
                 var name = readCookie("adminName");
                 //当前是管理员退出系统
@@ -405,62 +443,25 @@
                     </div>
 
                 </div>
+
+                <div class="sidebar-box">
+                    <h3 class="heading">高浏览电影</h3>
+                    <ul class="categories">
+                    </ul>
+                </div>
+
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                    <h3 class="heading">Popular Posts</h3>
+                    <h3 class="heading">最新影评</h3>
                     <div class="post-entry-sidebar">
-                        <ul>
-                            <li>
-                                <a href="">
-                                    <img src="static/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                                    <div class="text">
-                                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                        <div class="post-meta">
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="">
-                                    <img src="static/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                                    <div class="text">
-                                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                        <div class="post-meta">
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="">
-                                    <img src="static/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                                    <div class="text">
-                                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                        <div class="post-meta">
-                                            <span class="mr-2">March 15, 2018 </span> &bullet;
-                                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
+                        <ul id="newComment">
+
                         </ul>
                     </div>
                 </div>
                 <!-- END sidebar-box -->
 
-                <div class="sidebar-box">
-                    <h3 class="heading">Categories</h3>
-                    <ul class="categories">
-                        <li><a href="#">Courses <span>(12)</span></a></li>
-                        <li><a href="#">News <span>(22)</span></a></li>
-                        <li><a href="#">Design <span>(37)</span></a></li>
-                        <li><a href="#">HTML <span>(42)</span></a></li>
-                        <li><a href="#">Web Development <span>(14)</span></a></li>
-                    </ul>
-                </div>
+
                 <!-- END sidebar-box -->
             </div>
             <!-- END sidebar -->
@@ -483,45 +484,9 @@
             <div class="col-md-6 ml-auto">
                 <div class="row">
                     <div class="col-md-7">
-                        <h3>Latest Post</h3>
                         <div class="post-entry-sidebar">
-                            <ul>
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_6.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_3.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+                            <ul >
+
                             </ul>
                         </div>
                     </div>

@@ -129,4 +129,9 @@ public class MovieServiceImpl implements MovieService {
     public int addMovieHits(Integer movieId) {
         return movieDao.addMovieHits(movieId);
     }
+
+    @Override
+    public List<Movie> searchMovie(String searchMessage) {
+        return movieDao.searchMovie(searchMessage);
+    }
 }
