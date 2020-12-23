@@ -86,7 +86,7 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     public List<Comment> queryCommentByMovieId(Integer movieId) {
-        String sql="SELECT * FROM comment c,user u  where c.movieId = '"+movieId+"' and c.commentUser=u.userName";
+        String sql="SELECT * FROM comment c,user u  where c.movieId = '"+movieId+"' and c.commentUser=u.userName ORDER BY c.CreateTime DESC";
         return  queryForList(Comment.class,sql);
     }
 

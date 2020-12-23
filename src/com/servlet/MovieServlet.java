@@ -282,5 +282,4 @@ public class MovieServlet extends BaseServlet {
         String jsonStr = gson.toJson(hits);
         response.getWriter().write(jsonStr);
     }
-
 }

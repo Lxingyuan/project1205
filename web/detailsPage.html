@@ -167,7 +167,7 @@
                     let jsonObj = JSON.parse(data);
                     let hits = jsonObj.hits;
                     var movieId=jsonObj.movieId;
-                    $(".mb-4").append(jsonObj.movieName);
+                    $(".mb-4").append(jsonObj.movieName+" <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">"+jsonObj.hits+"</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
                         "<a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a>" +
@@ -310,12 +310,13 @@
                     success: function (data) {
                         if (data == "true") {
                             layer.msg('评论成功');
-                            window.local.reload();
+                            window.location.reload();
                         } else {
                             layer.msg('未登录');
                         }
                     }
                 })
+                return false;
             })
         });
 
