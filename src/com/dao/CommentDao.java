@@ -36,4 +36,6 @@ public interface CommentDao {
     Integer queryTotalCommentByMovieId(Integer movieId);
 
     List<Comment> queryCommentByMovieId(Integer movieId);
+
+    int addMovieComment(Comment comment);
 }

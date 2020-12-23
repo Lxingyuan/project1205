@@ -102,5 +102,10 @@ public class CommentServiceImpl implements CommentService {
         return commentDao.queryCommentByMovieId(movieId);
     }
 
+    @Override
+    public int addMovieComment(Comment comment) {
+        return commentDao.addMovieComment(comment);
+    }
+
 
 }

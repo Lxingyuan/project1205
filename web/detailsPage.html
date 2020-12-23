@@ -94,7 +94,6 @@
                             }
                         }
                     });
-
                 }
             });
 
@@ -169,11 +168,11 @@
                     let jsonObj = JSON.parse(data);
                     let hits=jsonObj.hits;
 
-                    $(".mb-4").append(jsonObj.movieName)
+                    $(".mb-4").append(jsonObj.movieName+" <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">"+jsonObj.hits+"</i>")
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center><a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a></center>");
                     $(".bio-body>img").attr("src",jsonObj.picAddress);
-                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type.replaceAll("&"," ")+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist.replaceAll("&"," ")+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
+                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>"+jsonObj.type+"</span><br>导演：<span>"+jsonObj.director+" </span><br>参演演员：<span>"+jsonObj.protagonist+"</span><br>上映年份：<span>"+jsonObj.showTime+"</span><br>剧情介绍：<p>"+jsonObj.content+"</p>");
                     $("#showMovie").on("click",function () {
                         layer.open({
                             type: 1,
@@ -193,7 +192,7 @@
                     })
                 }
             });
-//求总评论数
+            //求总评论数
             $.ajax({
                 url: "comment.do",
                 data: {action: "queryTotalCommentByMovieId", movieId: movieId},
@@ -212,9 +211,41 @@
                 dataType: "text",
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
-                    $(".comment-list").append(jsonObj);
+                    for (var i=0;i<jsonObj.data.length;i++){
+                        $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img  alt=\"Image placeholder\"  src="+jsonObj.data[i].headPic+"></div>" +
+                            "                            <div class=\"comment-body\">\n" +
+                            "                                <h3>"+jsonObj.data[i].commentUser+"</h3>\n" +
+                            "                                <div class=\"meta\">"+jsonObj.data[i].createTime+"</div>\n" +
+                            "                                <p>"+jsonObj.data[i].commentContent+"</p>\n" +
+                            "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                            "                            </div>\n" +
+                            "                        </li>");
+                    }
+
                 }
             })
+
+
+
+            $("#submit").on("click",function () {
+
+                $.ajax({
+                    url: "comment.do",
+                    //回传评论数据
+                    data: {action: "addMovieComment", movieId: movieId,username:name,commentContent:$("#comment").val()},
+                    type: "GET",
+                    dataType: "text",
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('评论成功');
+                            window.local.reload();
+                        } else {
+                            layer.msg('未登录');
+                        }
+                    }
+                })
+            })
+
         });
 
     </script>
@@ -270,124 +301,20 @@
                     <h3 class="mb-5" id="commentNum">总评论数：</h3>
 
                     <ul class="comment-list">
-                        <li class="comment">
-                            <div class="vcard">
-                                <img src="static/images/person_1.jpg" alt="Image placeholder">
-                            </div>
-                            <div class="comment-body">
-                                <h3>Jean Doe</h3>
-                                <div class="meta">January 9, 2018 at 2:21pm</div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum
-                                    necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente
-                                    iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                <p><a href="#" class="reply">Reply</a></p>
-                            </div>
-                        </li>
 
-                        <li class="comment">
-                            <div class="vcard">
-                                <img src="static/images/person_1.jpg" alt="Image placeholder">
-                            </div>
-                            <div class="comment-body">
-                                <h3>Jean Doe</h3>
-                                <div class="meta">January 9, 2018 at 2:21pm</div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum
-                                    necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente
-                                    iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                <p><a href="#" class="reply">Reply</a></p>
-                            </div>
-
-                            <ul class="children">
-                                <li class="comment">
-                                    <div class="vcard">
-                                        <img src="static/images/person_1.jpg" alt="Image placeholder">
-                                    </div>
-                                    <div class="comment-body">
-                                        <h3>Jean Doe</h3>
-                                        <div class="meta">January 9, 2018 at 2:21pm</div>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem
-                                            laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe
-                                            enim sapiente iste iure! Quam voluptas earum impedit necessitatibus,
-                                            nihil?</p>
-                                        <p><a href="#" class="reply">Reply</a></p>
-                                    </div>
-
-
-                                    <ul class="children">
-                                        <li class="comment">
-                                            <div class="vcard">
-                                                <img src="static/images/person_1.jpg" alt="Image placeholder">
-                                            </div>
-                                            <div class="comment-body">
-                                                <h3>Jean Doe</h3>
-                                                <div class="meta">January 9, 2018 at 2:21pm</div>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur
-                                                    quidem laborum necessitatibus, ipsam impedit vitae autem, eum
-                                                    officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum
-                                                    impedit necessitatibus, nihil?</p>
-                                                <p><a href="#" class="reply">Reply</a></p>
-                                            </div>
-
-                                            <ul class="children">
-                                                <li class="comment">
-                                                    <div class="vcard">
-                                                        <img src="static/images/person_1.jpg" alt="Image placeholder">
-                                                    </div>
-                                                    <div class="comment-body">
-                                                        <h3>Jean Doe</h3>
-                                                        <div class="meta">January 9, 2018 at 2:21pm</div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                                                            Pariatur quidem laborum necessitatibus, ipsam impedit vitae
-                                                            autem, eum officia, fugiat saepe enim sapiente iste iure!
-                                                            Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                                        <p><a href="#" class="reply">Reply</a></p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="comment">
-                            <div class="vcard">
-                                <img src="static/images/person_1.jpg" alt="Image placeholder">
-                            </div>
-                            <div class="comment-body">
-                                <h3>Jean Doe</h3>
-                                <div class="meta">January 9, 2018 at 2:21pm</div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum
-                                    necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente
-                                    iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                <p><a href="#" class="reply">Reply</a></p>
-                            </div>
-                        </li>
                     </ul>
                     <!-- END comment-list -->
 
                     <div class="comment-form-wrap pt-5">
-                        <h3 class="mb-5">Leave a comment</h3>
+                        <h3 class="mb-5">添加评论</h3>
                         <form action="#" class="p-5 bg-light">
-                            <div class="form-group">
-                                <label for="name">Name *</label>
-                                <input type="text" class="form-control" id="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email *</label>
-                                <input type="email" class="form-control" id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="website">Website</label>
-                                <input type="url" class="form-control" id="website">
-                            </div>
 
                             <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
+                                <label for="comment">评论框</label>
+                                <textarea name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Post Comment" class="btn btn-primary">
+                                <input type="button" value="提交评论" class="btn btn-primary" id="submit">
                             </div>
 
                         </form>
@@ -463,24 +390,6 @@
                     </ul>
                 </div>
                 <!-- END sidebar-box -->
-
-                <div class="sidebar-box">
-                    <h3 class="heading">Tags</h3>
-                    <ul class="tags">
-                        <li><a href="#">Travel</a></li>
-                        <li><a href="#">Adventure</a></li>
-                        <li><a href="#">Food</a></li>
-                        <li><a href="#">Lifestyle</a></li>
-                        <li><a href="#">Business</a></li>
-                        <li><a href="#">Freelancing</a></li>
-                        <li><a href="#">Travel</a></li>
-                        <li><a href="#">Adventure</a></li>
-                        <li><a href="#">Food</a></li>
-                        <li><a href="#">Lifestyle</a></li>
-                        <li><a href="#">Business</a></li>
-                        <li><a href="#">Freelancing</a></li>
-                    </ul>
-                </div>
             </div>
             <!-- END sidebar -->
 

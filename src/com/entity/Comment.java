@@ -13,6 +13,7 @@ public class Comment {
     private Integer movieId;
     private String movieName;
     private String commentUser;
+    private String headPic ;
     private String commentContent;
     private Date createTime;
     private Date updateTime;
@@ -20,16 +21,6 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Integer commentId, Integer commentTypeId, Integer movieId, String movieName, String commentUser, String commentContent, Date createTime, Date updateTime) {
-        this.commentId = commentId;
-        this.commentTypeId = commentTypeId;
-        this.movieId = movieId;
-        this.movieName = movieName;
-        this.commentUser = commentUser;
-        this.commentContent = commentContent;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
 
     @Override
     public String toString() {
@@ -39,10 +30,31 @@ public class Comment {
                 ", movieId=" + movieId +
                 ", movieName='" + movieName + '\'' +
                 ", commentUser='" + commentUser + '\'' +
+                ", headPic='" + headPic + '\'' +
                 ", commentContent='" + commentContent + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public Comment(Integer commentId, Integer commentTypeId, Integer movieId, String movieName, String commentUser, String userHead, String commentContent, Date createTime, Date updateTime) {
+        this.commentId = commentId;
+        this.commentTypeId = commentTypeId;
+        this.movieId = movieId;
+        this.movieName = movieName;
+        this.commentUser = commentUser;
+
+        this.commentContent = commentContent;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
     }
 
     public String getMovieName() {

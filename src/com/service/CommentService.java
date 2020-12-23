@@ -34,4 +34,6 @@ public interface CommentService {
     Integer queryTotalCommentByMovieId(Integer movieId);
 
     List<Comment> queryCommentByMovieId(Integer movieId);
+
+    int addMovieComment(Comment comment);
 }
