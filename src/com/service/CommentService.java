@@ -20,7 +20,7 @@ public interface CommentService {
 
     //删除评论信息
     int deleteComment(Integer commentId);
-
+    int deleteComment(Integer movieId,String commentUser);
     List<Comment> queryCommentByTime();
     //评论页面
     Page<Comment> queryCommentByPage(int pageNo, int pageSize);
