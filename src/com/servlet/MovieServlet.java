@@ -256,13 +256,13 @@ public class MovieServlet extends BaseServlet {
     public void queryMoviePageLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userName = request.getParameter("userName");
         //System.out.println(userName);
-        List<FavouriteMovie> list=favouriteMovieService.queryFavouriteMovie(userName);
-        List<Movie> movieList=new ArrayList<>();
+        List<FavouriteMovie> list = favouriteMovieService.queryFavouriteMovie(userName);
+        List<Movie> movieList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             //System.out.println(list.get(i).getMovieId());
             movieList.add(movieService.queryMovieById(list.get(i).getMovieId()));
         }
-        Page2<Movie> page=new Page2<>();
+        Page2<Movie> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         page.setCount(movieList.size());
@@ -272,9 +272,12 @@ public class MovieServlet extends BaseServlet {
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
         //System.out.println(list);
+    }
+
     public void addMovieHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int movieId = Integer.parseInt(request.getParameter("movieId"));
         int hits=movieService.addMovieHits(movieId);
+        System.out.println("hits="+hits);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(hits);
         response.getWriter().write(jsonStr);

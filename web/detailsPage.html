@@ -156,6 +156,11 @@
             var movieId=UrlParm.parm("movieId");
             $.ajax({
                 url: "movie.do",
+                data: {action: "addMovieHits", movieId: movieId},
+                type: "GET",
+            });
+            $.ajax({
+                url: "movie.do",
                 data: {action: "queryMovieByMovieId", movieId: movieId},
 
                 type: "GET",
@@ -188,7 +193,28 @@
                     })
                 }
             });
-alert();
+//求总评论数
+            $.ajax({
+                url: "comment.do",
+                data: {action: "queryTotalCommentByMovieId", movieId: movieId},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    $("#commentNum").append(jsonObj);
+                }
+            })
+            //获取数据库评论情况
+            $.ajax({
+                url: "comment.do",
+                data: {action: "queryCommentByMovieId", movieId: movieId},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    let jsonObj = JSON.parse(data);
+                    $(".comment-list").append(jsonObj);
+                }
+            })
         });
 
     </script>
@@ -241,7 +267,8 @@ alert();
                 <!--分隔符-->
 
                 <div class="pt-5">
-                    <h3 class="mb-5">6 Comments</h3>
+                    <h3 class="mb-5" id="commentNum">总评论数：</h3>
+
                     <ul class="comment-list">
                         <li class="comment">
                             <div class="vcard">
