@@ -284,7 +284,7 @@
             {
                 index = jsonObj.pageTotal - 4  ;
             }
-            if(jsonObj.pageTota>5){
+            if(jsonObj.pageTotal>5){
                 for (let i = index; i <= index+4; i++) {
                     if (i == currentPage) {
                         $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
