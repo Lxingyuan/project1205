@@ -1,8 +1,11 @@
 package com.servlet;
 
+import com.entity.FavouriteMovie;
 import com.entity.Movie;
 import com.google.gson.Gson;
+import com.service.FavouriteMovieService;
 import com.service.MovieService;
+import com.service.impl.FavouriteMovieServiceImpl;
 import com.service.impl.MovieServiceImpl;
 import com.utils.Page;
 import com.utils.Page2;
@@ -31,7 +34,7 @@ import java.util.List;
 @WebServlet("/movie.do")
 public class MovieServlet extends BaseServlet {
     MovieService movieService = new MovieServiceImpl();
-
+    FavouriteMovieService favouriteMovieService =new FavouriteMovieServiceImpl();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=utf-8");
@@ -243,9 +246,31 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
-    public void addMovieHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        Integer hits=movieService.addMovieHits(movieId);
+    /**
+     * 查找某个用户的喜欢列表
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void queryMoviePageLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userName = request.getParameter("userName");
+        //System.out.println(userName);
+        List<FavouriteMovie> list=favouriteMovieService.queryFavouriteMovie(userName);
+        List<Movie> movieList=new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            //System.out.println(list.get(i).getMovieId());
+            movieList.add(movieService.queryMovieById(list.get(i).getMovieId()));
+        }
+        Page2<Movie> page=new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(movieList.size());
+        page.setData(movieList);
+        //System.out.println(movieList);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+        //System.out.println(list);
     }
-
 }

@@ -1,12 +1,16 @@
 package com.service.impl;
 
+import com.dao.FavouriteMovieDao;
 import com.dao.MovieDao;
+import com.dao.impl.FavouriteMovieImpl;
 import com.dao.impl.MovieDaoImpl;
+import com.entity.FavouriteMovie;
 import com.entity.Movie;
 import com.service.MovieService;
 import com.utils.Page;
 import com.utils.Page2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +20,7 @@ import java.util.List;
  */
 public class MovieServiceImpl implements MovieService {
     MovieDao movieDao = new MovieDaoImpl();
-
+    FavouriteMovieDao favouriteMovieDao=new FavouriteMovieImpl();
     @Override
     public int insertMovie(Movie movie) {
         return movieDao.insertMovie(movie);
