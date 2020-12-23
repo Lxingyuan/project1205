@@ -72,6 +72,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> queryMovieByVoteNum() {
+        return movieDao.queryMovieByVoteNum();
+    }
+
+    @Override
     public Page<Movie> queryMovieByPage(int pageNo, int pageSize) {
         Page<Movie> page = new Page<>();
         //设置当前页码

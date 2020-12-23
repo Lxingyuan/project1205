@@ -1,9 +1,6 @@
 package com.dao;
 
 import com.entity.Movie;
-import com.entity.User;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,8 +14,10 @@ public interface MovieDao {
 
     //修改电影信息
     int updateMovie(Movie movie);
+
     //修改某个字段的电影信息
-    int updateMovieColumnValue(Integer movieId,String columnName,String columnValue);
+    int updateMovieColumnValue(Integer movieId, String columnName, String columnValue);
+
     //删除电影信息
     int deleteMovie(Integer movieId);
 
@@ -36,10 +35,14 @@ public interface MovieDao {
 
     //按上映年份查询电影
     Movie queryMovieByShowTime(String showTime);
+
     //按id查询电影
     Movie queryMovieById(Integer id);
+
     //按浏览次数查询电影
     List<Movie> queryMovieByHits();
+
+    List<Movie> queryMovieByVoteNum();
 
     Integer queryPageTotalCounts();
 
@@ -49,6 +52,7 @@ public interface MovieDao {
 
     /**
      * 按条件查询
+     *
      * @param movieName
      * @param type
      * @param protagonist
@@ -59,7 +63,9 @@ public interface MovieDao {
 
     int addMovieHits(Integer movieId);
 
-
+    Integer addMovieVote(Integer movieId);
 
     List<Movie> searchMovie(String searchMessage);
+
+
 }

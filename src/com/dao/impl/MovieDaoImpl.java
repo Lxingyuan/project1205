@@ -84,6 +84,12 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
         return queryForList(Movie.class, sql);
     }
 
+    @Override
+    public List<Movie> queryMovieByVoteNum() {
+        String sql = "select * from movie ORDER BY voteNum DESC";
+        return queryForList(Movie.class, sql);
+    }
+
     //查询当前表的总记录条数
     @Override
     public Integer queryPageTotalCounts() {

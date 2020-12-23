@@ -237,6 +237,21 @@ public class MovieServlet extends BaseServlet {
 //        System.out.println("jsonStr:"+jsonStr);
     }
 
+    public void queryMovieByVoteNum(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        List<Movie> list = movieService.queryMovieByVoteNum();
+        Page2<Movie> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(list.size());
+        page.setData(list);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+//        System.out.println("jsonStr:"+jsonStr);
+    }
+
     public void queryMovieByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
@@ -285,6 +300,9 @@ public class MovieServlet extends BaseServlet {
         String jsonStr = gson.toJson(hits);
         response.getWriter().write(jsonStr);
     }
+
+
+
     public void addMovieVote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String string=request.getParameter("string");
         String userName=request.getParameter("userName");

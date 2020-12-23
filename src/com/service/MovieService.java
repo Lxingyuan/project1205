@@ -42,6 +42,8 @@ public interface MovieService {
     //按浏览次数查询电影
     List<Movie> queryMovieByHits();
 
+    List<Movie> queryMovieByVoteNum();
+
     //电影分页
     Page<Movie> queryMovieByPage(int pageNo, int pageSize);
 

@@ -175,7 +175,7 @@
                 }
             }//初始化头部菜单结束
             //投票界面
-            if(readCookie("userName")==null){
+            if (readCookie("userName") == null) {
                 $("#vote").hide();
             }
             //数据库查询当前用户是否已投票
@@ -188,15 +188,15 @@
                 success: function (data) {
                     //console.log("data:" + data);//data代表服务器回传的数据
                     //var jsonObj = JSON.parse(data);
-                    if(data=="false"){
+                    if (data == "false") {
                         //未投票
-                    }else {
+                    } else {
                         //已投票，隐藏投票窗口
                         $("#vote").hide();
                     }
                 }
             });
-            $("#vote").on("click",function () {
+            $("#vote").on("click", function () {
                 layer.open({
                     type: 2
                     ,
@@ -253,6 +253,7 @@
                 }
             });
         }
+
         function showMovieComment() {
             $.ajax({
                 url: "http://localhost:8765/comment.do",
@@ -262,7 +263,7 @@
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?movieId="+jsonObj.data[i].movieId+">\n" +
+                        $("#newComment").append("<li><a href=detailsPage.html?movieId=" + jsonObj.data[i].movieId + ">\n" +
                             "<div class=\"text\">\n" +
                             "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
                             "<div class=\"post-meta\">\n" +
@@ -276,10 +277,11 @@
                 }
             });
         }
+
         function rotation() {
             $.ajax({
                 url: "movie.do",
-                data: {action: "queryMovieByHits"},
+                data: {action: "queryMovieByVoteNum"},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -290,14 +292,23 @@
                     for (let i = 0; i < 3; i++) {
                         $("#img" + (i + 1)).attr("src", jsonObj.data[i].postAddress);
                         $("#img" + (i + 1)).attr("title", jsonObj.data[i].movieName);
-                        $("#a"+(i+1)).attr('href',"detailsPage.html?movieId="+jsonObj.data[i].movieId);
+                        $("#a" + (i + 1)).attr('href', "detailsPage.html?movieId=" + jsonObj.data[i].movieId);
                     }
                     $("#popularMovie").attr("src", jsonObj.data[0].picAddress);
+                }
+            });
+            $.ajax({
+                url: "movie.do",
+                data: {action: "queryMovieByHits"},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    var jsonObj = JSON.parse(data);
                     for (let j = 0; j < 5; j++) {
                         $(".categories").append("<li><a href=\"detailsPage.html?movieId=" + jsonObj.data[j].movieId + "\">" + jsonObj.data[j].movieName + "</a></li>")
                     }
                 }
-            });
+            })
         }
 
         function changepage(i) {
