@@ -121,84 +121,8 @@
         }
         return null;
     }
-    var currentPage = 1;
-    function changepage(i) {
-        currentPage = i;
-        hotMovie(i);
 
-    }
 
-    function hotMovieinit(data) {
-        let index = 1;
-        let jsonObj = JSON.parse(data);
-        let lastbutton = "<li class=\"page-item\"><a class=\"page-link\" id='last'>Prev</a></li>";
-        let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
-        $("#hotMovie").empty();
-        $(".pagination").empty();
-        if (currentPage!=1) {
-            $(".pagination").append(lastbutton);
-            $("#last").on('click',function () {
-                changepage(currentPage - 1);
-            })
-        }
-
-        if(currentPage<=3) {
-            index = 1;
-        }else if(currentPage>3&&currentPage<(jsonObj.pageTotal-1)) {
-            index = currentPage - 2;
-        }else if(currentPage>=jsonObj.pageTotal-1)
-        {
-            index = jsonObj.pageTotal - 4;
-        }
-        for (let i = index; i <= index+4; i++) {
-            if (i == currentPage) {
-                $(".pagination").append("<li class=\"page-item active\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
-            } else {
-                $(".pagination").append("<li class=\"page-item\"><a class=\"page-link\" onclick=\"changepage('"+i+"')\">"+i+"</a></li>");
-            }
-        }
-
-        if(currentPage!=jsonObj.pageTotal) {
-            $(".pagination").append(nextbutton);
-            $("#next").on('click',function () {
-                changepage(currentPage + 1);
-            })
-        }
-
-        for (let i = 0; i < jsonObj.items.length; i++) {
-            //console.log(jsonObj.items[i]);
-            let colmd6 = $("<div class=\"col-md-3\" style=\"margin-left: 60px;height: 500px\"></div>");
-            //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
-            let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-            let img = $("<a href=\"detailsPage.html?movieId="+jsonObj.items[i].movieId+"\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
-            let blogbody = $("<div class=\"blog-content-body\"></div>");
-            let postmeta = $("<div class=\"post-meta\"></div>");
-            postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
-            postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
-            postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.items[i].hits+"</span>")
-            blogbody.append(postmeta);
-            blogbody.append("<center><h2>"+ jsonObj.items[i].movieName +"</h2></center>");
-            if(readCookie("adminName")!=null){
-                blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.items[i].movieId+"'>"+ "删除" +"</a></center>");
-            }
-            blogentry.append(img);
-            blogentry.append(blogbody);
-            colmd6.append(blogentry);
-            $("#hotMovie").append(colmd6);
-        }
-    }
-
-    function hotMovie(pageNo) {
-        $.ajax({
-            url: "http://localhost:8765/movie.do",
-            data: {action: "queryMoviePage", pageNo: pageNo},
-            type: "GET",
-            dataType: "text",
-            success: function (data) {
-                hotMovieinit(data);
-            }
-        });
-    }
 
     function initTop() {
         var name = readCookie("adminName");
@@ -311,15 +235,55 @@
     }
 
     function initRightTop(){
-        hotMovie(1);
+        $.ajax({
+            url: "/movie.do",
+            data: {action: "queryMoviePageLimit", userName: readCookie("userName")},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                //console.log(data);
+                let jsonObj = JSON.parse(data);
+
+                $("#hotMovie").empty();
+
+                for (let i = 0; i < jsonObj.data.length; i++) {
+                    //console.log(jsonObj.items[i]);
+                    let colmd6 = $("<div class=\"col-md-3\" style=\"margin-left: 60px;height: 500px\"></div>");
+                    //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
+                    let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
+                    let img = $("<a href=\"detailsPage.html?movieId="+jsonObj.data[i].movieId+"\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
+                    let blogbody = $("<div class=\"blog-content-body\"></div>");
+                    let postmeta = $("<div class=\"post-meta\"></div>");
+                    postmeta.append("<span class=\"category\">" + jsonObj.data[i].type + "</span>");
+                    postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.data[i].showTime + "</span>");
+                    postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.data[i].hits+"</span>")
+                    blogbody.append(postmeta);
+                    blogbody.append("<center><h2>"+ jsonObj.data[i].movieName +"</h2></center>");
+                    if(readCookie("adminName")!=null){
+                        blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.data[i].movieId+"'>"+ "删除" +"</a></center>");
+                    }
+                    blogentry.append(img);
+                    blogentry.append(blogbody);
+                    colmd6.append(blogentry);
+                    $("#hotMovie").append(colmd6);
+                }
+            }
+        });
     }
 
-    $(function () {
 
+
+
+    $(function () {
         initTop();
         initRightTop()
 
     });
+
+
+
+
+
 
     layui.use(['carousel', 'form'], function () {
         var carousel = layui.carousel
