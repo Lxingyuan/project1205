@@ -42,4 +42,8 @@ public interface UserDao {
     List<User> queryAllUser();
 
     List<User> queryAllUser(String userName, String telephone, String qq, String email);
+
+    User findUserVoteOrNot(String userName);
+
+    Integer setUserVoteIsTrue(String username);
 }

@@ -64,5 +64,5 @@ public interface MovieService {
 
     int addMovieHits(Integer movieId);
 
-
+    Integer addMovieVote(Integer movieId);
 }

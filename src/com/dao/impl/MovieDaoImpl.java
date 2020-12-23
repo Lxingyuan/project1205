@@ -130,4 +130,10 @@ public class MovieDaoImpl extends BaseDao implements MovieDao {
         String sql="UPDATE movie SET hits=hits+1 where movieId ='"+movieId+"'";
         return update(sql);
     }
+
+    @Override
+    public Integer addMovieVote(Integer movieId) {
+        String sql="UPDATE movie SET voteNum=voteNum+1 where movieId = ? ";
+        return update(sql,movieId);
+    }
 }

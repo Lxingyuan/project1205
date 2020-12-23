@@ -444,4 +444,15 @@ public class UserServlet extends BaseServlet {
         }
     }
 
+    public void findUserVoteOrNot(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userName=request.getParameter("userName");
+        User user=userService.findUserVoteOrNot(userName);
+        if(user==null){
+            //未投票
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+
 }

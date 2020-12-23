@@ -286,7 +286,7 @@
                     for (var i = 0; i < jsonObj.data.length; i++) {
                         //管理员增加删除按钮
                         if (readCookie("adminName") != null) {
-                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img  alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
+                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
@@ -300,7 +300,7 @@
                                 "                        </li>");
                         }
                         else {
-                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img  alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
+                            $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\"><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "</div>\n" +

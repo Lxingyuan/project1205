@@ -46,4 +46,7 @@ public interface UserService {
 
     int updateUserColumnValue(Integer userId,String columnName,String columnValue);
 
+    User findUserVoteOrNot(String userName);
+
+    Integer setUserVoteIsTrue(String username);
 }

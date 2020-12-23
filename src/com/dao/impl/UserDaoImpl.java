@@ -140,4 +140,16 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         }
         return queryForList(User.class, sql);
     }
+
+    @Override
+    public User findUserVoteOrNot(String userName) {
+        String sql = "select * from user where userName = ? and vote = 1";
+        return queryForOne(User.class, sql, userName);
+    }
+
+    @Override
+    public Integer setUserVoteIsTrue(String username) {
+        String sql = "update user set vote = 1 where UserName = ?";
+        return update(sql, username);
+    }
 }
