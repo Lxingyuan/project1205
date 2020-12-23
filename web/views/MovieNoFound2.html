@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<!--<ul class="layui-nav" id="top">
+    <li class="layui-nav-item">
+        <a href="/index.html">首页
+            &lt;!&ndash;<span class="layui-badge">9</span>&ndash;&gt;
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="">个人中心
+            &lt;!&ndash;<span class="layui-badge-dot"></span>&ndash;&gt;
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
+        <a href="/UserPersonal.html">
+            <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
+            <span id="userNameSpan"></span>
+        </a>
+        <dl class="layui-nav-child" id="dl01">
+            <dd><a href="/updateUserMessage.html">修改信息</a></dd>
+            <dd><a href="javascript:;" id="logOut">注销</a></dd>
+        </dl>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="login">
+        <a href="/register.html">
+            注册
+        </a>
+    </li>
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
+        <a href="/register.html">
+            登录
+        </a>
+    </li>
+</ul>-->
+<center><h1 style="padding: 30px">视频找不到了！请联系管理员</h1></center>
+
+
+<script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    /**
+     *@param name 键值
+     * @return 通过键值获取到对应的数据，如果没有则返回null
+     **/
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == " ")
+                c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+
+    function initTop(){
+        var name = readCookie("adminName");
+        console.log("adminName:" + readCookie("adminName"));
+        console.log("userName:" + readCookie("userName"));
+        //管理员已登录
+        if (name != null) {
+            //隐藏“登录”和“注册”
+            $("#login").hide();
+            $("#register").hide();
+            //显示登录信息
+            $("#userMessage").show();
+            $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
+            $.ajax({
+                url: "/admin.do",
+                data: {action: "findAdminByName", adminName: name},
+                type: "GET",
+                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                dataType: "text",//返回的数据类型
+                success: function (data) {
+                    console.log("data:" + data);//data代表服务器回传的数据
+                    var jsonObj = JSON.parse(data);
+                    //右上头像
+                    $("#userNameSpan").html(jsonObj.userName);
+                    //右上用户名
+                    $("#userHeadPic").attr("src", jsonObj.headPic);
+                    $("#adminDiv").show();
+                }
+            });
+
+        } else if (name == null) {
+            var name = readCookie("userName");
+            //用户已登录
+            if (name != null) {
+                $("#login").hide();
+                $("#register").hide();
+                //显示登录信息
+                $("#userMessage").show();
+                $("#userName").val(name);
+                //添加“修改密码”
+                $("#dl01").prepend("<dd><a href=\"/userUpdatePassword.html\">修改密码</a></dd>");
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "findUserByName", userName: name},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        console.log("data:" + data);//data代表服务器回传的数据
+                        var jsonObj = JSON.parse(data);
+                        $("#userNameSpan").html(jsonObj.userName);
+                        $("#userHeadPic").attr("src", jsonObj.headPic);
+                        $("#userDiv").show();
+                        //表单信息回填
+                        $("#telephone").val(jsonObj.telephone);
+                        $("#QQ").val(jsonObj.qq);
+                        $("#email").val(jsonObj.email);
+                        $("#cropedBigImg2").attr("src",jsonObj.headPic);
+                        if(jsonObj.sex=="男"){
+                            $("#sexDiv > input :eq(0)").attr("checked", true);
+                        }else {
+                            $("#sexDiv > input :eq(1)").attr("checked", true);
+                        }
+                        //console.log($(".sex:checked").val());
+                    }
+                });
+            }
+        }
+        $("#logOut").on("click", function () {
+            var name = readCookie("adminName");
+            //当前是管理员退出系统
+            if (name != null) {
+                $.ajax({
+                    url: "/admin.do",
+                    data: {action: "adminLogOut"},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        //alert(data)
+                        if (data == "true") {
+                            layer.msg('退出成功!');
+                            window.location.href = '/index.html';
+                            window.event.returnValue = false;
+                        }
+                        else {
+                            layer.msg("退出失败！");
+                        }
+                    }
+                });
+                return false;
+            } else {
+                //用户的退出操作
+                $.ajax({
+                    url: "/user.do",
+                    data: {action: "userLogOut"},
+                    type: "GET",
+                    async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        //console.log("data:" + data);//data代表服务器回传的数据
+                        if (data == "true") {
+                            layer.msg('退出成功!');
+                            window.location.href = '/index.html';
+                            window.event.returnValue = false;
+                        }
+                        else {
+                            layer.msg("退出失败！");
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+
+    }
+
+
+    $(function () {
+
+        initTop();
+
+
+    });
+
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+
+        //常规轮播
+        carousel.render({
+            elem: '#test1'
+            , arrow: 'always'
+        });
+
+        //改变下时间间隔、动画类型、高度
+        carousel.render({
+            elem: '#test2'
+            , interval: 1800
+            , anim: 'fade'
+            , height: '120px'
+        });
+
+        //设定各种参数
+        var ins3 = carousel.render({
+            elem: '#test3'
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '100%'
+            , height: '100%'
+            , interval: 5000
+        });
+
+
+
+        var $ = layui.$, active = {
+            set: function (othis) {
+                var THIS = 'layui-bg-normal'
+                    , key = othis.data('key')
+                    , options = {};
+
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+
+        //监听开关
+        form.on('switch(autoplay)', function () {
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+
+        $('.demoSet').on('keyup', function () {
+            var value = this.value
+                , options = {};
+            if (!/^\d+$/.test(value)) return;
+
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+
+        //其它示例
+        $('.demoTest .layui-btn').on('click', function () {
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+
+    layui.use('element', function () {
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        //监听导航点击
+        element.on('nav(demo)', function (elem) {
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+</script>
+</body>
+</html>

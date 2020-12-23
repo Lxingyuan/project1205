@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +39,20 @@ public class Error404Filter implements Filter {
         }
         //String uri = request.getRequestURI();
         //System.out.println(uri);
-        response.sendRedirect("/views/MovieNoFound.html");
+        Cookie[] cookies = request.getCookies();
+        boolean flag=false;
+        for (Cookie cookie: cookies) {
+            if (cookie.getName().equals("adminName")) {
+                //response.sendRedirect("/views/MovieNoFound.html");
+                flag=true;
+                break;
+            }
+        }
+        if(flag==true){
+            response.sendRedirect("/views/MovieNoFound.html");
+        }else {
+            response.sendRedirect("/views/MovieNoFound2.html");
+        }
+
     }
 }
