@@ -193,6 +193,11 @@
                             }
                         });
                     })
+                    if(readCookie("userName")==null){
+                        $("#like").hide();
+                        $("#unLike").hide();
+                    }
+
                     //判断用户是否喜欢了当前电影
                     $.ajax({
                         url: "/movie.do",
@@ -312,7 +317,6 @@
                     }
                 })
             })
-
         });
 
     </script>
