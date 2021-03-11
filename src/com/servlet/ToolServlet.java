@@ -1,13 +1,13 @@
 package com.servlet;
 
-import com.entity.FavouriteMovie;
-import com.entity.Movie;
+import com.entity.FavouriteTool;
+import com.entity.Tool;
 import com.google.gson.Gson;
-import com.service.FavouriteMovieService;
-import com.service.MovieService;
+import com.service.FavouriteToolService;
+import com.service.ToolService;
 import com.service.UserService;
-import com.service.impl.FavouriteMovieServiceImpl;
-import com.service.impl.MovieServiceImpl;
+import com.service.impl.FavouriteToolServiceImpl;
+import com.service.impl.ToolServiceImpl;
 import com.service.impl.UserServiceImpl;
 import com.utils.Page;
 import com.utils.Page2;
@@ -33,10 +33,10 @@ import java.util.List;
  * 描述:用户执行操作
  * Win10
  */
-@WebServlet("/movie.do")
-public class MovieServlet extends BaseServlet {
-    MovieService movieService = new MovieServiceImpl();
-    FavouriteMovieService favouriteMovieService =new FavouriteMovieServiceImpl();
+@WebServlet("/tool.do")
+public class ToolServlet extends BaseServlet {
+    ToolService toolService = new ToolServiceImpl();
+    FavouriteToolService favouriteToolService =new FavouriteToolServiceImpl();
     UserService userService=new UserServiceImpl();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,9 +55,9 @@ public class MovieServlet extends BaseServlet {
     }
 
 
-    public void queryMovieList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page2<Movie> page = movieService.queryMovieByPage2();
+        Page2<Tool> page = toolService.queryToolByPage2();
         System.out.println("page:" + page);
         Gson gson = new Gson();
         //转成字符串
@@ -65,16 +65,16 @@ public class MovieServlet extends BaseServlet {
         //写入返回信息
         response.getWriter().write(jsonStr);
     }
-    public void deleteMovieById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId = request.getParameter("movieId");
-        Integer result = movieService.deleteMovie(Integer.parseInt(movieId));
+    public void deleteToolById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String toolId = request.getParameter("toolId");
+        Integer result = toolService.deleteTool(Integer.parseInt(toolId));
         if (result < 0) {
             response.getWriter().write("false");
         } else {
             response.getWriter().write("true");
         }
     }
-    public void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void deleteTool(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] idNum = request.getParameterValues("idNum[]");
         boolean flag = true;
         Integer result;
@@ -82,7 +82,7 @@ public class MovieServlet extends BaseServlet {
         //System.out.println("idNum:"+idNum2);
         for (int i = 0; i < idNum.length; i++) {
             //System.out.print(idNum[i]+" ");
-            result = movieService.deleteMovie(Integer.parseInt(idNum[i]));
+            result = toolService.deleteTool(Integer.parseInt(idNum[i]));
             //删除失败
             if (result < 0) {
                 flag = false;
@@ -96,8 +96,8 @@ public class MovieServlet extends BaseServlet {
         }
     }
 
-    public void updateMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId = request.getParameter("movieId");
+    public void updateTool(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String toolId = request.getParameter("toolId");
         //要更新的字段名
         String columnName = request.getParameter("columnName");
         //要更新的字段值
@@ -107,8 +107,8 @@ public class MovieServlet extends BaseServlet {
         //columnValue=columnValue.replace("\"", "\\\"");
         columnValue = columnValue.replace("\\", "\\\\");
         //System.out.println("columnValue替换后:"+columnValue);
-        System.out.println(movieId + " " + columnName + " " + columnValue);
-        Integer result = movieService.updateMovieColumnValue(Integer.parseInt(movieId), columnName, columnValue);
+        System.out.println(toolId + " " + columnName + " " + columnValue);
+        Integer result = toolService.updateToolColumnValue(Integer.parseInt(toolId), columnName, columnValue);
         if (result < 0) {
             response.getWriter().write("false");
         } else {
@@ -124,17 +124,17 @@ public class MovieServlet extends BaseServlet {
      * @throws ServletException
      * @throws IOException
      */
-    public void queryMovieListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //电影名称
-        String movieName = request.getParameter("movieName");
+        String toolName = request.getParameter("toolName");
         //电影类型
         String type = request.getParameter("type");
         //主演
         String protagonist = request.getParameter("protagonist");
         //上映年份
         String showTime = request.getParameter("showTime");
-        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
-        Page2<Movie> page = movieService.queryMovieByPage2(movieName, type, protagonist, showTime);
+        //System.out.println("|toolName:"+toolName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        Page2<Tool> page = toolService.queryToolByPage2(toolName, type, protagonist, showTime);
         System.out.println("page2:" + page);
         Gson gson = new Gson();
         //转成字符串
@@ -143,20 +143,20 @@ public class MovieServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
-    public void queryMoviePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Page<Movie> page = movieService.queryMovieByPage(pageNo, Page.PAGE_SIZE);
+        Page<Tool> page = toolService.queryToolByPage(pageNo, Page.PAGE_SIZE);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
     }
 
-    public void addMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Movie movie = new Movie();
-        movie.setHits(0);
-        movie.setPostAddress("/static/images/2.jpg");
+    public void addTool(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Tool tool = new Tool();
+        tool.setHits(0);
+        tool.setDownloadAddr("/static/images/2.jpg");
         if (ServletFileUpload.isMultipartContent(request)) {
             // 创建FileItemFactory 工厂实现类
             FileItemFactory fileItemFactory = new DiskFileItemFactory();
@@ -173,18 +173,18 @@ public class MovieServlet extends BaseServlet {
                         System.out.println("普通项 name:" + fileItem.getFieldName());
                         //参数UTF-8解决乱码
                         System.out.println("value = " + fileItem.getString("UTF-8"));
-                        if ("movieName".equals(fileItem.getFieldName())) {
-                            movie.setMovieName(fileItem.getString("UTF-8"));
+                        if ("toolName".equals(fileItem.getFieldName())) {
+                            tool.setToolName(fileItem.getString("UTF-8"));
                         } else if ("type".equals(fileItem.getFieldName())) {
-                            movie.setType(fileItem.getString("UTF-8"));
+                            tool.setType(fileItem.getString("UTF-8"));
                         } else if ("director".equals(fileItem.getFieldName())) {
-                            movie.setDirector(fileItem.getString("UTF-8"));
+                            tool.setDirector(fileItem.getString("UTF-8"));
                         } else if ("protagonist".equals(fileItem.getFieldName())) {
-                            movie.setProtagonist(fileItem.getString("UTF-8"));
+                            tool.setProtagonist(fileItem.getString("UTF-8"));
                         } else if ("showTime".equals(fileItem.getFieldName())) {
-                            movie.setShowTime(fileItem.getString("UTF-8"));
+                            tool.setShowTime(fileItem.getString("UTF-8"));
                         } else if ("content".equals(fileItem.getFieldName())) {
-                            movie.setContent(fileItem.getString("UTF-8"));
+                            tool.setContent(fileItem.getString("UTF-8"));
                         }
                     } else {
                         //上传的文件
@@ -194,7 +194,7 @@ public class MovieServlet extends BaseServlet {
                         fileItem.write(new File("D:\\project1205\\images\\" + time + fileItem.getName()));
                         //要保存时到数据库的文件名
                         String fileName = "http://localhost:8765/images\\" + time + fileItem.getName();
-                        movie.setPicAddress(fileName);
+                        tool.setPicAddress(fileName);
                     }
                 }
             } catch (FileUploadException e) {
@@ -203,7 +203,7 @@ public class MovieServlet extends BaseServlet {
                 e.printStackTrace();
             }
         }
-        Integer result = movieService.insertMovie(movie);
+        Integer result = toolService.insertTool(tool);
         //System.out.println("result:" + result);
         if (result > 0) {
             response.getWriter().write("true");
@@ -212,21 +212,21 @@ public class MovieServlet extends BaseServlet {
         }
     }
 
-    public void queryMovieById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId = request.getParameter("movieId");
-        Movie movie = movieService.queryMovieById(Integer.parseInt(movieId));
-        if (movie == null) {
+    public void queryToolById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String toolId = request.getParameter("toolId");
+        Tool tool = toolService.queryToolById(Integer.parseInt(toolId));
+        if (tool == null) {
             response.getWriter().write("false");
         } else {
             response.getWriter().write("true");
         }
     }
 
-    public void queryMovieByHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolByHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        List<Movie> list = movieService.queryMovieByHits();
-        Page2<Movie> page = new Page2<>();
+        List<Tool> list = toolService.queryToolByHits();
+        Page2<Tool> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         page.setCount(list.size());
@@ -237,11 +237,11 @@ public class MovieServlet extends BaseServlet {
 //        System.out.println("jsonStr:"+jsonStr);
     }
 
-    public void queryMovieByVoteNum(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolByVoteNum(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        List<Movie> list = movieService.queryMovieByVoteNum();
-        Page2<Movie> page = new Page2<>();
+        List<Tool> list = toolService.queryToolByVoteNum();
+        Page2<Tool> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         page.setCount(list.size());
@@ -252,15 +252,15 @@ public class MovieServlet extends BaseServlet {
 //        System.out.println("jsonStr:"+jsonStr);
     }
 
-    public void queryMovieByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolByToolId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        System.out.println(movieId);
-        Movie movieObj = movieService.queryMovieById(movieId);
-        System.out.println(movieObj);
+        Integer toolId = Integer.valueOf(request.getParameter("toolId"));
+        System.out.println(toolId);
+        Tool toolObj = toolService.queryToolById(toolId);
+        System.out.println(toolObj);
         Gson gson = new Gson();
-        String jsonStr = gson.toJson(movieObj);
+        String jsonStr = gson.toJson(toolObj);
         response.getWriter().write(jsonStr);
     }
 
@@ -271,30 +271,30 @@ public class MovieServlet extends BaseServlet {
      * @throws ServletException
      * @throws IOException
      */
-    public void queryMoviePageLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void queryToolPageLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userName = request.getParameter("userName");
         //System.out.println(userName);
-        List<FavouriteMovie> list = favouriteMovieService.queryFavouriteMovie(userName);
-        List<Movie> movieList = new ArrayList<>();
+        List<FavouriteTool> list = favouriteToolService.queryFavouriteTool(userName);
+        List<Tool> toolList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            //System.out.println(list.get(i).getMovieId());
-            movieList.add(movieService.queryMovieById(list.get(i).getMovieId()));
+            //System.out.println(list.get(i).getToolId());
+            toolList.add(toolService.queryToolById(list.get(i).getToolId()));
         }
-        Page2<Movie> page = new Page2<>();
+        Page2<Tool> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
-        page.setCount(movieList.size());
-        page.setData(movieList);
-        //System.out.println(movieList);
+        page.setCount(toolList.size());
+        page.setData(toolList);
+        //System.out.println(toolList);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);
         //System.out.println(list);
     }
 
-    public void addMovieHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int movieId = Integer.parseInt(request.getParameter("movieId"));
-        int hits=movieService.addMovieHits(movieId);
+    public void addToolHits(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int toolId = Integer.parseInt(request.getParameter("toolId"));
+        int hits= toolService.addToolHits(toolId);
         System.out.println("hits="+hits);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(hits);
@@ -303,14 +303,14 @@ public class MovieServlet extends BaseServlet {
 
 
 
-    public void addMovieVote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void addToolVote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String string=request.getParameter("string");
         String userName=request.getParameter("userName");
         String [] strings=string.split(",");
         Integer result=0;
         for(int i = 0; i < strings.length; i++){
             //System.out.println(strings[i]);
-            result=movieService.addMovieVote(Integer.parseInt(strings[i]));
+            result= toolService.addToolVote(Integer.parseInt(strings[i]));
             if(result<0){
                 break;
             }
@@ -327,15 +327,15 @@ public class MovieServlet extends BaseServlet {
 
         }
     }
-    public void searchMovie(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void searchTool(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String searchMessage=request.getParameter("searchMessage");
-        List<Movie> list =movieService.searchMovie(searchMessage);
-        Page2<Movie> page = new Page2<>();
+        List<Tool> list = toolService.searchTool(searchMessage);
+        Page2<Tool> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         page.setCount(list.size());
         page.setData(list);
-        //System.out.println(movieList);
+        //System.out.println(toolList);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(page);
         response.getWriter().write(jsonStr);

@@ -33,8 +33,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int deleteComment(Integer movieId, String commentUser) {
-        return commentDao.deleteComment(movieId,commentUser);
+    public int deleteComment(Integer toolId, String commentUser) {
+        return commentDao.deleteComment(toolId,commentUser);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page2<Comment> queryCommentByPage2(String movieName, String commentUser, String commentContent) {
+    public Page2<Comment> queryCommentByPage2(String toolName, String commentUser, String commentContent) {
         Page2<Comment> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
         System.out.println("2");
-        List<Comment> list = commentDao.queryAllComment(movieName, commentUser, commentContent);
+        List<Comment> list = commentDao.queryAllComment(toolName, commentUser, commentContent);
         page.setData(list);
         page.setCount(list.size());
         return page;
@@ -98,18 +98,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Integer queryTotalCommentByMovieId(Integer movieId) {
-        return commentDao.queryTotalCommentByMovieId(movieId);
+    public Integer queryTotalCommentByToolId(Integer toolId) {
+        return commentDao.queryTotalCommentByToolId(toolId);
     }
 
     @Override
-    public List<Comment> queryCommentByMovieId(Integer movieId) {
-        return commentDao.queryCommentByMovieId(movieId);
+    public List<Comment> queryCommentByToolId(Integer toolId) {
+        return commentDao.queryCommentByToolId(toolId);
     }
 
     @Override
-    public int addMovieComment(Comment comment) {
-        return commentDao.addMovieComment(comment);
+    public int addToolComment(Comment comment) {
+        return commentDao.addToolComment(comment);
     }
 
 

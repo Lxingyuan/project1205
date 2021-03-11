@@ -18,7 +18,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">电影id</label>
             <div class="layui-input-block">
-                <input onKeypress="checkSpace()" type="text" id="movieId" name="movieId" lay-verify="movieId" autocomplete="off"
+                <input onKeypress="checkSpace()" type="text" id="toolId" name="toolId" lay-verify="toolId" autocomplete="off"
                        placeholder="请输入id" class="layui-input">
             </div>
         </div>
@@ -51,8 +51,8 @@
     var flag=false;
     function find(){
         $.ajax({
-            url: "/movie.do?action=queryMovieById",
-            data: {movieId: $("#movieId").val()},
+            url: "/tool.do?action=queryToolById",
+            data: {toolId: $("#toolId").val()},
             type: "GET",
             async: false,
             dataType: "text",//返回的数据类型
@@ -67,9 +67,9 @@
         });
     }
     $(function () {
-        $("#movieId").on("blur",function () {
-            console.log($("#movieId").val());
-            if($("#movieId").val()==""){
+        $("#toolId").on("blur",function () {
+            console.log($("#toolId").val());
+            if($("#toolId").val()==""){
                 return;
             }
             find();
@@ -85,7 +85,7 @@
             , laydate = layui.laydate;
         //提交时验证规则
         form.verify({
-            movieId: function (value) {
+            toolId: function (value) {
                 if (value.length < 1) {
                     return '请输入id！';
                 }
@@ -103,8 +103,8 @@
         //验证通过，提交
         form.on('submit(demo1)', function () {
             $.ajax({
-                url: "/movie.do?action=updateMovie",
-                data: {movieId: $("#movieId").val(), columnName: "videoAddress", columnValue: $("#videoAddress").val()},
+                url: "/tool.do?action=updateTool",
+                data: {toolId: $("#toolId").val(), columnName: "videoAddress", columnValue: $("#videoAddress").val()},
                 type: "GET",
                 async: false,
                 dataType: "text",//返回的数据类型

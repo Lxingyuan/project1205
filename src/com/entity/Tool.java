@@ -7,15 +7,15 @@ import java.util.Date;
  * 日期: 2020/12/9 10:39
  * 描述:
  */
-public class Movie {
-    private Integer movieId;
-    private String movieName;
+public class Tool {
+    private Integer toolId;
+    private String toolName;
     private String type;
     private String director;
     private String protagonist;
     private String showTime;
     private String picAddress;
-    private String postAddress;
+    private String downloadAddr;
     private String videoAddress;
     private String content;
     private Integer hits;
@@ -33,15 +33,15 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{" +
-                "movieId=" + movieId +
-                ", movieName='" + movieName + '\'' +
+        return "Tool{" +
+                "toolId=" + toolId +
+                ", toolName='" + toolName + '\'' +
                 ", type='" + type + '\'' +
                 ", director='" + director + '\'' +
                 ", protagonist='" + protagonist + '\'' +
                 ", showTime='" + showTime + '\'' +
                 ", picAddress='" + picAddress + '\'' +
-                ", postAddress='" + postAddress + '\'' +
+                ", downloadAddr='" + downloadAddr + '\'' +
                 ", videoAddress='" + videoAddress + '\'' +
                 ", content='" + content + '\'' +
                 ", hits=" + hits +
@@ -51,17 +51,17 @@ public class Movie {
                 '}';
     }
 
-    public Movie() {
+    public Tool() {
     }
 
-    public Movie(String movieName, String type, String director, String protagonist, String showTime, String picAddress, String postAddress, String videoAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
-        this.movieName = movieName;
+    public Tool(String toolName, String type, String director, String protagonist, String showTime, String picAddress, String downloadAddr, String videoAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
+        this.toolName = toolName;
         this.type = type;
         this.director = director;
         this.protagonist = protagonist;
         this.showTime = showTime;
         this.picAddress = picAddress;
-        this.postAddress = postAddress;
+        this.downloadAddr = downloadAddr;
         this.videoAddress = videoAddress;
         this.content = content;
         this.hits = hits;
@@ -70,12 +70,12 @@ public class Movie {
         this.voteNum = voteNum;
     }
 
-    public String getPostAddress() {
-        return postAddress;
+    public String getDownloadAddr() {
+        return downloadAddr;
     }
 
-    public void setPostAddress(String postAddress) {
-        this.postAddress = postAddress;
+    public void setDownloadAddr(String downloadAddr) {
+        this.downloadAddr = downloadAddr;
     }
 
     public String getVideoAddress() {
@@ -86,20 +86,20 @@ public class Movie {
         this.videoAddress = videoAddress;
     }
 
-    public Integer getMovieId() {
-        return movieId;
+    public Integer getToolId() {
+        return toolId;
     }
 
-    public void setMovieId(Integer movieId) {
-        this.movieId = movieId;
+    public void setToolId(Integer toolId) {
+        this.toolId = toolId;
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getToolName() {
+        return toolName;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
+    public void setToolName(String toolName) {
+        this.toolName = toolName;
     }
 
     public String getType() {

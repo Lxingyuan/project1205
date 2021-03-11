@@ -18,7 +18,7 @@
                 </textarea>
             </div>
         </div>
-        <input type="hidden" id="id" name="movieId">
+        <input type="hidden" id="id" name="toolId">
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
@@ -74,7 +74,7 @@
             //上传的文件名
             var noticeId = formData.get("noticeId");
             var noticeContent = formData.get("noticeContent");
-            //console.log(movieId);
+            //console.log(toolId);
             console.log(content);
             $.ajax({
                 url: "/notice.do?action=updateNotice",

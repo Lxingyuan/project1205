@@ -1,17 +1,16 @@
 package com.servlet;
 
 import com.service.AdminService;
-import com.service.MovieService;
+import com.service.ToolService;
 import com.service.UserService;
 import com.service.impl.AdminServiceImpl;
-import com.service.impl.MovieServiceImpl;
+import com.service.impl.ToolServiceImpl;
 import com.service.impl.UserServiceImpl;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.junit.Test;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -78,10 +77,10 @@ public class PicUploadServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        //要更新的是movie表
-        if ("movie".equals(tableName)) {
-            MovieService movieService = new MovieServiceImpl();
-            Integer result = movieService.updateMovieColumnValue(Integer.parseInt(id), columnName, fileName);
+        //要更新的是tool表
+        if ("tool".equals(tableName)) {
+            ToolService toolService = new ToolServiceImpl();
+            Integer result = toolService.updateToolColumnValue(Integer.parseInt(id), columnName, fileName);
             if (result > 0) {
                 response.getWriter().write("true");
             } else {

@@ -45,7 +45,7 @@
             return null;
         }
 
-        function showMovieComment() {
+        function showToolComment() {
             $.ajax({
                 url: "http://localhost:8765/comment.do",
                 data: {action: "queryCommentByTime"},
@@ -54,12 +54,12 @@
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?movieId="+jsonObj.data[i].movieId+">\n" +
+                        $("#newComment").append("<li><a href=detailsPage.html?toolId="+jsonObj.data[i].toolId+">\n" +
                             "<div class=\"text\">\n" +
                             "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
                             "<div class=\"post-meta\">\n" +
                             "<span class=\"mr-2\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
-                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span> 3</span>\n" +
+                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+ jsonObj.data[i].commentTypeId +"</span>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</a>\n" +
@@ -70,21 +70,21 @@
         }
         function rotation() {
             $.ajax({
-                url: "movie.do",
-                data: {action: "queryMovieByHits"},
+                url: "tool.do",
+                data: {action: "queryToolByHits"},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (let j = 0; j < 5; j++) {
-                        $(".categories").append("<li><a href=\"detailsPage.html?movieId=" + jsonObj.data[j].movieId + "\">" + jsonObj.data[j].movieName + "</a></li>")
+                        $(".categories").append("<li><a href=\"detailsPage.html?toolId=" + jsonObj.data[j].toolId + "\">" + jsonObj.data[j].toolName + "</a></li>")
                     }
                 }
             });
         }
 
         $(function () {
-            showMovieComment();
+            showToolComment();
             rotation();
             $("#logOut").on("click", function () {
                 var name = readCookie("adminName");
@@ -189,35 +189,35 @@
                 }
             }
 
-            var movieId = UrlParm.parm("movieId");
+            var toolId = UrlParm.parm("toolId");
             $.ajax({
-                url: "movie.do",
-                data: {action: "addMovieHits", movieId: movieId},
+                url: "tool.do",
+                data: {action: "addToolHits", toolId: toolId},
                 type: "GET",
             });
             $.ajax({
-                url: "movie.do",
-                data: {action: "queryMovieByMovieId", movieId: movieId},
+                url: "tool.do",
+                data: {action: "queryToolByToolId", toolId: toolId},
 
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
                     let jsonObj = JSON.parse(data);
                     let hits = jsonObj.hits;
-                    var movieId = jsonObj.movieId;
-                    $(".mb-4").append(jsonObj.movieName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
+                    var toolId = jsonObj.toolId;
+                    $(".mb-4").append(jsonObj.toolName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
-                        "<a class=\"btn btn-primary btn-sm text-white\" id='showMovie'>播放预告片</a>" +
+                        "<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放预告片</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='like' style='color: black;margin-left: 5px'>喜欢</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
                         "</center>");
                     $(".bio-body>img").attr("src", jsonObj.picAddress);
-                    $("#movieMassage").append("电影类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>导演：<span>" + jsonObj.director + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>上映年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
-                    $("#showMovie").on("click", function () {
+                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>导演：<span>" + jsonObj.director + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>上映年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
+                    $("#showTool").on("click", function () {
                         layer.open({
                             type: 1,
-                            title: jsonObj.movieName + '的预告片',
+                            title: jsonObj.toolName + '的预告片',
                             area: ['1100px', '700px'],
                             shade: 0.1,
                             maxmin: true,
@@ -236,10 +236,10 @@
                         $("#unLike").hide();
                     }
 
-                    //判断用户是否喜欢了当前电影
+                    //判断用户是否喜欢了当前工具
                     $.ajax({
-                        url: "/movie.do",
-                        data: {action: "queryMoviePageLimit", userName: readCookie("userName")},
+                        url: "/tool.do",
+                        data: {action: "queryToolPageLimit", userName: readCookie("userName")},
                         type: "GET",
                         dataType: "text",
                         success: function (data) {
@@ -247,16 +247,16 @@
                             let jsonObj = JSON.parse(data);
                             var flag = false;
                             for (let i = 0; i < jsonObj.data.length; i++) {
-                                //console.log(jsonObj.data[i].movieId);
-                                //当前用户喜欢的电影中有这个电影的id
-                                if (jsonObj.data[i].movieId == movieId) {
+                                //console.log(jsonObj.data[i].toolId);
+                                //当前用户喜欢的工具中有这个工具的id
+                                if (jsonObj.data[i].toolId == toolId) {
                                     //把“喜欢”隐藏
                                     $("#like").hide();
                                     flag = true;
                                     break;
                                 }
                             }
-                            //没有喜欢这个电影
+                            //没有喜欢这个工具
                             if (flag == false) {
                                 //把“取消喜欢”隐藏
                                 $("#unLike").hide();
@@ -267,8 +267,8 @@
                     $("#like").on("click", function () {
                         //layer.msg("喜欢")
                         $.ajax({
-                            url: "/favouriteMovie.do",
-                            data: {action: "insert", movieId: movieId, userName: readCookie("userName"),},
+                            url: "/favouriteTool.do",
+                            data: {action: "insert", toolId: toolId, userName: readCookie("userName"),},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
@@ -285,8 +285,8 @@
                     $("#unLike").on("click", function () {
                         //layer.msg("取消喜欢")
                         $.ajax({
-                            url: "/favouriteMovie.do",
-                            data: {action: "deleteFavouriteMovie", movieId: movieId, userName: readCookie("userName"),},
+                            url: "/favouriteTool.do",
+                            data: {action: "deleteFavouriteTool", toolId: toolId, userName: readCookie("userName"),},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
@@ -305,7 +305,7 @@
             //求总评论数
             $.ajax({
                 url: "comment.do",
-                data: {action: "queryTotalCommentByMovieId", movieId: movieId},
+                data: {action: "queryTotalCommentByToolId", toolId: toolId},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -316,7 +316,7 @@
             //获取数据库评论情况
             $.ajax({
                 url: "comment.do",
-                data: {action: "queryCommentByMovieId", movieId: movieId},
+                data: {action: "queryCommentByToolId", toolId: toolId},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -330,7 +330,7 @@
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
                                 "                                   <a class='deleteComment' href='javascript:;' style='color: red;'>删除" +
-                                "<input type='hidden' value='" + jsonObj.data[i].movieId + "'>" +
+                                "<input type='hidden' value='" + jsonObj.data[i].toolId + "'>" +
                                 "                                   <span style='display: none'>"+jsonObj.data[i].commentUser+"</span>" +
                                 "                                   </a></div>\n" +
                                 "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
@@ -354,13 +354,13 @@
 
                     $(".deleteComment").on("click", function () {
                         //alert(123)
-                        var movieId = $(this).children("input").val();
+                        var toolId = $(this).children("input").val();
                         var commentUser = $(this).children("span").html();
-                        //console.log(movieId + " " +commentUser);
+                        //console.log(toolId + " " +commentUser);
                         layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
                             $.ajax({
                                 url: "comment.do",
-                                data: {action: "deleteComment2", movieId: movieId,commentUser:commentUser},
+                                data: {action: "deleteComment2", toolId: toolId,commentUser:commentUser},
                                 type: "GET",
                                 dataType: "text",
                                 success: function (data) {
@@ -386,8 +386,8 @@
                     url: "comment.do",
                     //回传评论数据
                     data: {
-                        action: "addMovieComment",
-                        movieId: movieId,
+                        action: "addToolComment",
+                        toolId: toolId,
                         username: name,
                         commentContent: $("#comment").val()
                     },
@@ -450,7 +450,7 @@
         <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content">
                 <h1 class="mb-4"></h1>
-                <div class="mr-xl-2 text-black" id="movieMassage">
+                <div class="mr-xl-2 text-black" id="toolMassage">
 
                 </div>
                 <!--分隔符-->
@@ -494,7 +494,7 @@
                 </div>
 
                 <div class="sidebar-box">
-                    <h3 class="heading">高浏览电影</h3>
+                    <h3 class="heading">高浏览工具</h3>
                     <ul class="categories">
                     </ul>
                 </div>

@@ -15,14 +15,14 @@ import java.util.List;
 public class CommentDaoImpl extends BaseDao implements CommentDao {
     @Override
     public int insertComment(Comment comment) {
-        String sql = "insert into comment (CommentTypeId,MovieId,CommentUser,CommentContent)values(?,?,?,?,?)";
-        return update(sql, comment.getCommentTypeId(), comment.getMovieId(), comment.getCommentUser(), comment.getCommentContent());
+        String sql = "insert into comment (CommentTypeId,ToolId,CommentUser,CommentContent)values(?,?,?,?,?)";
+        return update(sql, comment.getCommentTypeId(), comment.getToolId(), comment.getCommentUser(), comment.getCommentContent());
     }
 
     @Override
     public int updateComment(Comment comment) {
-        String sql = "update comment set UpdateTime = ?,CommentTypeId = ?,MovieId = ?,CommentUser = ?,CommentContent = ? where CommentId = ?";
-        return update(sql, comment.getUpdateTime(), comment.getCommentTypeId(), comment.getMovieId(), comment.getCommentUser(), comment.getCommentContent(), comment.getCommentId());
+        String sql = "update comment set UpdateTime = ?,CommentTypeId = ?,ToolId = ?,CommentUser = ?,CommentContent = ? where CommentId = ?";
+        return update(sql, comment.getUpdateTime(), comment.getCommentTypeId(), comment.getToolId(), comment.getCommentUser(), comment.getCommentContent(), comment.getCommentId());
 
     }
 
@@ -46,9 +46,9 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     @Override
-    public int deleteComment(Integer movieId, String commentUser) {
-        String sql = "delete from comment where movieId = ? and commentUser = ?";
-        return update(sql, movieId,commentUser);
+    public int deleteComment(Integer toolId, String commentUser) {
+        String sql = "delete from comment where toolId = ? and commentUser = ?";
+        return update(sql, toolId,commentUser);
     }
 
     @Override
@@ -64,16 +64,16 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     public List<Comment> queryAllComment() {
-        String sql = "select c.* , m.* from `comment` c,`movie` m WHERE c.MovieId=m.MovieId";
+        String sql = "select c.* , m.* from `comment` c,`tool` m WHERE c.ToolId=m.ToolId";
         return queryForList(Comment.class, sql);
     }
 
     @Override
-    public List<Comment> queryAllComment(String movieName, String commentUser, String commentContent) {
-        String sql = "SELECT c.* , m.* FROM `comment` c,`movie` m WHERE m.movieName LIKE '%' AND c.commentUser LIKE '%' AND c.commentContent LIKE '%' AND c.MovieId=m.MovieId;";
-        if (StringUtils.isNotEmpty(movieName)) {
-            String string = "movieName LIKE '%" + movieName + "%'";
-            sql = sql.replace("movieName LIKE '%'", string);
+    public List<Comment> queryAllComment(String toolName, String commentUser, String commentContent) {
+        String sql = "SELECT c.* , m.* FROM `comment` c,`tool` m WHERE m.toolName LIKE '%' AND c.commentUser LIKE '%' AND c.commentContent LIKE '%' AND c.ToolId=m.ToolId;";
+        if (StringUtils.isNotEmpty(toolName)) {
+            String string = "toolName LIKE '%" + toolName + "%'";
+            sql = sql.replace("toolName LIKE '%'", string);
         }
         if (StringUtils.isNotEmpty(commentUser)) {
             String string = "commentUser LIKE '%" + commentUser + "%'";
@@ -86,20 +86,20 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
         return queryForList(Comment.class, sql);
     }
 
-    public Integer queryTotalCommentByMovieId(Integer movieId) {
-        String sql = "select count(1) from comment where movieId ='"+movieId+"'";
+    public Integer queryTotalCommentByToolId(Integer toolId) {
+        String sql = "select count(1) from comment where toolId ='"+toolId+"'";
         return Math.toIntExact((Long) queryForSingleValue(sql));
     }
 
-    public List<Comment> queryCommentByMovieId(Integer movieId) {
-        String sql="SELECT * FROM comment c,user u  where c.movieId = '"+movieId+"' and c.commentUser=u.userName ORDER BY c.CreateTime DESC";
+    public List<Comment> queryCommentByToolId(Integer toolId) {
+        String sql="SELECT * FROM comment c,user u  where c.toolId = '"+toolId+"' and c.commentUser=u.userName ORDER BY c.CreateTime DESC";
         return  queryForList(Comment.class,sql);
     }
 
     @Override
-    public int addMovieComment(Comment comment) {
-        String sql = "insert into comment (MovieId,CommentUser,CommentContent)values(?,?,?)";
-        return update(sql,  comment.getMovieId(), comment.getCommentUser(), comment.getCommentContent());
+    public int addToolComment(Comment comment) {
+        String sql = "insert into comment (ToolId,CommentUser,CommentContent)values(?,?,?)";
+        return update(sql,  comment.getToolId(), comment.getCommentUser(), comment.getCommentContent());
     }
 }
 

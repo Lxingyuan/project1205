@@ -50,14 +50,14 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">电影名称</label>
+                    <label class="layui-form-label">工具名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="movieName" placeholder="请输入" autocomplete="off" class="layui-input"
-                               id="movieName">
+                        <input type="text" name="toolName" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="toolName">
                     </div>
                 </div>
                 <div class="layui-inline" id="kkkk">
-                    <label class="layui-form-label">电影类型</label>
+                    <label class="layui-form-label">工具类型</label>
                     <div class="layui-input-block">
                         <input type="text" name="type" placeholder="请输入" autocomplete="off" class="layui-input"
                                id="type">
@@ -101,7 +101,7 @@
     <img src=" {{ d.picAddress }} " width="100%">
 </script>
 <script type="text/html" id="imgTp2">
-    <img src=" {{ d.postAddress }} " width="100%">
+    <img src=" {{ d.downloadAddr }} " width="100%">
 </script>
 
 <script type="text/html" id="toolbarDemo">
@@ -135,7 +135,7 @@
         table.render({
             elem: '#demo'
             , toolbar: '#toolbarDemo'
-            , url: '/movie.do?action=queryMovieList' //数据接口
+            , url: '/tool.do?action=queryToolList' //数据接口
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , page: {
                 limit: 5,//指定每页显示的条数
@@ -146,8 +146,8 @@
             , cols: [[ //表头
                 {type: 'numbers'}
                 , {type: 'checkbox'}
-                , {field: 'movieId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
-                , {field: 'movieName', title: '电影名', width: 130, edit: 'text'}
+                , {field: 'toolId', title: 'ID', width: 60, sort: true, unresize: true, totalRowText: '合计'}
+                , {field: 'toolName', title: '工具名', width: 130, edit: 'text'}
                 , {field: 'type', title: '类型', width: 150, edit: 'text'}
                 , {
                     field: 'picAddress',
@@ -157,18 +157,19 @@
                     unresize: true,
                     event: 'updateImg'
                 }
-                , {
-                    field: 'postAddress',
+                /*, {
+                    field: 'downloadAddr',
                     title: '大海报预览',
                     width: 130,
                     templet: '#imgTp2',
                     unresize: true,
-                    event: 'postAddress'
-                }
+                    event: 'downloadAddr'
+                }*/
+                , {field: 'downloadAddr', title: '下载地址', width: 130, edit: 'text'}
                 , {field: 'director', title: '导演', width: 130, edit: 'text'}
                 , {field: 'protagonist', title: '主演', width: 130, edit: 'text'}
                 , {field: 'showTime', title: '上映年份', width: 100, sort: true, edit: 'text'}
-                , {field: 'content', title: '电影详细介绍', width: 150, event: 'content'}
+                , {field: 'content', title: '工具详细介绍', width: 150, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, edit: 'text'}
                 , {field: 'voteNum', title: '得票数', width: 100, sort: true, edit: 'text'}
                 , {field: 'videoAddress', title: '预告片', width: 100, templet: '#videoAddress'}
@@ -215,7 +216,7 @@
                     layer.open({
                         type: 2
                         ,
-                        title: '新增电影'
+                        title: '新增工具'
                         ,
                         area: ['600px', '700px']
                         ,
@@ -225,7 +226,7 @@
                         ,
                         offset: ['5%', '30%']
                         ,
-                        content: '/views/addMovie.html'
+                        content: '/views/addTool.html'
                         ,
                         btn: ['关闭']
                         ,
@@ -239,13 +240,13 @@
                     var items = checkStatus.data;//选中行数据
                     var idNum = new Array();
                     for (var i = 0; i < items.length; i++) {
-                        idNum.push(items[i].movieId);
+                        idNum.push(items[i].toolId);
                     }
                     //console.log(idNum);//保存的id列表
                     if (items.length != 0) {
                         layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
                             $.ajax({
-                                url: "/movie.do?action=deleteMovie",
+                                url: "/tool.do?action=deleteTool",
                                 data: {idNum: idNum},
                                 type: "GET",
                                 async: false,
@@ -282,10 +283,10 @@
             //删除
             if (layEvent === 'del') {
                 var idNum = new Array();
-                idNum.push(data.movieId);
+                idNum.push(data.toolId);
                 layer.confirm('您确定要删除这条数据吗?', {icon: 3, title: '提示'}, function (index) {
                     $.ajax({
-                        url: "/movie.do?action=deleteMovie",
+                        url: "/tool.do?action=deleteTool",
                         data: {idNum: idNum},
                         type: "GET",
                         async: false,
@@ -312,15 +313,15 @@
                 //console.log(data)
                 layer.open({
                     type: 1,
-                    title: data.movieName + '的预告片',
+                    title: data.toolName + '的预告片',
                     area: ['1100px', '700px'],
                     shade: 0.1,
                     maxmin: true,
                     offset: ['3%', '12%'],
                     content: '<div style="padding: 10px 40px;">                                    <form id="f1" >\n' +
                     '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
-                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="tool">\n' +
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
                     '                                                <iframe height=600 width=1000 src="' + data.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
                     '                                            <input onKeypress="checkSpace()" type="text" id="videoAddress0" name="videoAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
@@ -347,8 +348,8 @@
                     }, function () {
                         // 按钮1的事件
                         $.ajax({
-                            url: "/movie.do?action=updateMovie",
-                            data: {movieId: data.movieId, columnName: "videoAddress", columnValue: $("#videoAddress0").val()},
+                            url: "/tool.do?action=updateTool",
+                            data: {toolId: data.toolId, columnName: "videoAddress", columnValue: $("#videoAddress0").val()},
                             type: "GET",
                             async: false,
                             dataType: "text",//返回的数据类型
@@ -378,7 +379,7 @@
                 layer.open({
                     type: 2
                     ,
-                    title: '修改电影详细信息'
+                    title: '修改工具详细信息'
                     ,
                     area: ['700px', '500px']
                     ,
@@ -388,7 +389,7 @@
                     ,
                     offset: ['5%', '30%']
                     ,
-                    content: '/views/editMovieContent.html'
+                    content: '/views/editToolContent.html'
                     ,
                     btn: ['关闭']
                     ,
@@ -396,7 +397,7 @@
                         //console.log(data.content);
                         let body = layer.getChildFrame('body', index);
                         body.find("#content").html(data.content);
-                        body.find("#id").val(data.movieId);
+                        body.find("#id").val(data.toolId);
                         layui.form.render();
                     },
                     yes: function () {
@@ -410,15 +411,15 @@
 
                 layer.open({
                     type: 1,
-                    title: '修改“' + data.movieName + '”的图片',
+                    title: '修改“' + data.toolName + '”的图片',
                     area: ['500px', '590px'],
                     shade: 0.1,
                     maxmin: true,
                     offset: ['10%', '35%'],
                     content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
                     '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
-                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="tool">\n' +
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
                     '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
                     '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.picAddress + '"/>\n' +
@@ -491,23 +492,23 @@
                 });
             }
             //点击上传大海报
-            else if (layEvent === 'postAddress') {
+            /*else if (layEvent === 'downloadAddr') {
                 //layer.msg(layEvent);
 
                 layer.open({
                     type: 1,
-                    title: '修改“' + data.movieName + '”的大海报图片',
+                    title: '修改“' + data.toolName + '”的大海报图片',
                     area: ['1100px', '700px'],
                     shade: 0.1,
                     maxmin: true,
                     offset: ['3%', '12%'],
                     content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
                     '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="' + data.movieId + '">\n' +
-                    '                                            <input type="hidden" name="tableName" value="movie">\n' +
-                    '                                            <input type="hidden" name="columnName" value="postAddress">\n' +
+                    '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
+                    '                                            <input type="hidden" name="tableName" value="tool">\n' +
+                    '                                            <input type="hidden" name="columnName" value="downloadAddr">\n' +
                     '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
-                    '                                            <img id="cropedBigImg" style="width: 900px;height: 600px;" src="' + data.postAddress + '"/>\n' +
+                    '                                            <img id="cropedBigImg" style="width: 900px;height: 600px;" src="' + data.downloadAddr + '"/>\n' +
                     '                                        </div>\n' +
                     '                                        <button type="button" id="chuan">确认上传</button>\n' +
                     '                                    </form></div>'
@@ -575,7 +576,7 @@
                         }
                     });
                 });
-            }
+            }*/
         });
 
         //监听单元格编辑
@@ -590,7 +591,7 @@
                 //以&分隔的中文
                 var $zz = /^([\u4e00-\u9fa5]+&)*([\u4e00-\u9fa5]+)$/;
                 if ($zz.test(value) == false) {
-                    layer.msg('电影类型格式不对！(以&分隔的中文！)');
+                    layer.msg('工具类型格式不对！(以&分隔的中文！)');
                     table.reload('demo', {
                         page: {
                             curr: recodePage
@@ -648,8 +649,8 @@
                 //alert("确认")
                 // 按钮1的事件
                 $.ajax({
-                    url: "/movie.do?action=updateMovie",
-                    data: {movieId: data.movieId, columnName: field, columnValue: value},
+                    url: "/tool.do?action=updateTool",
+                    data: {toolId: data.toolId, columnName: field, columnValue: value},
                     type: "GET",
                     async: false,
                     dataType: "text",//返回的数据类型
@@ -679,13 +680,13 @@
         //条件查询
         $("#search").on("click", function () {
             //layer.msg('233');
-            //layer.msg($("#movieName").val());
+            //layer.msg($("#toolName").val());
             //layer.msg($("#showTime").val());
             table.reload('demo', {
-                url: '/movie.do?action=queryMovieListLimit' //数据接口
+                url: '/tool.do?action=queryToolListLimit' //数据接口
                 ,
                 where: {
-                    movieName: $("#movieName").val(),
+                    toolName: $("#toolName").val(),
                     type: $("#type").val(),
                     protagonist: $("#protagonist").val(),
                     showTime: $("#showTime").val()

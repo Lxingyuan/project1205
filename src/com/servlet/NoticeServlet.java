@@ -108,7 +108,7 @@ public class NoticeServlet extends BaseServlet {
         //公告创建人
         String noticeUser=request.getParameter("noticeUser");
 
-        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        //System.out.println("|toolName:"+toolName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
         Page2<Notice> page = noticeService.queryNoticeByPage2(noticeHead,noticeContent,noticeUser);
         System.out.println("page2:"+page);
         Gson gson = new Gson();

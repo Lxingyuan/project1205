@@ -1,8 +1,6 @@
 package com.servlet;
 
-import com.dao.BaseDao;
 import com.entity.Comment;
-import com.entity.Movie;
 import com.google.gson.Gson;
 import com.service.CommentService;
 import com.service.impl.CommentServiceImpl;
@@ -10,7 +8,6 @@ import com.utils.Page2;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -93,14 +90,14 @@ public class CommentServlet extends BaseServlet {
     public void queryCommentListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //公告标题
-        String movieName = request.getParameter("movieName");
+        String toolName = request.getParameter("toolName");
         //公告内容
         String commentUser = request.getParameter("commentUser");
         //公告创建人
         String commentContent = request.getParameter("commentContent");
 
-        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
-        Page2<Comment> page = commentService.queryCommentByPage2(movieName, commentUser, commentContent);
+        //System.out.println("|toolName:"+toolName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        Page2<Comment> page = commentService.queryCommentByPage2(toolName, commentUser, commentContent);
         System.out.println("page2:" + page);
         Gson gson = new Gson();
         //转成字符串
@@ -123,18 +120,18 @@ public class CommentServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
-    public void queryTotalCommentByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        int totalNum = commentService.queryTotalCommentByMovieId(movieId);
+    public void queryTotalCommentByToolId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer toolId = Integer.valueOf(request.getParameter("toolId"));
+        int totalNum = commentService.queryTotalCommentByToolId(toolId);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(totalNum);
         response.getWriter().write(jsonStr);
 
     }
 
-    public void queryCommentByMovieId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
-        List<Comment> comments = commentService.queryCommentByMovieId(movieId);
+    public void queryCommentByToolId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer toolId = Integer.valueOf(request.getParameter("toolId"));
+        List<Comment> comments = commentService.queryCommentByToolId(toolId);
         Page2<Comment> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
@@ -146,20 +143,20 @@ public class CommentServlet extends BaseServlet {
         response.getWriter().write(jsonStr);
     }
 
-    public void addMovieComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer movieId = Integer.valueOf(request.getParameter("movieId"));
+    public void addToolComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer toolId = Integer.valueOf(request.getParameter("toolId"));
         String username = request.getParameter("username");
         String commentContent = request.getParameter("commentContent");
-        System.out.println("movieId=" + movieId + " username=" + username + "comment=" + commentContent);
+        System.out.println("toolId=" + toolId + " username=" + username + "comment=" + commentContent);
 
         Comment comment1 = new Comment();
-        comment1.setMovieId(movieId);
+        comment1.setToolId(toolId);
         comment1.setCommentUser(username);
         comment1.setCommentContent(commentContent);
         if ("".equals(username)) {
             response.getWriter().write("false");
         } else {
-            Integer result = commentService.addMovieComment(comment1);
+            Integer result = commentService.addToolComment(comment1);
             if (result < 0) {
                 response.getWriter().write("false");
             } else {
@@ -168,9 +165,9 @@ public class CommentServlet extends BaseServlet {
         }
     }
     public void deleteComment2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String movieId = request.getParameter("movieId");
+        String toolId = request.getParameter("toolId");
         String commentUser = request.getParameter("commentUser");
-        Integer result=commentService.deleteComment(Integer.parseInt(movieId),commentUser);
+        Integer result=commentService.deleteComment(Integer.parseInt(toolId),commentUser);
         if (result < 0) {
             response.getWriter().write("false");
         } else {

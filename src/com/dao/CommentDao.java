@@ -25,18 +25,18 @@ public interface CommentDao {
     //删除评论信息
     int deleteComment(Integer commentId);
     //删除评论信息
-    int deleteComment(Integer movieId,String commentUser);
+    int deleteComment(Integer toolId,String commentUser);
     Integer queryPageTotalCounts();
 
     List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);
 
     List<Comment> queryAllComment();
 
-    List<Comment> queryAllComment(String movieName,String commentUser,String commentContent);
+    List<Comment> queryAllComment(String toolName,String commentUser,String commentContent);
 
-    Integer queryTotalCommentByMovieId(Integer movieId);
+    Integer queryTotalCommentByToolId(Integer toolId);
 
-    List<Comment> queryCommentByMovieId(Integer movieId);
+    List<Comment> queryCommentByToolId(Integer toolId);
 
-    int addMovieComment(Comment comment);
+    int addToolComment(Comment comment);
 }

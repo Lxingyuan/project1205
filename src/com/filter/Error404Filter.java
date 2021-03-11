@@ -43,15 +43,15 @@ public class Error404Filter implements Filter {
         boolean flag=false;
         for (Cookie cookie: cookies) {
             if (cookie.getName().equals("adminName")) {
-                //response.sendRedirect("/views/MovieNoFound.html");
+                //response.sendRedirect("/views/ToolNoFound.html");
                 flag=true;
                 break;
             }
         }
         if(flag==true){
-            response.sendRedirect("/views/MovieNoFound.html");
+            response.sendRedirect("/views/ToolNoFound.html");
         }else {
-            response.sendRedirect("/views/MovieNoFound2.html");
+            response.sendRedirect("/views/ToolNoFound2.html");
         }
 
     }

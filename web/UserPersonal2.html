@@ -85,9 +85,9 @@
         <div class="layui-col-md9" style="background: #9cabb4">
             <div class="grid-demo">
                 <br>
-                <center><b style="font-size: 20px;color: black;">TA喜欢的电影</b></center>
+                <center><b style="font-size: 20px;color: black;">TA喜欢的工具</b></center>
                 <br>
-                <div class="row" id="hotMovie">
+                <div class="row" id="hotTool">
                 </div>
                 <ul class="pagination">
                 </ul>
@@ -290,33 +290,33 @@
     function initRightTop() {
         var userName = UrlParm.parm("userName");
         $.ajax({
-            url: "/movie.do",
-            data: {action: "queryMoviePageLimit", userName: userName},
+            url: "/tool.do",
+            data: {action: "queryToolPageLimit", userName: userName},
             type: "GET",
             dataType: "text",
             success: function (data) {
                 //console.log(data);
                 let jsonObj = JSON.parse(data);
 
-                $("#hotMovie").empty();
+                $("#hotTool").empty();
 
                 for (let i = 0; i < jsonObj.data.length; i++) {
                     //console.log(jsonObj.items[i]);
                     let colmd6 = $("<div class=\"col-md-3\" style=\"margin-left: 60px;height: 500px\"></div>");
-                    //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
+                    //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
                     let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-                    let img = $("<a href=\"detailsPage.html?movieId=" + jsonObj.data[i].movieId + "\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
+                    let img = $("<a href=\"detailsPage.html?toolId=" + jsonObj.data[i].toolId + "\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
                     let blogbody = $("<div class=\"blog-content-body\"></div>");
                     let postmeta = $("<div class=\"post-meta\"></div>");
                     postmeta.append("<span class=\"category\">" + jsonObj.data[i].type + "</span>");
                     postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.data[i].showTime + "</span>");
                     postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.data[i].hits + "</span>")
                     blogbody.append(postmeta);
-                    blogbody.append("<center><h2>" + jsonObj.data[i].movieName + "</h2></center>");
+                    blogbody.append("<center><h2>" + jsonObj.data[i].toolName + "</h2></center>");
                     blogentry.append(img);
                     blogentry.append(blogbody);
                     colmd6.append(blogentry);
-                    $("#hotMovie").append(colmd6);
+                    $("#hotTool").append(colmd6);
                 }
             }
         });

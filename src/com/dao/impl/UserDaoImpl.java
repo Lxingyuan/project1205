@@ -45,7 +45,7 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 
     @Override
     public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
-        //System.out.println("dao中:"+movieId+" "+columnName+" "+columnValue);
+        //System.out.println("dao中:"+toolId+" "+columnName+" "+columnValue);
         String sql = "update user set " + columnName + " = '" + columnValue + "' where userId = " + userId;
         //System.out.println(sql);
         return update(sql);

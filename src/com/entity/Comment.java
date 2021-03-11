@@ -10,8 +10,8 @@ import java.util.Date;
 public class Comment {
     private Integer commentId;
     private Integer commentTypeId;
-    private Integer movieId;
-    private String movieName;
+    private Integer toolId;
+    private String toolName;
     private String commentUser;
     private String headPic ;
     private String commentContent;
@@ -27,8 +27,8 @@ public class Comment {
         return "Comment{" +
                 "commentId=" + commentId +
                 ", commentTypeId=" + commentTypeId +
-                ", movieId=" + movieId +
-                ", movieName='" + movieName + '\'' +
+                ", toolId=" + toolId +
+                ", toolName='" + toolName + '\'' +
                 ", commentUser='" + commentUser + '\'' +
                 ", headPic='" + headPic + '\'' +
                 ", commentContent='" + commentContent + '\'' +
@@ -37,11 +37,11 @@ public class Comment {
                 '}';
     }
 
-    public Comment(Integer commentId, Integer commentTypeId, Integer movieId, String movieName, String commentUser, String userHead, String commentContent, Date createTime, Date updateTime) {
+    public Comment(Integer commentId, Integer commentTypeId, Integer toolId, String toolName, String commentUser, String userHead, String commentContent, Date createTime, Date updateTime) {
         this.commentId = commentId;
         this.commentTypeId = commentTypeId;
-        this.movieId = movieId;
-        this.movieName = movieName;
+        this.toolId = toolId;
+        this.toolName = toolName;
         this.commentUser = commentUser;
 
         this.commentContent = commentContent;
@@ -57,12 +57,12 @@ public class Comment {
         this.headPic = headPic;
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getToolName() {
+        return toolName;
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
+    public void setToolName(String toolName) {
+        this.toolName = toolName;
     }
 
     public Integer getCommentId() {
@@ -81,12 +81,12 @@ public class Comment {
         this.commentTypeId = commentTypeId;
     }
 
-    public Integer getMovieId() {
-        return movieId;
+    public Integer getToolId() {
+        return toolId;
     }
 
-    public void setMovieId(Integer movieId) {
-        this.movieId = movieId;
+    public void setToolId(Integer toolId) {
+        this.toolId = toolId;
     }
 
     public String getCommentUser() {

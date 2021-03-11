@@ -35,8 +35,8 @@
         $(function () {
             $("#search").on("click", function () {
                 $.ajax({
-                    url: "movie.do",
-                    data: {action: "searchMovie", searchMessage: $("#searchContent").val()},
+                    url: "tool.do",
+                    data: {action: "searchTool", searchMessage: $("#searchContent").val()},
                     type: "GET",
                     dataType: "text",
                     success: function (data) {
@@ -45,10 +45,10 @@
                         $(".pagination").empty();
                         for (let i = 0; i < jsonObj.data.length; i++) {
                             $("#searchList").append("<div class=\"post-entry-horzontal\" >\n" +
-                                "            <a style='width: 700px' href=detailsPage.html?movieId=" + jsonObj.data[i].movieId + ">\n" +
+                                "            <a style='width: 700px' href=detailsPage.html?toolId=" + jsonObj.data[i].toolId + ">\n" +
                                 "                <img class=\"image\" src= "+jsonObj.data[i].picAddress+">\n" +
                                 "                <span class=\"text\">\n" +
-                                "                      <h2>"+jsonObj.data[i].movieName+"</h2>\n" +
+                                "                      <h2>"+jsonObj.data[i].toolName+"</h2>\n" +
                                 "                      <div class=\"post-meta\">\n" +
                                 "                        <span class=\"category\">"+jsonObj.data[i].type+"</span>\n" +
                                 "                        <span class=\"mr-2\">"+jsonObj.data[i].showTime+"</span> &bullet;\n" +

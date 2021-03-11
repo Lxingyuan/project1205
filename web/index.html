@@ -46,18 +46,18 @@
         }
 
         $(function () {
-            hotMovie(1);
+            hotTool(1);
             rotation();
             showNotice();
-            showMovieComment();
+            showToolComment();
             //删除按钮事件
-            $("body").on("click", ".deleteMovie", function () {
+            $("body").on("click", ".deleteTool", function () {
                 //alert($(this).children("input").val());
-                var movieId = $(this).children("input").val();
+                var toolId = $(this).children("input").val();
                 layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
                     $.ajax({
-                        url: "/movie.do?action=deleteMovieById",
-                        data: {movieId: movieId},
+                        url: "/tool.do?action=deleteToolById",
+                        data: {toolId: toolId},
                         type: "GET",
                         async: false,
                         dataType: "text",//返回的数据类型
@@ -210,7 +210,7 @@
                     ,
                     offset: ['10%', '34%']
                     ,
-                    content: '/views/voteMovie.html'
+                    content: '/views/voteTool.html'
                     ,
                     btn: ['关闭']
                     ,
@@ -242,19 +242,19 @@
             });
         }
 
-        function hotMovie(pageNo) {
+        function hotTool(pageNo) {
             $.ajax({
-                url: "http://localhost:8765/movie.do",
-                data: {action: "queryMoviePage", pageNo: pageNo},
+                url: "http://localhost:8765/tool.do",
+                data: {action: "queryToolPage", pageNo: pageNo},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
-                    hotMovieinit(data);
+                    hotToolinit(data);
                 }
             });
         }
 
-        function showMovieComment() {
+        function showToolComment() {
             $.ajax({
                 url: "http://localhost:8765/comment.do",
                 data: {action: "queryCommentByTime"},
@@ -263,7 +263,7 @@
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?movieId=" + jsonObj.data[i].movieId + ">\n" +
+                        $("#newComment").append("<li><a href=detailsPage.html?toolId=" + jsonObj.data[i].toolId + ">\n" +
                             "<div class=\"text\">\n" +
                             "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
                             "<div class=\"post-meta\">\n" +
@@ -280,8 +280,8 @@
 
         function rotation() {
             $.ajax({
-                url: "movie.do",
-                data: {action: "queryMovieByVoteNum"},
+                url: "tool.do",
+                data: {action: "queryToolByVoteNum"},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -290,22 +290,22 @@
                     //jsonObj.data表示json字符串中key为data对应的值
                     //console.log(jsonObj.data.length);
                     for (let i = 0; i < 3; i++) {
-                        $("#img" + (i + 1)).attr("src", jsonObj.data[i].postAddress);
-                        $("#img" + (i + 1)).attr("title", jsonObj.data[i].movieName);
-                        $("#a" + (i + 1)).attr('href', "detailsPage.html?movieId=" + jsonObj.data[i].movieId);
+                        $("#img" + (i + 1)).attr("src", jsonObj.data[i].picAddress);
+                        $("#img" + (i + 1)).attr("title", jsonObj.data[i].toolName);
+                        $("#a" + (i + 1)).attr('href', "detailsPage.html?toolId=" + jsonObj.data[i].toolId);
                     }
-                    $("#popularMovie").attr("src", jsonObj.data[0].picAddress);
+                    $("#popularTool").attr("src", jsonObj.data[0].picAddress);
                 }
             });
             $.ajax({
-                url: "movie.do",
-                data: {action: "queryMovieByHits"},
+                url: "tool.do",
+                data: {action: "queryToolByHits"},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (let j = 0; j < 5; j++) {
-                        $(".categories").append("<li><a href=\"detailsPage.html?movieId=" + jsonObj.data[j].movieId + "\">" + jsonObj.data[j].movieName + "</a></li>")
+                        $(".categories").append("<li><a href=\"detailsPage.html?toolId=" + jsonObj.data[j].toolId + "\">" + jsonObj.data[j].toolName + "</a></li>")
                     }
                 }
             })
@@ -313,15 +313,15 @@
 
         function changepage(i) {
             currentPage = i;
-            hotMovie(i);
+            hotTool(i);
         }
 
-        function hotMovieinit(data) {
+        function hotToolinit(data) {
             let index = 1;
             let jsonObj = JSON.parse(data);
             let lastbutton = "<li class=\"page-item\"><a class=\"page-link\" id='last'>Prev</a></li>";
             let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
-            $("#hotMovie").empty();
+            $("#hotTool").empty();
             $(".pagination").empty();
             if (currentPage != 1) {
                 $(".pagination").append(lastbutton);
@@ -367,23 +367,23 @@
             for (let i = 0; i < jsonObj.items.length; i++) {
                 //console.log(jsonObj.items[i]);
                 let colmd6 = $("<div class=\"col-md-6\"></div>");
-                //movie.do?action=queryMovieName&movieName=jsonObj.items[i].movieName
+                //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
                 let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-                let img = $("<a href=\"detailsPage.html?movieId=" + jsonObj.items[i].movieId + "\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
+                let img = $("<a href=\"detailsPage.html?toolId=" + jsonObj.items[i].toolId + "\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
                 postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
                 postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
                 postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.items[i].hits + "</span>")
                 blogbody.append(postmeta);
-                blogbody.append("<center><h2>" + jsonObj.items[i].movieName + "</h2></center>");
+                blogbody.append("<center><h2>" + jsonObj.items[i].toolName + "</h2></center>");
                 if (readCookie("adminName") != null) {
-                    blogbody.append("<center><a class='deleteMovie' href='javascript:;' style='color: red'><input type='hidden' value='" + jsonObj.items[i].movieId + "'>" + "删除" + "</a></center>");
+                    blogbody.append("<center><a class='deleteTool' href='javascript:;' style='color: red'><input type='hidden' value='" + jsonObj.items[i].toolId + "'>" + "删除" + "</a></center>");
                 }
                 blogentry.append(img);
                 blogentry.append(blogbody);
                 colmd6.append(blogentry);
-                $("#hotMovie").append(colmd6);
+                $("#hotTool").append(colmd6);
             }
         }
 
@@ -447,12 +447,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h2 class="mb-4">热门电影</h2>
+                <h2 class="mb-4">热门工具</h2>
             </div>
         </div>
         <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content" id="pageBody">
-                <div class="row" id="hotMovie">
+                <div class="row" id="hotTool">
                 </div>
                 <ul class="pagination">
                 </ul>
@@ -473,7 +473,7 @@
                 <!-- END sidebar-box -->
 
                 <div class="sidebar-box">
-                    <h2 class="heading">高浏览电影</h2>
+                    <h2 class="heading">高浏览工具</h2>
                     <ul class="categories">
                     </ul>
                 </div>

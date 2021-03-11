@@ -260,7 +260,7 @@ public class UserServlet extends BaseServlet {
         //电子邮箱
         String email=request.getParameter("email");
         System.out.println("成功获取信息");
-        //System.out.println("|movieName:"+movieName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
+        //System.out.println("|toolName:"+toolName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
         Page2<User> page = userService.queryUserByPage2(userName,telephone,qq,email);
         System.out.println("page2:"+page);
         Gson gson = new Gson();

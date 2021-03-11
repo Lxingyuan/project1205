@@ -14,14 +14,14 @@
 <div style="margin: 20px 60px;">
     <div align="center">
         <h3 style="color: #ff7217">温馨提示：一个用户在一次投票期间只能进行一次投票！</h3>
-        <h3 style="color: #ffbf5a">您可以选择多个电影，目前网站收录的电影如下：</h3>
+        <h3 style="color: #ffbf5a">您可以选择多个工具，目前网站收录的工具如下：</h3>
     </div>
     <br>
     <form class="layui-form" action="" id="f1">
         <div class="layui-form-item">
-            <div class="layui-input-block" id="movies" style="margin-left: 0px">
-                <!--<input type="checkbox" name="movieName" title="1" value="1">
-                <input type="checkbox" name="movieName" title="2" value="2">-->
+            <div class="layui-input-block" id="tools" style="margin-left: 0px">
+                <!--<input type="checkbox" name="toolName" title="1" value="1">
+                <input type="checkbox" name="toolName" title="2" value="2">-->
             </div>
         </div>
         <div class="layui-form-item">
@@ -58,8 +58,8 @@
 
         function init() {
             $.ajax({
-                url: "/movie.do",
-                data: {action: "queryMovieList"},
+                url: "/tool.do",
+                data: {action: "queryToolList"},
                 type: "GET",
                 async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                 dataType: "text",//返回的数据类型
@@ -67,7 +67,7 @@
                     //console.log(data)
                     let jsonObj = JSON.parse(data);
                     for (let i = 0; i < jsonObj.data.length; i++) {
-                        $("#movies").append("<input type=\"checkbox\" name=\"movieName\" title=\"" + jsonObj.data[i].movieName + "\" value=\"" + jsonObj.data[i].movieId + "\">")
+                        $("#tools").append("<input type=\"checkbox\" name=\"toolName\" title=\"" + jsonObj.data[i].toolName + "\" value=\"" + jsonObj.data[i].toolId + "\">")
                     }
                 }
             });
@@ -77,8 +77,8 @@
     });
 
     function chk() {
-        //选择所有name="'movieName'"的对象，返回数组
-        var obj = document.getElementsByName('movieName');
+        //选择所有name="'toolName'"的对象，返回数组
+        var obj = document.getElementsByName('toolName');
         //取到对象数组后，循环检测它是不是被选中
         var s = '';
         for (var i = 0; i < obj.length; i++) {
@@ -101,8 +101,8 @@
         $("#submitButton").on("click", function () {
             var string = chk();
             $.ajax({
-                url: "/movie.do",
-                data: {action: "addMovieVote", string: string, userName: readCookie("userName")},
+                url: "/tool.do",
+                data: {action: "addToolVote", string: string, userName: readCookie("userName")},
                 type: "GET",
                 async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
                 dataType: "text",//返回的数据类型

@@ -33,14 +33,14 @@ public class Test1 {
     }
     @Test
     public void test() {
-        String sql = "SELECT * FROM movie WHERE movieName LIKE '%' AND type LIKE '%' AND protagonist LIKE '%' AND showTime LIKE '%'";
-        String movieName = "";
+        String sql = "SELECT * FROM tool WHERE toolName LIKE '%' AND type LIKE '%' AND protagonist LIKE '%' AND showTime LIKE '%'";
+        String toolName = "";
         String type = "";
         String protagonist = "葛优";
         String showTime = "";
-        if(StringUtils.isNotEmpty(movieName)){
-            String string="movieName LIKE '%"+movieName+"%'";
-            sql=sql.replace("movieName LIKE '%'",string);
+        if(StringUtils.isNotEmpty(toolName)){
+            String string="toolName LIKE '%"+toolName+"%'";
+            sql=sql.replace("toolName LIKE '%'",string);
         }
         if(StringUtils.isNotEmpty(type)){
             String string="type LIKE '%"+type+"%'";

@@ -14,14 +14,14 @@
 <div style="margin: 20px 60px;">
     <form class="layui-form" action="" id="f1">
         <div class="layui-form-item">
-            <label class="layui-form-label">电影名</label>
+            <label class="layui-form-label">工具名</label>
             <div class="layui-input-block">
-                <input onKeypress="checkSpace()" type="text" id="movieName" name="movieName" lay-verify="movieName"
-                       autocomplete="off" placeholder="请输入电影名" class="layui-input">
+                <input onKeypress="checkSpace()" type="text" id="toolName" name="toolName" lay-verify="toolName"
+                       autocomplete="off" placeholder="请输入工具名" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">电影类型</label>
+            <label class="layui-form-label">工具类型</label>
             <div class="layui-input-block">
                 <input onKeypress="checkSpace()" type="text" id="type" name="type" lay-verify="type" autocomplete="off"
                        placeholder="请输入类型"
@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">电影详细极介绍</label>
+            <label class="layui-form-label">工具详细极介绍</label>
             <div class="layui-input-block">
                 <textarea lay-verify="content" class="layui-textarea" id="content" style="display: none" name="content">
                 </textarea>
@@ -107,7 +107,7 @@
             //layer.msg(type);
             var $zz = /^([\u4e00-\u9fa5]+&)*([\u4e00-\u9fa5]+)$/;
             if ($zz.test(type) == false) {
-                layer.msg('电影类型格式不对！(以&分隔的中文！)');
+                layer.msg('工具类型格式不对！(以&分隔的中文！)');
             }
         });
         $(document).on("change", "#chooseImage", function () {
@@ -172,18 +172,18 @@
         });
         //提交时验证规则
         form.verify({
-            movieName: function (value) {
+            toolName: function (value) {
                 if (value.length < 1) {
-                    return '请输入电影名！';
+                    return '请输入工具名！';
                 }
             }
             , type: function (value) {
                 if (value.length < 1) {
-                    return '请输入电影类型！';
+                    return '请输入工具类型！';
                 }
                 var $zz = /^([\u4e00-\u9fa5]+&)*([\u4e00-\u9fa5]+)$/;
                 if ($zz.test(value) == false) {
-                    return '电影类型格式不对！(以&分隔的中文！)';
+                    return '工具类型格式不对！(以&分隔的中文！)';
                 }
             }
             , director: function (value) {
@@ -224,7 +224,7 @@
             });*/
             var formData = new FormData(document.getElementById("f1"));
             $.ajax({
-                url: "/movie.do?action=addMovie",
+                url: "/tool.do?action=addTool",
                 data: formData,
                 processData: false,
                 contentType: false,
