@@ -20,6 +20,7 @@ public class User {
     private Date registerTime;
     private String headPic;
     private Integer vote;
+    private String test;
 
     public Integer getVote() {
         return vote;
