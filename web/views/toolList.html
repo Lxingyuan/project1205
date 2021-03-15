@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">上映年份</label>
+                    <label class="layui-form-label">发行年份</label>
                     <div class="layui-input-block">
                         <select name="showTime" id="showTime">
                             <option value="">不限</option>
@@ -111,7 +111,7 @@
     </div>
 </script>
 
-<script type="text/html" id="videoAddress">
+<script type="text/html" id="teachingAddress">
     <a class="layui-btn layui-btn-xs" lay-event="showVideo">显示视频</a>
 </script>
 
@@ -166,13 +166,13 @@
                     event: 'downloadAddr'
                 }*/
                 , {field: 'downloadAddr', title: '下载地址', width: 130, edit: 'text'}
-                , {field: 'director', title: '导演', width: 130, edit: 'text'}
+                , {field: 'characteristic', title: '特征', width: 130, edit: 'text'}
                 , {field: 'protagonist', title: '主演', width: 130, edit: 'text'}
-                , {field: 'showTime', title: '上映年份', width: 100, sort: true, edit: 'text'}
+                , {field: 'showTime', title: '发行年份', width: 100, sort: true, edit: 'text'}
                 , {field: 'content', title: '工具详细介绍', width: 150, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, edit: 'text'}
                 , {field: 'voteNum', title: '得票数', width: 100, sort: true, edit: 'text'}
-                , {field: 'videoAddress', title: '预告片', width: 100, templet: '#videoAddress'}
+                , {field: 'teachingAddress', title: '教学地址', width: 100, templet: '#teachingAddress'}
                 , {fixed: 'right', title: '操作', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {
@@ -313,7 +313,7 @@
                 //console.log(data)
                 layer.open({
                     type: 1,
-                    title: data.toolName + '的预告片',
+                    title: data.toolName + '的教学地址',
                     area: ['1100px', '700px'],
                     shade: 0.1,
                     maxmin: true,
@@ -323,8 +323,8 @@
                     '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
                     '                                            <input type="hidden" name="tableName" value="tool">\n' +
                     '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
-                    '                                                <iframe height=600 width=1000 src="' + data.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
-                    '                                            <input onKeypress="checkSpace()" type="text" id="videoAddress0" name="videoAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
+                    '                                                <iframe height=600 width=1000 src="' + data.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
+                    '                                            <input onKeypress="checkSpace()" type="text" id="teachingAddress0" name="teachingAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
                     '                                        </div>\n' +
                     '                                    </form></div>'
                     ,
@@ -336,11 +336,11 @@
                 });
                 //修改视频地址按钮事件
                 $(document).on("click", "#editVideo", function () {
-                    if($("#videoAddress0").val()==""){
+                    if($("#teachingAddress0").val()==""){
                         layer.msg('请输入地址！');
                         return;
                     }
-                    //console.log($("#videoAddress0").val());
+                    //console.log($("#teachingAddress0").val());
                     layer.confirm("您确定修改吗?",{
                         btn: ['确认', '取消']
                         ,icon: 3,
@@ -349,7 +349,7 @@
                         // 按钮1的事件
                         $.ajax({
                             url: "/tool.do?action=updateTool",
-                            data: {toolId: data.toolId, columnName: "videoAddress", columnValue: $("#videoAddress0").val()},
+                            data: {toolId: data.toolId, columnName: "teachingAddress", columnValue: $("#teachingAddress0").val()},
                             type: "GET",
                             async: false,
                             dataType: "text",//返回的数据类型
@@ -600,14 +600,14 @@
                     return;
                 }
             }
-            //修改上映年份字段
+            //修改发行年份字段
             if (field == "showTime") {
                 //数字
                 var $zz = /^[1-9]*[1-9][0-9]*$/;
                 //console.log(value);
                 //console.log($zz.test(value));
                 if ($zz.test(value) == false) {
-                    layer.msg('上映年份格式不对！');
+                    layer.msg('发行年份格式不对！');
                     table.reload('demo', {
                         page: {
                             curr: recodePage
@@ -617,7 +617,7 @@
                 }
                 var year = new Date().getFullYear();
                 if (value > year || value < 1800) {
-                    layer.msg('上映年份不对!(1800~' + year + ')');
+                    layer.msg('发行年份不对!(1800~' + year + ')');
                     table.reload('demo', {
                         page: {
                             curr: recodePage

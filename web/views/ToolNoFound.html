@@ -16,7 +16,7 @@
     <h3>请输入以下信息重新更改地址！</h3>
     <form class="layui-form" action="" id="f1">
         <div class="layui-form-item">
-            <label class="layui-form-label">电影id</label>
+            <label class="layui-form-label">工具id</label>
             <div class="layui-input-block">
                 <input onKeypress="checkSpace()" type="text" id="toolId" name="toolId" lay-verify="toolId" autocomplete="off"
                        placeholder="请输入id" class="layui-input">
@@ -74,7 +74,7 @@
             }
             find();
             if (flag==false){
-                layer.msg("这个id对应的电影不存在！")
+                layer.msg("这个id对应的工具不存在！")
             }
         });
     });
@@ -91,7 +91,7 @@
                 }
                 find();
                 if(flag==false){
-                    return '这个id对应的电影不存在!';
+                    return '这个id对应的工具不存在!';
                 }
             }
             ,videoAddress: function (value) {

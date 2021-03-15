@@ -45,8 +45,8 @@ public class ToolServiceImpl implements ToolService {
     }
 
     @Override
-    public Tool queryToolByDirector(String director) {
-        return toolDao.queryToolByDirector(director);
+    public Tool queryToolByCharacteristic(String characteristic) {
+        return toolDao.queryToolByCharacteristic(characteristic);
     }
 
     @Override

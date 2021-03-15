@@ -29,11 +29,11 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">导演</label>
+            <label class="layui-form-label">特征</label>
             <div class="layui-input-block">
-                <input onKeypress="checkSpace()" type="text" id="director" name="director" lay-verify="director"
+                <input onKeypress="checkSpace()" type="text" id="characteristic" name="characteristic" lay-verify="characteristic"
                        autocomplete="off"
-                       placeholder="请输入导演"
+                       placeholder="请输入特征"
                        class="layui-input">
             </div>
         </div>
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">上映年份</label>
+            <label class="layui-form-label">发行年份</label>
             <div class="layui-input-block">
                 <select name="showTime" id="showTime">
                 </select>
@@ -186,9 +186,9 @@
                     return '工具类型格式不对！(以&分隔的中文！)';
                 }
             }
-            , director: function (value) {
+            , characteristic: function (value) {
                 if (value.length < 1) {
-                    return '请输入导演！';
+                    return '请输入特征！';
                 }
             }
             , protagonist: function (value) {

@@ -198,7 +198,6 @@
             $.ajax({
                 url: "tool.do",
                 data: {action: "queryToolByToolId", toolId: toolId},
-
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -208,22 +207,22 @@
                     $(".mb-4").append(jsonObj.toolName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
-                        "<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放预告片</a>" +
+                        "<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放教学地址</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='like' style='color: black;margin-left: 5px'>喜欢</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
                         "</center>");
                     $(".bio-body>img").attr("src", jsonObj.picAddress);
-                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>导演：<span>" + jsonObj.director + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>上映年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
+                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>特征：<span>" + jsonObj.characteristic + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>发行年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
                     $("#showTool").on("click", function () {
                         layer.open({
                             type: 1,
-                            title: jsonObj.toolName + '的预告片',
+                            title: jsonObj.toolName + '的教学地址',
                             area: ['1100px', '700px'],
                             shade: 0.1,
                             maxmin: true,
                             offset: ['3%', '12%'],
                             content: '<div style="padding: 10px 40px;"><form id="f1" ><div>' +
-                            '<iframe height=600 width=1000 src="' + jsonObj.videoAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
+                            '<iframe height=600 width=1000 src="' + jsonObj.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
                             '</div></form></div>',
                             btn: ['关闭'],
                             yes: function () {

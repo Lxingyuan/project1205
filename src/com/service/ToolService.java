@@ -28,7 +28,7 @@ public interface ToolService {
     Tool queryToolByType(String toolType);
 
     //按导演查询电影
-    Tool queryToolByDirector(String director);
+    Tool queryToolByCharacteristic(String characteristic);
 
     //按id查询电影
     Tool queryToolById(Integer id);

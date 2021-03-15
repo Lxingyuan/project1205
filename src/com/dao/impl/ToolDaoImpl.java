@@ -15,14 +15,14 @@ import java.util.List;
 public class ToolDaoImpl extends BaseDao implements ToolDao {
     @Override
     public int insertTool(Tool tool) {
-        String sql = "insert into tool (ToolName,Type,Director,Protagonist,ShowTime,PicAddress,DownloadAddr,VideoAddress,Content,Hits)values(?,?,?,?,?,?,?,?,?,?)";
-        return update(sql, tool.getToolName(), tool.getType(), tool.getDirector(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getVideoAddress(), tool.getContent(), tool.getHits());
+        String sql = "insert into tool (ToolName,Type,Characteristic,Protagonist,ShowTime,PicAddress,DownloadAddr,TeachingAddress,Content,Hits)values(?,?,?,?,?,?,?,?,?,?)";
+        return update(sql, tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits());
     }
 
     @Override
     public int updateTool(Tool tool) {
-        String sql = "update tool set UpdateTime=?,ToolName=?,Type=?,Director=?,Protagonist=?,ShowTime=?,PicAddress=?,DownloadAddr=?,VideoAddress=?,Content=?,Hits=? where ToolId = ?";
-        return update(sql, tool.getUpdateTime(), tool.getToolName(), tool.getType(), tool.getDirector(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getVideoAddress(), tool.getContent(), tool.getHits(), tool.getToolId());
+        String sql = "update tool set UpdateTime=?,ToolName=?,Type=?,Characteristic=?,Protagonist=?,ShowTime=?,PicAddress=?,DownloadAddr=?,TeachingAddress=?,Content=?,Hits=? where ToolId = ?";
+        return update(sql, tool.getUpdateTime(), tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits(), tool.getToolId());
     }
 
     @Override
@@ -52,9 +52,9 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
     }
 
     @Override
-    public Tool queryToolByDirector(String director) {
-        String sql = "select * from tool where Director=?";
-        return queryForOne(Tool.class, sql, director);
+    public Tool queryToolByCharacteristic(String characteristic) {
+        String sql = "select * from tool where Characteristic=?";
+        return queryForOne(Tool.class, sql, characteristic);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
 
     @Override
     public List<Tool> searchTool(String searchMessage) {
-        String sql = "SELECT * FROM tool WHERE toolName LIKE '%"+searchMessage+"%' or type LIKE '%"+searchMessage+"%' or protagonist LIKE '%"+searchMessage+"%' or showTime LIKE '%"+searchMessage+"%'or director LIKE '%"+searchMessage+"%'";
+        String sql = "SELECT * FROM tool WHERE toolName LIKE '%"+searchMessage+"%' or type LIKE '%"+searchMessage+"%' or protagonist LIKE '%"+searchMessage+"%' or showTime LIKE '%"+searchMessage+"%'or characteristic LIKE '%"+searchMessage+"%'";
         return queryForList(Tool.class, sql);
     }
 

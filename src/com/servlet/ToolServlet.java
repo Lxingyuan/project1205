@@ -177,8 +177,8 @@ public class ToolServlet extends BaseServlet {
                             tool.setToolName(fileItem.getString("UTF-8"));
                         } else if ("type".equals(fileItem.getFieldName())) {
                             tool.setType(fileItem.getString("UTF-8"));
-                        } else if ("director".equals(fileItem.getFieldName())) {
-                            tool.setDirector(fileItem.getString("UTF-8"));
+                        } else if ("characteristic".equals(fileItem.getFieldName())) {
+                            tool.setCharacteristic(fileItem.getString("UTF-8"));
                         } else if ("protagonist".equals(fileItem.getFieldName())) {
                             tool.setProtagonist(fileItem.getString("UTF-8"));
                         } else if ("showTime".equals(fileItem.getFieldName())) {

@@ -11,12 +11,12 @@ public class Tool {
     private Integer toolId;
     private String toolName;
     private String type;
-    private String director;
+    private String characteristic;
     private String protagonist;
     private String showTime;
     private String picAddress;
     private String downloadAddr;
-    private String videoAddress;
+    private String teachingAddress;
     private String content;
     private Integer hits;
     private Date createTime;
@@ -37,12 +37,12 @@ public class Tool {
                 "toolId=" + toolId +
                 ", toolName='" + toolName + '\'' +
                 ", type='" + type + '\'' +
-                ", director='" + director + '\'' +
+                ", characteristic='" + characteristic + '\'' +
                 ", protagonist='" + protagonist + '\'' +
                 ", showTime='" + showTime + '\'' +
                 ", picAddress='" + picAddress + '\'' +
                 ", downloadAddr='" + downloadAddr + '\'' +
-                ", videoAddress='" + videoAddress + '\'' +
+                ", teachingAddress='" + teachingAddress + '\'' +
                 ", content='" + content + '\'' +
                 ", hits=" + hits +
                 ", createTime=" + createTime +
@@ -54,15 +54,15 @@ public class Tool {
     public Tool() {
     }
 
-    public Tool(String toolName, String type, String director, String protagonist, String showTime, String picAddress, String downloadAddr, String videoAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
+    public Tool(String toolName, String type, String characteristic, String protagonist, String showTime, String picAddress, String downloadAddr, String teachingAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
         this.toolName = toolName;
         this.type = type;
-        this.director = director;
+        this.characteristic = characteristic;
         this.protagonist = protagonist;
         this.showTime = showTime;
         this.picAddress = picAddress;
         this.downloadAddr = downloadAddr;
-        this.videoAddress = videoAddress;
+        this.teachingAddress = teachingAddress;
         this.content = content;
         this.hits = hits;
         this.createTime = createTime;
@@ -78,12 +78,12 @@ public class Tool {
         this.downloadAddr = downloadAddr;
     }
 
-    public String getVideoAddress() {
-        return videoAddress;
+    public String getTeachingAddress() {
+        return teachingAddress;
     }
 
-    public void setVideoAddress(String videoAddress) {
-        this.videoAddress = videoAddress;
+    public void setTeachingAddress(String teachingAddress) {
+        this.teachingAddress = teachingAddress;
     }
 
     public Integer getToolId() {
@@ -110,12 +110,12 @@ public class Tool {
         this.type = type;
     }
 
-    public String getDirector() {
-        return director;
+    public String getCharacteristic() {
+        return characteristic;
     }
 
-    public void setDirector(String director) {
-        this.director = director;
+    public void setCharacteristic(String characteristic) {
+        this.characteristic = characteristic;
     }
 
     public String getProtagonist() {

@@ -29,7 +29,7 @@ public interface ToolDao {
     Tool queryToolByType(String toolType);
 
     //按导演查询电影
-    Tool queryToolByDirector(String director);
+    Tool queryToolByCharacteristic(String characteristic);
 
     //按主演查询电影
     Tool queryToolByProtagonist(String protagonist);
