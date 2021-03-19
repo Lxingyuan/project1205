@@ -54,12 +54,12 @@
                 success: function (data) {
                     var jsonObj = JSON.parse(data);
                     for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?toolId="+jsonObj.data[i].toolId+">\n" +
+                        $("#newComment").append("<li><a href=detailsPage.html?toolId=" + jsonObj.data[i].toolId + ">\n" +
                             "<div class=\"text\">\n" +
-                            "<h4>" + jsonObj.data[i].commentContent + "</h4>\n" +
+                            "<h5>评论内容：" + jsonObj.data[i].commentContent + "</h5>\n" +
                             "<div class=\"post-meta\">\n" +
-                            "<span class=\"mr-2\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
-                            "<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+ jsonObj.data[i].commentTypeId +"</span>\n" +
+                            "<span class=\"mr-2\" style=\"font-size:20px\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
+                            "<span class=\"ml-2\">" + jsonObj.data[i].createTime +"</span>\n" +
                             "</div>\n" +
                             "</div>\n" +
                             "</a>\n" +
@@ -68,6 +68,7 @@
                 }
             });
         }
+
         function rotation() {
             $.ajax({
                 url: "tool.do",
@@ -207,12 +208,14 @@
                     $(".mb-4").append(jsonObj.toolName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
-                        "<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放教学地址</a>" +
+
+                        //"<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放教学地址</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='like' style='color: black;margin-left: 5px'>喜欢</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
+
                         "</center>");
                     $(".bio-body>img").attr("src", jsonObj.picAddress);
-                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>特征：<span>" + jsonObj.characteristic + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>发行年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
+                    $("#toolMassage").append("<b>工具类型：</b><span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br><b>特征：</b><span>" + jsonObj.characteristic + " </span><br><b>参演演员：</b><span>" + jsonObj.protagonist + "</span><br><b>发行年份：</b><span>" + jsonObj.showTime + "</span><br><b>工具简介：</b><p>" + jsonObj.content + "</p><br><span style=\"font-size:30px\">官网地址:"+jsonObj.downloadAddr+"</span>");
                     $("#showTool").on("click", function () {
                         layer.open({
                             type: 1,
@@ -267,7 +270,7 @@
                         //layer.msg("喜欢")
                         $.ajax({
                             url: "/favouriteTool.do",
-                            data: {action: "insert", toolId: toolId, userName: readCookie("userName"),},
+                            data: {action: "insert", toolId: toolId, userName: readCookie("userName")},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
@@ -285,7 +288,7 @@
                         //layer.msg("取消喜欢")
                         $.ajax({
                             url: "/favouriteTool.do",
-                            data: {action: "deleteFavouriteTool", toolId: toolId, userName: readCookie("userName"),},
+                            data: {action: "deleteFavouriteTool", toolId: toolId, userName: readCookie("userName")},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
@@ -324,27 +327,27 @@
                         //管理员增加删除按钮
                         if (readCookie("adminName") != null) {
                             $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\">" +
-                                "<a href='UserPersonal2.html?userName="+jsonObj.data[i].commentUser+"'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].commentUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
                                 "                                   <a class='deleteComment' href='javascript:;' style='color: red;'>删除" +
                                 "<input type='hidden' value='" + jsonObj.data[i].toolId + "'>" +
-                                "                                   <span style='display: none'>"+jsonObj.data[i].commentUser+"</span>" +
+                                "                                   <span style='display: none'>" + jsonObj.data[i].commentUser + "</span>" +
                                 "                                   </a></div>\n" +
                                 "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
-                                "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                                //"                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
                                 "                            </div>\n" +
                                 "                        </li>");
                         }
                         else {
                             $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\">" +
-                                "<a href='UserPersonal2.html?userName="+jsonObj.data[i].commentUser+"'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].commentUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "</div>\n" +
                                 "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
-                                "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                                //  "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
                                 "                            </div>\n" +
                                 "                        </li>");
                         }
@@ -359,7 +362,7 @@
                         layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
                             $.ajax({
                                 url: "comment.do",
-                                data: {action: "deleteComment2", toolId: toolId,commentUser:commentUser},
+                                data: {action: "deleteComment2", toolId: toolId, commentUser: commentUser},
                                 type: "GET",
                                 dataType: "text",
                                 success: function (data) {
@@ -388,6 +391,7 @@
                         action: "addToolComment",
                         toolId: toolId,
                         username: name,
+
                         commentContent: $("#comment").val()
                     },
                     type: "GET",
@@ -455,6 +459,7 @@
                 <!--分隔符-->
 
                 <div class="pt-5">
+                    <h3>评价：<div id="star" style="height: 50px;"></div></h3>
                     <h3 class="mb-5" id="commentNum">总评论数：</h3>
 
                     <ul class="comment-list">
@@ -467,7 +472,10 @@
                         <form action="#" class="p-5 bg-light">
 
                             <div class="form-group">
-                                <label for="comment">评论框</label>
+                                <div for="comment">评论框
+
+                                </div>
+
                                 <textarea name="comment" id="comment" cols="30" rows="10"
                                           class="form-control"></textarea>
                             </div>
@@ -493,6 +501,7 @@
                 </div>
 
                 <div class="sidebar-box">
+
                     <h3 class="heading">高浏览工具</h3>
                     <ul class="categories">
                     </ul>
@@ -500,7 +509,7 @@
 
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                    <h3 class="heading">最新影评</h3>
+                    <h3 class="heading">最新评论</h3>
                     <div class="post-entry-sidebar">
                         <ul id="newComment">
 
@@ -533,7 +542,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="post-entry-sidebar">
-                            <ul >
+                            <ul>
 
                             </ul>
                         </div>
@@ -599,81 +608,112 @@
 <script src="static/js/jquery.stellar.min.js"></script>
 <script src="/layuiadmin/layui/layui.js"></script>
 <script>
-    layui.use(['carousel', 'form'], function () {
-        var carousel = layui.carousel
-            , form = layui.form;
-
-        //常规轮播
-        carousel.render({
-            elem: '#test1'
-            , arrow: 'always'
-        });
-
-        //改变下时间间隔、动画类型、高度
-        carousel.render({
-            elem: '#test2'
-            , interval: 1800
-            , anim: 'fade'
-            , height: '120px'
-        });
-
-        //设定各种参数
-        var ins3 = carousel.render({
-            elem: '#test3'
-        });
-        //图片轮播
-        carousel.render({
-            elem: '#test10'
-            , width: '100%'
-            , height: '100%'
-            , interval: 5000
-        });
-
-
-        var $ = layui.$, active = {
-            set: function (othis) {
-                var THIS = 'layui-bg-normal'
-                    , key = othis.data('key')
-                    , options = {};
-
-                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
-                options[key] = othis.data('value');
-                ins3.reload(options);
-            }
-        };
-
-        //监听开关
-        form.on('switch(autoplay)', function () {
-            ins3.reload({
-                autoplay: this.checked
-            });
-        });
-
-        $('.demoSet').on('keyup', function () {
-            var value = this.value
-                , options = {};
-            if (!/^\d+$/.test(value)) return;
-
-            options[this.name] = value;
-            ins3.reload(options);
-        });
-
-        //其它示例
-        $('.demoTest .layui-btn').on('click', function () {
-            var othis = $(this), type = othis.data('type');
-            active[type] ? active[type].call(this, othis) : '';
-        });
-    });
-    layui.use('element', function () {
+    layui.use(['rate','element'], function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-
         //监听导航点击
         element.on('nav(demo)', function (elem) {
             //console.log(elem)
             layer.msg(elem.text());
         });
+        var toolId = UrlParm.parm("toolId");
+        var rate = layui.rate;
+        //渲染
+        var ins1 = rate.render({
+            elem: '#star',  //绑定元素
+            value:2,
+            theme: "yellow"
+            ,choose: function(value){
+                if(value!=null){
+                    $.ajax({
+                        url: "toolScore.do",
+                        data: {action: "insertScore",toolId: toolId, userName: readCookie("userName"),score:value},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "true") {
+                                alert("您已为软件评分"+value);
+                                //window.location.reload();
+                            }else if(data == "empty"){
+                                alert("未登录");
+                            } else{
+                                alert("您已经评过分数啦！")
+                            }
+                        }
+                    })
+                }
+            }
+
+
+        });
     });
+    // layui.use(['carousel', 'form'], function () {
+    //     var carousel = layui.carousel
+    //         , form = layui.form;
+    //
+    //     //常规轮播
+    //     carousel.render({
+    //         elem: '#test1'
+    //         , arrow: 'always'
+    //     });
+    //
+    //     //改变下时间间隔、动画类型、高度
+    //     carousel.render({
+    //         elem: '#test2'
+    //         , interval: 1800
+    //         , anim: 'fade'
+    //         , height: '120px'
+    //     });
+    //
+    //     //设定各种参数
+    //     var ins3 = carousel.render({
+    //         elem: '#test3'
+    //     });
+    //     //图片轮播
+    //     carousel.render({
+    //         elem: '#test10'
+    //         , width: '100%'
+    //         , height: '100%'
+    //         , interval: 5000
+    //     });
+    //
+    //
+    //     var $ = layui.$, active = {
+    //         set: function (othis) {
+    //             var THIS = 'layui-bg-normal'
+    //                 , key = othis.data('key')
+    //                 , options = {};
+    //
+    //             othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+    //             options[key] = othis.data('value');
+    //             ins3.reload(options);
+    //         }
+    //     };
+    //
+    //     //监听开关
+    //     form.on('switch(autoplay)', function () {
+    //         ins3.reload({
+    //             autoplay: this.checked
+    //         });
+    //     });
+    //
+    //     $('.demoSet').on('keyup', function () {
+    //         var value = this.value
+    //             , options = {};
+    //         if (!/^\d+$/.test(value)) return;
+    //
+    //         options[this.name] = value;
+    //         ins3.reload(options);
+    //     });
+    //
+    //     //其它示例
+    //     $('.demoTest .layui-btn').on('click', function () {
+    //         var othis = $(this), type = othis.data('type');
+    //         active[type] ? active[type].call(this, othis) : '';
+    //     });
+    // });
+
 </script>
+
 <script src="static/js/main.js"></script>
 </body>
 </html>

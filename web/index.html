@@ -373,7 +373,7 @@
                 let blogbody = $("<div class=\"blog-content-body\"></div>");
                 let postmeta = $("<div class=\"post-meta\"></div>");
                 postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
-                postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.items[i].showTime + "</span>");
+                postmeta.append("<span class=\"mr-2\">发行时间：" + jsonObj.items[i].showTime + "</span>");
                 postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.items[i].hits + "</span>")
                 blogbody.append(postmeta);
                 blogbody.append("<center><h2>" + jsonObj.items[i].toolName + "</h2></center>");

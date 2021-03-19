@@ -18,21 +18,24 @@ public interface CommentDao {
     //修改评论信息
     int updateComment(Comment comment);
 
-    int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
+    int updateCommentColumnValue(Integer commentId, String columnName, String columnValue);
 
 
     List<Comment> queryCommentByTime();
+
     //删除评论信息
     int deleteComment(Integer commentId);
+
     //删除评论信息
-    int deleteComment(Integer toolId,String commentUser);
+    int deleteComment(Integer toolId, String commentUser);
+
     Integer queryPageTotalCounts();
 
     List<Comment> queryCommentByPage(Integer pageNo, Integer pageSize);
 
     List<Comment> queryAllComment();
 
-    List<Comment> queryAllComment(String toolName,String commentUser,String commentContent);
+    List<Comment> queryAllComment(String toolName, String commentUser, String commentContent);
 
     Integer queryTotalCommentByToolId(Integer toolId);
 

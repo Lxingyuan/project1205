@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>评分组件</title>
+    <script src="static/js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+</head>
+<body>
+<div id="star"></div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.use('rate', function(){
+        var rate = layui.rate;
+
+        //渲染
+        var ins1 = rate.render({
+            elem: '#star',  //绑定元素
+            value:2.5,
+            half: true,
+            theme: "yellow"
+            ,choose: function(value){
+                if(value!=null){
+                    alert('评分为'+value);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
