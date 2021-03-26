@@ -46,9 +46,9 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
     }
 
     @Override
-    public int deleteComment(Integer toolId, String commentUser) {
-        String sql = "delete from comment where toolId = ? and commentUser = ?";
-        return update(sql, toolId,commentUser);
+    public int deleteComment(Integer toolId, String commentUser,String commentContent) {
+        String sql = "delete from comment where toolId = ? and commentUser = ? and commentContent=?";
+        return update(sql, toolId,commentUser,commentContent);
     }
 
     @Override

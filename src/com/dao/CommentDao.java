@@ -17,7 +17,7 @@ public interface CommentDao {
 
     //修改评论信息
     int updateComment(Comment comment);
-
+    //修改表单信息
     int updateCommentColumnValue(Integer commentId, String columnName, String columnValue);
 
 
@@ -27,7 +27,7 @@ public interface CommentDao {
     int deleteComment(Integer commentId);
 
     //删除评论信息
-    int deleteComment(Integer toolId, String commentUser);
+    int deleteComment(Integer toolId, String commentUser,String commentContent);
 
     Integer queryPageTotalCounts();
 

@@ -167,7 +167,9 @@ public class CommentServlet extends BaseServlet {
     public void deleteComment2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String toolId = request.getParameter("toolId");
         String commentUser = request.getParameter("commentUser");
-        Integer result=commentService.deleteComment(Integer.parseInt(toolId),commentUser);
+        String commentContent = request.getParameter("commentContent");
+        System.out.println("toolId:"+toolId+" commentUser:"+commentUser+" commentContent:"+commentContent);
+        Integer result=commentService.deleteComment(Integer.parseInt(toolId),commentUser,commentContent);
         if (result < 0) {
             response.getWriter().write("false");
         } else {

@@ -4,28 +4,21 @@
     <title>Colorlib Balita &mdash; Minimal Blog Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
-
     <link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/css/animate.css">
     <link rel="stylesheet" href="static/css/owl.carousel.min.css">
-
     <link rel="stylesheet" href="static/fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
-
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
-
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/getUrlParam.js"></script>
-
     <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
-
     <script type="text/javascript">
         /**
          *@param name 键值
@@ -34,7 +27,6 @@
         function readCookie(name) {
             var nameEQ = name + "=";
             var ca = document.cookie.split(";");
-
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) == " ")
@@ -44,7 +36,6 @@
             }
             return null;
         }
-
         function showToolComment() {
             $.ajax({
                 url: "http://localhost:8765/comment.do",
@@ -68,7 +59,6 @@
                 }
             });
         }
-
         function rotation() {
             $.ajax({
                 url: "tool.do",
@@ -83,7 +73,6 @@
                 }
             });
         }
-
         $(function () {
             showToolComment();
             rotation();
@@ -110,8 +99,6 @@
                     });
                     return false;
                     window.location.reload();
-
-
                 } else {
                     //用户的退出操作
                     $.ajax({
@@ -134,7 +121,6 @@
                     });
                 }
             });
-
             var name = readCookie("adminName");
             console.log("adminName:" + readCookie("adminName"));
             console.log("userName:" + readCookie("userName"));
@@ -161,7 +147,6 @@
                         $("#userHeadPic").attr("src", jsonObj.headPic)
                     }
                 });
-
             } else {
                 var name = readCookie("userName");
                 //用户已登录
@@ -189,7 +174,6 @@
                     });
                 }
             }
-
             var toolId = UrlParm.parm("toolId");
             $.ajax({
                 url: "tool.do",
@@ -199,6 +183,7 @@
             $.ajax({
                 url: "tool.do",
                 data: {action: "queryToolByToolId", toolId: toolId},
+
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
@@ -208,36 +193,32 @@
                     $(".mb-4").append(jsonObj.toolName + " <i class=\"layui-icon layui-icon-fire\" style=\"font-size: 30px; color: red;\">" + jsonObj.hits + "</i>");
                     $(".bio-body").append("<img  style='width: 275px;height: 350px'>");
                     $(".bio-body").append("<center>" +
-
-                        //"<a class=\"btn btn-primary btn-sm text-white\" id='showTool'>播放教学地址</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='like' style='color: black;margin-left: 5px'>喜欢</a>" +
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
-
                         "</center>");
                     $(".bio-body>img").attr("src", jsonObj.picAddress);
-                    $("#toolMassage").append("<b>工具类型：</b><span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br><b>特征：</b><span>" + jsonObj.characteristic + " </span><br><b>参演演员：</b><span>" + jsonObj.protagonist + "</span><br><b>发行年份：</b><span>" + jsonObj.showTime + "</span><br><b>工具简介：</b><p>" + jsonObj.content + "</p><br><span style=\"font-size:30px\">官网地址:"+jsonObj.downloadAddr+"</span>");
-                    $("#showTool").on("click", function () {
-                        layer.open({
-                            type: 1,
-                            title: jsonObj.toolName + '的教学地址',
-                            area: ['1100px', '700px'],
-                            shade: 0.1,
-                            maxmin: true,
-                            offset: ['3%', '12%'],
-                            content: '<div style="padding: 10px 40px;"><form id="f1" ><div>' +
-                            '<iframe height=600 width=1000 src="' + jsonObj.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
-                            '</div></form></div>',
-                            btn: ['关闭'],
-                            yes: function () {
-                                layer.closeAll();
-                            }
-                        });
-                    })
+                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>特征：<span>" + jsonObj.characteristic + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>发行年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
+                    // $("#showTool").on("click", function () {
+                    //     layer.open({
+                    //         type: 1,
+                    //         title: jsonObj.toolName + '的教学地址',
+                    //         area: ['1100px', '700px'],
+                    //         shade: 0.1,
+                    //         maxmin: true,
+                    //         offset: ['3%', '12%'],
+                    //         content: '<div style="padding: 10px 40px;"><form id="f1" ><div>' +
+                    //         '<iframe height=600 width=1000 src="' + jsonObj.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
+                    //         '</div></form></div>',
+                    //         btn: ['关闭'],
+                    //         yes: function () {
+                    //             layer.closeAll();
+                    //         }
+                    //     });
+                    // })
                     if (readCookie("userName") == null) {
                         $("#like").hide();
                         $("#unLike").hide();
                     }
-
                     //判断用户是否喜欢了当前工具
                     $.ajax({
                         url: "/tool.do",
@@ -263,24 +244,25 @@
                                 //把“取消喜欢”隐藏
                                 $("#unLike").hide();
                             }
-
                         }
                     });
                     $("#like").on("click", function () {
                         //layer.msg("喜欢")
                         $.ajax({
                             url: "/favouriteTool.do",
-                            data: {action: "insert", toolId: toolId, userName: readCookie("userName")},
+                            data: {action: "insert", toolId: toolId, userName: readCookie("userName"),},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
                                 if (data == "true") {
-                                    layer.msg("标记喜欢成功！");
+                                    layer.msg('标记喜欢成功！',{
+                                        icon: 1,
+                                        time: 5000 //2秒关闭（如果不配置，默认是3秒）
+                                    });
                                     window.location.reload();
                                 } else {
                                     layer.msg("标记喜欢失败！")
                                 }
-
                             }
                         });
                     });
@@ -288,7 +270,7 @@
                         //layer.msg("取消喜欢")
                         $.ajax({
                             url: "/favouriteTool.do",
-                            data: {action: "deleteFavouriteTool", toolId: toolId, userName: readCookie("userName")},
+                            data: {action: "deleteFavouriteTool", toolId: toolId, userName: readCookie("userName"),},
                             type: "GET",
                             dataType: "text",
                             success: function (data) {
@@ -298,7 +280,6 @@
                                 } else {
                                     layer.msg("取消喜欢失败！")
                                 }
-
                             }
                         });
                     });
@@ -327,42 +308,40 @@
                         //管理员增加删除按钮
                         if (readCookie("adminName") != null) {
                             $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\">" +
-                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].commentUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "<a href='UserPersonal2.html?userName="+jsonObj.data[i].commentUser+"'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
                                 "                                   <a class='deleteComment' href='javascript:;' style='color: red;'>删除" +
                                 "<input type='hidden' value='" + jsonObj.data[i].toolId + "'>" +
-                                "                                   <span style='display: none'>" + jsonObj.data[i].commentUser + "</span>" +
-                                "                                   </a></div>\n" +
-                                "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
-                                //"                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
+                                "                                   <span style='display: none'>"+jsonObj.data[i].commentUser+"</span>" +
+                                "                                   <p style='display: none'>"+jsonObj.data[i].commentContent+"</p>" +
+                                "                                </a><h3>" + jsonObj.data[i].commentContent + "</h3>\n" +
+                                "                                 </div>\n" +
                                 "                            </div>\n" +
                                 "                        </li>");
                         }
                         else {
                             $(".comment-list").append("<li class=\"comment\"><div class=\"vcard\">" +
-                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].commentUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "<a href='UserPersonal2.html?userName="+jsonObj.data[i].commentUser+"'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
                                 "                            <div class=\"comment-body\">\n" +
                                 "                                <h3>" + jsonObj.data[i].commentUser + "</h3>\n" +
                                 "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "</div>\n" +
                                 "                                <p>" + jsonObj.data[i].commentContent + "</p>\n" +
-                                //  "                                <p><a href=\"#\" class=\"reply\">评论</a></p>\n" +
                                 "                            </div>\n" +
                                 "                        </li>");
                         }
-
                     }
-
                     $(".deleteComment").on("click", function () {
-                        //alert(123)
+                        //layer.msg(123)
                         var toolId = $(this).children("input").val();
                         var commentUser = $(this).children("span").html();
+                        var commentContent = $(this).children('p').html();
                         //console.log(toolId + " " +commentUser);
                         layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
                             $.ajax({
                                 url: "comment.do",
-                                data: {action: "deleteComment2", toolId: toolId, commentUser: commentUser},
+                                data: {action: "deleteComment2", toolId: toolId,commentUser:commentUser,commentContent:commentContent},
                                 type: "GET",
                                 dataType: "text",
                                 success: function (data) {
@@ -375,15 +354,10 @@
                                 }
                             });
                         });
-
-
                     })
                 }
             })
-
-
             $("#submit").on("click", function () {
-
                 $.ajax({
                     url: "comment.do",
                     //回传评论数据
@@ -391,7 +365,6 @@
                         action: "addToolComment",
                         toolId: toolId,
                         username: name,
-
                         commentContent: $("#comment").val()
                     },
                     type: "GET",
@@ -408,7 +381,6 @@
                 return false;
             })
         });
-
     </script>
 </head>
 <body>
@@ -422,6 +394,11 @@
     <li class="layui-nav-item">
         <a href="/search.html">点击搜索
             <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/Guestbook.html">留言板
+            <!--<span  class="layui-badge-dot"></span>-->
         </a>
     </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
@@ -446,89 +423,63 @@
     </li>
 </ul>
 <!-- END header -->
-
 <section class="site-section py-lg">
     <div class="container">
-
         <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content">
                 <h1 class="mb-4"></h1>
                 <div class="mr-xl-2 text-black" id="toolMassage">
-
                 </div>
                 <!--分隔符-->
-
                 <div class="pt-5">
                     <h3>评价：<div id="star" style="height: 50px;"></div></h3>
                     <h3 class="mb-5" id="commentNum">总评论数：</h3>
-
                     <ul class="comment-list">
-
                     </ul>
                     <!-- END comment-list -->
-
                     <div class="comment-form-wrap pt-5">
                         <h3 class="mb-5">添加评论</h3>
                         <form action="#" class="p-5 bg-light">
-
                             <div class="form-group">
-                                <div for="comment">评论框
-
-                                </div>
-
+                                <label for="comment">评论框</label>
                                 <textarea name="comment" id="comment" cols="30" rows="10"
                                           class="form-control"></textarea>
                             </div>
                             <div class="form-group">
                                 <input type="button" value="提交评论" class="btn btn-primary" id="submit">
                             </div>
-
                         </form>
                     </div>
                 </div>
-
             </div>
-
             <!-- END main-content -->
-
             <div class="col-md-12 col-lg-4 sidebar">
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
                     <div class="bio-body">
-
                     </div>
-
                 </div>
-
                 <div class="sidebar-box">
-
                     <h3 class="heading">高浏览工具</h3>
                     <ul class="categories">
                     </ul>
                 </div>
-
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                    <h3 class="heading">最新评论</h3>
+                    <h3 class="heading">最新影评</h3>
                     <div class="post-entry-sidebar">
                         <ul id="newComment">
-
                         </ul>
                     </div>
                 </div>
                 <!-- END sidebar-box -->
-
-
                 <!-- END sidebar-box -->
             </div>
             <!-- END sidebar -->
-
         </div>
     </div>
 </section>
-
 <!-- END section -->
-
 <footer class="site-footer">
     <div class="container">
         <div class="row mb-5">
@@ -542,15 +493,12 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="post-entry-sidebar">
-                            <ul>
-
+                            <ul >
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-1"></div>
-
                     <div class="col-md-4">
-
                         <div class="mb-5">
                             <h3>Quick Links</h3>
                             <ul class="list-unstyled">
@@ -561,7 +509,6 @@
                                 <li><a href="#">Categories</a></li>
                             </ul>
                         </div>
-
                         <div class="mb-5">
                             <h3>Social</h3>
                             <ul class="list-unstyled footer-social">
@@ -589,7 +536,6 @@
     </div>
 </footer>
 <!-- END footer -->
-
 <!-- loader -->
 <div id="loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
@@ -598,7 +544,6 @@
                 stroke="#f4b214"/>
     </svg>
 </div>
-
 <script src="static/js/jquery-3.2.1.min.js"></script>
 <script src="static/js/jquery-migrate-3.0.0.js"></script>
 <script src="static/js/popper.min.js"></script>
@@ -608,13 +553,8 @@
 <script src="static/js/jquery.stellar.min.js"></script>
 <script src="/layuiadmin/layui/layui.js"></script>
 <script>
-    layui.use(['rate','element'], function () {
-        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-        //监听导航点击
-        element.on('nav(demo)', function (elem) {
-            //console.log(elem)
-            layer.msg(elem.text());
-        });
+    layui.use('rate', function () {
+
         var toolId = UrlParm.parm("toolId");
         var rate = layui.rate;
         //渲染
@@ -631,89 +571,83 @@
                         dataType: "text",
                         success: function (data) {
                             if (data == "true") {
-                                alert("您已为软件评分"+value);
+                                layer.msg("您已为软件评分"+value);
                                 //window.location.reload();
                             }else if(data == "empty"){
-                                alert("未登录");
+                                layer.msg("未登录");
                             } else{
-                                alert("您已经评过分数啦！")
+                                layer.msg("您已经评过分数啦！")
                             }
                         }
                     })
                 }
             }
-
-
         });
     });
-    // layui.use(['carousel', 'form'], function () {
-    //     var carousel = layui.carousel
-    //         , form = layui.form;
-    //
-    //     //常规轮播
-    //     carousel.render({
-    //         elem: '#test1'
-    //         , arrow: 'always'
-    //     });
-    //
-    //     //改变下时间间隔、动画类型、高度
-    //     carousel.render({
-    //         elem: '#test2'
-    //         , interval: 1800
-    //         , anim: 'fade'
-    //         , height: '120px'
-    //     });
-    //
-    //     //设定各种参数
-    //     var ins3 = carousel.render({
-    //         elem: '#test3'
-    //     });
-    //     //图片轮播
-    //     carousel.render({
-    //         elem: '#test10'
-    //         , width: '100%'
-    //         , height: '100%'
-    //         , interval: 5000
-    //     });
-    //
-    //
-    //     var $ = layui.$, active = {
-    //         set: function (othis) {
-    //             var THIS = 'layui-bg-normal'
-    //                 , key = othis.data('key')
-    //                 , options = {};
-    //
-    //             othis.css('background-color', '#5FB878').siblings().removeAttr('style');
-    //             options[key] = othis.data('value');
-    //             ins3.reload(options);
-    //         }
-    //     };
-    //
-    //     //监听开关
-    //     form.on('switch(autoplay)', function () {
-    //         ins3.reload({
-    //             autoplay: this.checked
-    //         });
-    //     });
-    //
-    //     $('.demoSet').on('keyup', function () {
-    //         var value = this.value
-    //             , options = {};
-    //         if (!/^\d+$/.test(value)) return;
-    //
-    //         options[this.name] = value;
-    //         ins3.reload(options);
-    //     });
-    //
-    //     //其它示例
-    //     $('.demoTest .layui-btn').on('click', function () {
-    //         var othis = $(this), type = othis.data('type');
-    //         active[type] ? active[type].call(this, othis) : '';
-    //     });
-    // });
-
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+        //常规轮播
+        carousel.render({
+            elem: '#test1'
+            , arrow: 'always'
+        });
+        //改变下时间间隔、动画类型、高度
+        carousel.render({
+            elem: '#test2'
+            , interval: 1800
+            , anim: 'fade'
+            , height: '120px'
+        });
+        //设定各种参数
+        var ins3 = carousel.render({
+            elem: '#test3'
+        });
+        //图片轮播
+        carousel.render({
+            elem: '#test10'
+            , width: '100%'
+            , height: '100%'
+            , interval: 5000
+        });
+        var $ = layui.$, active = {
+            set: function (othis) {
+                var THIS = 'layui-bg-normal'
+                    , key = othis.data('key')
+                    , options = {};
+                othis.css('background-color', '#5FB878').siblings().removeAttr('style');
+                options[key] = othis.data('value');
+                ins3.reload(options);
+            }
+        };
+        //监听开关
+        form.on('switch(autoplay)', function () {
+            ins3.reload({
+                autoplay: this.checked
+            });
+        });
+        $('.demoSet').on('keyup', function () {
+            var value = this.value
+                , options = {};
+            if (!/^\d+$/.test(value)) return;
+            options[this.name] = value;
+            ins3.reload(options);
+        });
+        //其它示例
+        $('.demoTest .layui-btn').on('click', function () {
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+    layui.use('element', function () {
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+        //监听导航点击
+        element.on('nav(demo)', function (elem) {
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
 </script>
-
 <script src="static/js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layuiAdmin 主页示例模板一</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <style>
+        .layui-table-cell {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        th .layui-table-cell {
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+    <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">留言标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="discussionHead" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="discussionHead">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">留言内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="discussionContent" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="discussionContent">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">留言发出人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="discussionUser" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="discussionUser">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">留言时间</label>
+                    <div class="layui-input-block">
+                        <select name="showTime" id="showTime">
+                            <option value="0">不限</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search"
+                            id="search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div class="layui-table-box">
+                <table id="demo" lay-filter="test">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+    </div>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>-->
+</script>
+<script>
+    layui.use('table', function () {
+        var table = layui.table;
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            , toolbar: '#toolbarDemo'
+            , url: '/discussion.do?action=queryDiscussionList' //数据接口
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽d度，layui 2.2.1 新增
+            , page: {
+                limit: 10,//指定每页显示的条数
+                limits: [5, 10, 20, 30, 40, 50, 999]//每页条数
+            } //开启分页
+            , height: 700
+            , cols: [[ //表头
+                {type: 'numbers'}
+                , {type: 'checkbox'}
+                , {field: 'discussionId', title: 'ID', width: 60, sort: true}
+                , {field: 'discussionHead', title: '留言标题', width: 200, sort: true, edit: 'text'}
+                , {field: 'discussionUser', title: '留言发出人', width: 100, edit: 'text'}
+                , {field: 'discussionContent', title: '留言内容', width: 400, sort: true, edit: 'text'}
+                , {
+                    field: 'createTime',
+                    title: '创建时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.createTime) }}</div>'
+                }
+                , {
+                    field: 'updateTime',
+                    title: '更新时间',
+                    width: 200,
+                    sort: true,
+                    templet: '<div>{{ layui.laytpl.toDateString(d.updateTime) }}</div>'
+                }
+                , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+            ]]
+            , done: function (res, curr, count) {
+                //如果是异步请求数据方式，res即为接口返回的信息。
+                //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                //console.log(res);
+                //得到当前页码
+                //console.log("页码:" + curr);
+                //得到数据总量
+                //console.log("总量:" + count);
+            }
+            , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+        });
+        //转换表中的时间显示格式
+        layui.use('laytpl', function () {
+            var laytpl = layui.laytpl;
+            //时间戳的处理
+            layui.laytpl.toDateString = function (time, format) {
+
+                var date = new Date(time)
+                    , ymd = [
+                    this.digit(date.getFullYear(), 4)
+                    , this.digit(date.getMonth() + 1)
+                    , this.digit(date.getDate())
+                ]
+                    , hms = [
+                    this.digit(date.getHours())
+                    , this.digit(date.getMinutes())
+                    , this.digit(date.getSeconds())
+                ];
+
+                format = format || 'yyyy-MM-dd HH:mm:ss';
+
+                return format.replace(/yyyy/g, ymd[0])
+                    .replace(/MM/g, ymd[1])
+                    .replace(/dd/g, ymd[2])
+                    .replace(/HH/g, hms[0])
+                    .replace(/mm/g, hms[1])
+                    .replace(/ss/g, hms[2]);
+
+            }
+            //数字前置补零
+            layui.laytpl.digit = function (num, length, end) {
+                var str = '';
+                num = String(num);
+                length = length || 2;
+                for (var i = num.length; i < length; i++) {
+                    str += '0';
+                }
+                return num < Math.pow(10, length) ? str + (num | 0) : num;
+            };
+        });
+        //表格上方头工具栏监听事件
+        table.on('toolbar(test)', function (obj) {
+            //var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'delete':
+                    var checkStatus = table.checkStatus('demo');
+                    var items = checkStatus.data;//选中行数据
+                    var idNum = new Array();
+                    for (var i = 0; i < items.length; i++) {
+                        idNum.push(items[i].discussionId);
+                    }
+                    //console.log(idNum);//保存的id列表
+                    if (items.length != 0) {
+                        layer.confirm('您确定要删除所选吗?', {icon: 3, title: '提示'}, function (index) {
+                            $.ajax({
+                                url: "/discussion.do?action=deleteDiscussion",
+                                data: {idNum: idNum},
+                                type: "GET",
+                                async: false,
+                                dataType: "text",//返回的数据类型
+                                success: function (data) {
+                                    //console.log("data:" + data);//data代表服务器回传的数据
+                                    if (data == "true") {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除成功！'
+                                        });*/
+                                        layer.msg('删除成功！');
+                                        //刷新表格
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: 1
+                                            }
+                                        });
+                                    } else {
+                                        /*layer.open({
+                                            title: '提示'
+                                            , content: '删除失败！'
+                                        });*/
+                                        layer.msg('删除失败');
+                                    }
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    } else {
+                        /*layer.open({
+                            title: '提示'
+                            , content: '您没有选择任何行！'
+                        });*/
+                        layer.msg('您没有选择任何行！');
+                    }
+                    break;
+            }
+        });
+        //监听工具条
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            //删除
+            if (layEvent === 'del') {
+                var idNum = new Array();
+                idNum.push(data.discussionId);
+                layer.confirm('您确定要删除这条数据吗?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        url: "/discussion.do?action=deleteDiscussion",
+                        data: {idNum: idNum},
+                        type: "GET",
+                        async: false,
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg('删除成功！');
+                                table.reload('demo', {
+                                    page: {
+                                        curr: 1
+                                    }
+                                });
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (layEvent === 'edit') { //编辑
+                console.log(data)
+            }else if (layEvent === 'discussionContent') {//富文本编辑器
+                //layer.msg("213")
+                //console.log(data.content);
+                layer.open({
+                    type: 2
+                    ,
+                    title: '修改留言内容'
+                    ,
+                    area: ['700px', '500px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['5%', '30%']
+                    ,
+                    content: '/views/editDiscussionContent.html'
+                    ,
+                    btn: ['关闭']
+                    ,
+                    success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
+                        //console.log(data.content);
+                        let body = layer.getChildFrame('body', index);
+                        body.find("#discussionContent").html(data.discussionContent);
+                        body.find("#id").val(data.discussionId);
+                        layui.form.render();
+                    },
+                    yes: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        });
+        //监听单元格编辑
+        table.on('edit(test)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field //得到字段
+                , recodePage = $(".layui-laypage-skip .layui-input").val();//当前所处的页数
+            console.log(recodePage);
+            //修改电话字段
+
+            //验证通过，修改数据库
+            layer.confirm("您确定修改吗?",{
+                btn: ['确认', '取消']
+                ,icon: 3,
+                title: '提示'
+            }, function () {
+                //alert("确认")
+                // 按钮1的事件
+                $.ajax({
+                    url: "/discussion.do?action=updateDiscussion",
+                    data: {discussionId: data.discussionId, columnName: field, columnValue: value},
+                    type: "GET",
+                    async: false,
+                    dataType: "text",//返回的数据类型
+                    success: function (data) {
+                        if (data == "true") {
+                            layer.msg('更新成功');
+                        } else {
+                            table.reload('demo', {
+                                page: {
+                                    curr: recodePage
+                                }
+                            });
+                            layer.msg('更新失败');
+                        }
+                    }
+                });
+            }, function(){
+                // 按钮2的事件
+                table.reload('demo', {
+                    page: {
+                        curr: recodePage
+                    }
+                });
+            });
+
+
+            //console.log(data);
+        });
+
+        $("#search").on("click", function () {
+            layer.msg('233');
+            //layer.msg($("#toolName").val());
+            //layer.msg($("#showTime").val());
+            table.reload('demo', {
+                url: '/discussion.do?action=queryDiscussionListLimit' //数据接口
+                ,
+                where: {
+                    discussionHead: $("#discussionHead").val(),
+                    discussionContent: $("#discussionContent").val(),
+                    discussionUser: $("#discussionUser").val(),
+                }
+                ,
+                page: {
+                    curr: 1
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

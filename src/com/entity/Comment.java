@@ -13,7 +13,7 @@ public class Comment {
     private Integer toolId;
     private String toolName;
     private String commentUser;
-    private String headPic ;
+    private String headPic;
     private String commentContent;
     private Date createTime;
     private Date updateTime;

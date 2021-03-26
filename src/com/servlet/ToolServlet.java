@@ -68,6 +68,7 @@ public class ToolServlet extends BaseServlet {
     public void deleteToolById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String toolId = request.getParameter("toolId");
         Integer result = toolService.deleteTool(Integer.parseInt(toolId));
+        System.out.println("删除ID"+toolId+"结果"+result);
         if (result < 0) {
             response.getWriter().write("false");
         } else {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>影视创作论坛</title>
+    <title>Colorlib Balita &mdash; Minimal Blog Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
@@ -12,30 +12,21 @@
     <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
-    <!-- Theme Style -->
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
-
-    <style>
-        .imgdetial {
-            width: 400px;
-            height: 450px;
-        }
-    </style>
-    <script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="static/js/getUrlParam.js"></script>
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="static/css/style.css">
     <script type="text/javascript">
-
         /**
          *@param name 键值
          * @return 通过键值获取到对应的数据，如果没有则返回null
          **/
         function readCookie(name) {
-
             var nameEQ = name + "=";
             var ca = document.cookie.split(";");
-
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) == " ")
@@ -46,35 +37,11 @@
             return null;
         }
 
+        var currentPage = 1;
         $(function () {
+
             hotTool(1);
-            rotation();
-            showNotice();
-            showToolComment();
-            //删除按钮事件
-            $("body").on("click", ".deleteTool", function () {
-                //layer.msg($(this).children("input").val());
-                var toolId = $(this).children("input").val();
-                layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
-                    $.ajax({
-                        url: "/tool.do",
-                        data: {action:"deleteToolById",toolId: toolId},
-                        type: "GET",
-                        async: false,
-                        dataType: "text",//返回的数据类型
-                        success: function (data) {
-                            //console.log("data:" + data);//data代表服务器回传的数据
-                            if (data == "true") {
-                                layer.msg('删除成功！');
-                                window.location.reload();
-                            } else {
-                                layer.msg('删除失败');
-                            }
-                        }
-                    });
-                });
-            });
-            //退出按钮事件
+
             $("#logOut").on("click", function () {
                 var name = readCookie("adminName");
                 //当前是管理员退出系统
@@ -96,6 +63,7 @@
                             }
                         }
                     });
+                    return false;
                     window.location.reload();
                 } else {
                     //用户的退出操作
@@ -109,6 +77,7 @@
                             //console.log("data:" + data);//data代表服务器回传的数据
                             if (data == "true") {
                                 layer.msg("退出成功！");
+                                return false;
                                 window.location.reload();
                             }
                             else {
@@ -116,10 +85,8 @@
                             }
                         }
                     });
-
                 }
             });
-            //初始化头部菜单
             var name = readCookie("adminName");
             console.log("adminName:" + readCookie("adminName"));
             console.log("userName:" + readCookie("userName"));
@@ -130,7 +97,6 @@
                 $("#register").hide();
                 //显示登录信息
                 $("#userMessage").show();
-                //添加“进入后台”
                 $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
                 $.ajax({
                     url: "/admin.do",
@@ -147,7 +113,6 @@
                         $("#userHeadPic").attr("src", jsonObj.headPic)
                     }
                 });
-
             } else {
                 var name = readCookie("userName");
                 //用户已登录
@@ -174,143 +139,87 @@
                         }
                     });
                 }
-            }//初始化头部菜单结束
-            //投票界面
-            if (readCookie("userName") == null) {
-                $("#vote").hide();
             }
-            //数据库查询当前用户是否已投票
-            $.ajax({
-                url: "/user.do",
-                data: {action: "findUserVoteOrNot", userName: name},
+            //获取数据库评论情况
+            /*$.ajax({
+                url: "discussion.do",
+                data: {action: "queryDiscussion"},
                 type: "GET",
-                async: false,//ajax默认是异步的，即 默认为async:true 。设为false后就可以把ajax中返回到前台
-                dataType: "text",//返回的数据类型
+                dataType: "text",
                 success: function (data) {
-                    //console.log("data:" + data);//data代表服务器回传的数据
-                    //var jsonObj = JSON.parse(data);
-                    if (data == "false") {
-                        //未投票
-                    } else {
-                        //已投票，隐藏投票窗口
-                        $("#vote").hide();
+                    let jsonObj = JSON.parse(data);
+                    for (var i = 0; i < jsonObj.data.length; i++) {
+                        //管理员增加删除按钮
+                        if (readCookie("adminName") != null) {
+                            $(".comment-list").append("<li  style='border: 3px black solid' class=\"comment\"><div class=\"vcard\">" +
+                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].discussionUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "                            <div class=\"comment-body\">\n" +
+                                "                               <h3>" + jsonObj.data[i].discussionUser + "</h3>\n" +
+                                "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "" +
+                                "                                   <a class='deleteDiscussion' href='javascript:;' style='color: red;'>删除" +
+                                "                                   <span style='display: none'>" + jsonObj.data[i].discussionUser + "</span>" +
+                                "                                   <p style='display: none'>" + jsonObj.data[i].discussionContent + "</p>" +
+
+                                "                                   </a></div>\n" +
+                                "                                <h2>标题：" + jsonObj.data[i].discussionHead + "</h2> \n" +
+                                "                                <p style='color: black'>正文：" + jsonObj.data[i].discussionContent + "</p> \n" +
+                                "                            </div>\n" +
+                                "                        </li>");
+                        }
+                        else {
+                            $(".comment-list").append("<li style='border: 3px black solid' class=\"comment\"><div class=\"vcard\">" +
+                                "<a href='UserPersonal2.html?userName=" + jsonObj.data[i].discussionUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.data[i].headPic + "></a></div>" +
+                                "                            <div class=\"comment-body\">\n" +
+                                "                                <h3>" + jsonObj.data[i].discussionUser + "</h3>\n" +
+                                "                                <div class=\"meta\">" + jsonObj.data[i].createTime + "</div>\n" +
+                                "                                <h2>标题：" + jsonObj.data[i].discussionHead + "</h2> \n" +
+                                "                                <p style='color: black'>正文：" + jsonObj.data[i].discussionContent + "</p> \n" +
+                                "                            </div>\n" +
+                                "                        </li>");
+                        }
                     }
+                    $(".deleteDiscussion").on("click", function () {
+                        //layer.msg(123)
+                        var discussionUser = $(this).children("span").html();
+                        var discussionContent = $(this).children("p").html();
+                        //console.log(toolId + " " +discussionUser);
+                        layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
+                            $.ajax({
+                                url: "discussion.do",
+                                data: {
+                                    action: "deleteDiscussion2",
+                                    discussionUser: discussionUser,
+                                    discussionContent: discussionContent
+                                },
+                                type: "GET",
+                                dataType: "text",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        layer.msg("删除成功！");
+                                        window.location.reload();
+                                    } else {
+                                        layer.msg("删除失败！")
+                                    }
+                                }
+                            });
+                        });
+                    })
                 }
-            });
-            $("#vote").on("click", function () {
-                layer.open({
-                    type: 2
-                    ,
-                    title: '进行投票'
-                    ,
-                    area: ['600px', '700px']
-                    ,
-                    shade: 0.1
-                    ,
-                    maxmin: true
-                    ,
-                    offset: ['10%', '34%']
-                    ,
-                    content: '/views/voteTool.html'
-                    ,
-                    btn: ['关闭']
-                    ,
-                    yes: function () {
-                        layer.closeAll();
-                    }
-                });
-            });
+            })*/
 
         });
 
-        var currentPage = 1;
-
-        function showNotice() {
-            $.ajax({
-                url: "http://localhost:8765/notice.do",
-                data: {action: "queryNoticeByTime"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    let noticeHead = $("<h2>" + jsonObj.noticeHead + "</h2>");
-                    let noticeBody = $("<p>" + jsonObj.noticeContent + "</p>");
-                    let noticeUser = $("<p>" + jsonObj.createTime + "</p>");
-                    $("#notice").append(noticeHead);
-                    $("#notice").append(noticeBody);
-                    $("#notice").append(noticeUser);
-                }
-            });
-        }
-
         function hotTool(pageNo) {
             $.ajax({
-                url: "tool.do",
-                data: {action: "queryToolPage", pageNo: pageNo},
+                url: "discussion.do",
+                data: {action: "queryDiscussionPage", pageNo: pageNo},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
+
                     hotToolinit(data);
                 }
             });
-        }
-
-        function showToolComment() {
-            $.ajax({
-                url: "http://localhost:8765/comment.do",
-                data: {action: "queryCommentByTime"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?toolId=" + jsonObj.data[i].toolId + ">\n" +
-                            "<div class=\"text\">\n" +
-                            "<h5>评论内容：" + jsonObj.data[i].commentContent + "</h5>\n" +
-                            "<div class=\"post-meta\">\n" +
-                            "<span class=\"mr-2\" style=\"font-size:20px\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
-                            "<span class=\"ml-2\">" + jsonObj.data[i].createTime +"</span>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</a>\n" +
-                            "</li>");
-                    }
-                }
-            });
-        }
-
-        function rotation() {
-            $.ajax({
-                url: "tool.do",
-                data: {action: "queryToolByVoteNum"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    //layer.msg(data);
-                    var jsonObj = JSON.parse(data);
-                    //jsonObj.data表示json字符串中key为data对应的值
-                    //console.log(jsonObj.data.length);
-                    for (let i = 0; i < 3; i++) {
-                        $("#img" + (i + 1)).attr("src", jsonObj.data[i].picAddress);
-                        $("#img" + (i + 1)).attr("title", jsonObj.data[i].toolName);
-                        $("#a" + (i + 1)).attr('href', "detailsPage.html?toolId=" + jsonObj.data[i].toolId);
-                    }
-                    $("#popularTool").attr("src", jsonObj.data[0].picAddress);
-                }
-            });
-            //点击量
-            $.ajax({
-                url: "tool.do",
-                data: {action: "queryToolByHits"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    for (let j = 0; j < 5; j++) {
-                        $(".categories").append("<li><a href=\"detailsPage.html?toolId=" + jsonObj.data[j].toolId + "\">" + jsonObj.data[j].toolName + "</a></li>")
-                    }
-                }
-            })
         }
 
         //换页
@@ -318,18 +227,22 @@
             currentPage = i;   //当前页码
             hotTool(i);
         }
+
         //画表
         function hotToolinit(data) {
+
             let index = 1;
             let jsonObj = JSON.parse(data);
             let lastbutton = "<li class=\"page-item\"><a class=\"page-link\" id='last'>Prev</a></li>";
             let nextbutton = "<li class=\"page-item\"><a class=\"page-link\" id='next'>Next</a></li>";
-            $("#hotTool").empty();
+            $(".comment-list").empty();
             $(".pagination").empty();
+            console.log(jsonObj)
             if (currentPage != 1) {
                 $(".pagination").append(lastbutton);
                 $("#last").on('click', function () {
                     changepage(currentPage - 1);
+
                 })
             }
 
@@ -362,41 +275,71 @@
             if (currentPage != jsonObj.pageTotal) {
                 $(".pagination").append(nextbutton);
                 $("#next").on('click', function () {
-                    var j=currentPage + 1;
+                    var j = currentPage + 1;
                     changepage(j);
                 })
             }
-
-            for (let i = 0; i < jsonObj.items.length; i++) {
-                //console.log(jsonObj.items[i]);
-                let colmd6 = $("<div class=\"col-md-6\"></div>");
-                //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
-                let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-                let img = $("<a href=\"detailsPage.html?toolId=" + jsonObj.items[i].toolId + "\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
-                let blogbody = $("<div class=\"blog-content-body\"></div>");
-                let postmeta = $("<div class=\"post-meta\"></div>");
-                postmeta.append("<span class=\"category\">" + jsonObj.items[i].type + "</span>");
-                postmeta.append("<span class=\"mr-2\">发行时间：" + jsonObj.items[i].showTime + "</span>");
-                postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>" + jsonObj.items[i].hits + "</span>")
-                blogbody.append(postmeta);
-                blogbody.append("<center><h2>" + jsonObj.items[i].toolName + "</h2></center>");
+            for (var i = 0; i < jsonObj.items.length; i++) {
+                //管理员增加删除按钮
                 if (readCookie("adminName") != null) {
-                    blogbody.append("<center><a class='deleteTool' href='javascript:;' style='color: red'><input type='hidden' value='" + jsonObj.items[i].toolId + "'>" + "删除" + "</a></center>");
+                    $(".comment-list").append("<li  style='border: 3px black solid' class=\"comment\"><div class=\"vcard\">" +
+                        "<a href='UserPersonal2.html?userName=" + jsonObj.items[i].discussionUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.items[i].headPic + "></a></div>" +
+                        "                            <div class=\"comment-body\">\n" +
+                        "                               <h3>" + jsonObj.items[i].discussionUser + "</h3>\n" +
+                        "                                <div class=\"meta\">" + jsonObj.items[i].createTime + "" +
+                        "                                   <a class='deleteDiscussion' href='javascript:;' style='color: red;'>删除" +
+                        "                                   <span style='display: none'>" + jsonObj.items[i].discussionUser + "</span>" +
+                        "                                   <p style='display: none'>" + jsonObj.items[i].discussionContent + "</p>" +
+                        "                                   </a></div>\n" +
+                        "                                <h2>标题：" + jsonObj.items[i].discussionHead + "</h2> \n" +
+                        "                                <p style='color: black'>正文：" + jsonObj.items[i].discussionContent + "</p> \n" +
+                        "                            </div>\n" +
+                        "                        </li>");
                 }
-                blogentry.append(img);
-                blogentry.append(blogbody);
-                colmd6.append(blogentry);
-                $("#hotTool").append(colmd6);
+                else {
+                    $(".comment-list").append("<li style='border: 3px black solid' class=\"comment\"><div class=\"vcard\">" +
+                        "<a href='UserPersonal2.html?userName=" + jsonObj.items[i].discussionUser + "'><img alt=\"Image placeholder\"  src=" + jsonObj.items[i].headPic + "></a></div>" +
+                        "                            <div class=\"comment-body\">\n" +
+                        "                                <h3>" + jsonObj.items[i].discussionUser + "</h3>\n" +
+                        "                                <div class=\"meta\">" + jsonObj.items[i].createTime + "</div>\n" +
+                        "                                <h2>标题：" + jsonObj.items[i].discussionHead + "</h2> \n" +
+                        "                                <p style='color: black'>正文：" + jsonObj.items[i].discussionContent + "</p> \n" +
+                        "                            </div>\n" +
+                        "                        </li>");
+                }
             }
+            $(".deleteDiscussion").on("click", function () {
+                //layer.msg(123)
+                var discussionUser = $(this).children("span").html();
+                var discussionContent = $(this).children("p").html();
+                //console.log(toolId + " " +discussionUser);
+                layer.confirm('您确定要删除吗?', {icon: 3, title: '提示'}, function () {
+                    $.ajax({
+                        url: "discussion.do",
+                        data: {
+                            action: "deleteDiscussion2",
+                            discussionUser: discussionUser,
+                            discussionContent: discussionContent
+                        },
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            if (data == "true") {
+                                layer.msg("删除成功！");
+                                window.location.reload();
+                            } else {
+                                layer.msg("删除失败！")
+                            }
+                        }
+                    });
+                });
+            })
         }
 
     </script>
 </head>
-
-<!-- END header -->
-
-<body style="width: auto">
-
+<body>
+<!--导航栏-->
 <ul class="layui-nav" id="top">
     <li class="layui-nav-item">
         <a href="/index.html">首页
@@ -414,7 +357,6 @@
         </a>
     </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
-        <!--<a href="javascript:;">-->
         <a href="/UserPersonal.html">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
             <span id="userNameSpan"></span>
@@ -435,131 +377,77 @@
         </a>
     </li>
 </ul>
+<!-- END header -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 main-content" id="pageBody">
+            <!--新留言板-->
+            <div style="margin: 30px 60px;">
+                <form class="layui-form" action="" id="f1" style="margin-left: -110px">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input onKeypress="checkSpace()" type="text" id="discussionHead" name="discussionHead"
+                                   lay-verify="discussionHead"
+                                   autocomplete="off" placeholder="请输入留言标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                <textarea lay-verify="discussionContent" class="layui-textarea" id="discussionContent"
+                          style="display: none" name="discussionContent">
+                </textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1"
+                                    id="submit">立即提交
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <ul class="comment-list">
+            </ul>
+            <ul class="pagination">
+            </ul>
 
-<div align="center" style="margin-top: 10px;" id="vote">
-    <h1><a href="javascript:;" style="color: #ff9f26">当前正在举行投票，点击查看！</a></h1>
-</div>
 
-<div class="container" style="height: 600px;margin-top: 10px;margin-bottom: 50px" align="center">
-    <div class="layui-carousel" id="test10" style="height: 500px">
-        <div carousel-item="">
-            <div><a id="a1"><img width="100%" src="" id="img1"></a></div>
-            <div><a id="a2"><img width="100%" src="" id="img2"></a></div>
-            <div><a id="a3"><img width="100%" src="" id="img3"></a></div>
         </div>
+        <!-- END main-content -->
+        <div class="col-md-12 col-lg-4 sidebar">
+            <!-- END sidebar-box -->
+            <div class="sidebar-box">
+                <div class="bio-body">
+                </div>
+            </div>
+
+            <!-- END sidebar-box -->
+
+        </div>
+        <!-- END sidebar -->
     </div>
 </div>
 <!-- END section -->
-
-<section class="site-section py-sm">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h2 class="mb-4">热门工具</h2>
-            </div>
-        </div>
-        <div class="row blog-entries">
-            <div class="col-md-12 col-lg-8 main-content" id="pageBody">
-                <div class="row" id="hotTool">
-                </div>
-                <ul class="pagination">
-                </ul>
-            </div>
-            <!-- END main-content -->
-
-
-            <div class="col-md-12 col-lg-4 sidebar">
-
-                <!-- END sidebar-box -->
-                <div class="sidebar-box">
-                    <CENTER><h1>公告</h1></CENTER>
-                    <div class="bio text-center" id="notice">
-
-                    </div>
-                </div>
-
-                <!-- END sidebar-box -->
-
-                <div class="sidebar-box">
-                    <h2 class="heading">高浏览工具</h2>
-                    <ul class="categories">
-                    </ul>
-                </div>
-                <!-- END sidebar-box -->
-                <div class="sidebar-box">
-                    <h3 class="heading">最新评论</h3>
-                    <div class="post-entry-sidebar">
-                        <ul id="newComment">
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <footer class="site-footer">
     <div class="container">
         <div class="row mb-5">
             <div class="col-md-4">
-                <h3>热门评论</h3>
-                <p>
-                    <img src="static/images/img_1.jpg" alt="Image placeholder" class="img-fluid">
-                </p>
-
+                <h3>Paragraph</h3>
+                <img src="static/images/img_1.jpg" alt="Image placeholder" class="img-fluid">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi, accusantium optio unde perferendis
                     eum illum voluptatibus dolore tempora, consequatur minus asperiores temporibus reprehenderit.</p>
             </div>
             <div class="col-md-6 ml-auto">
                 <div class="row">
                     <div class="col-md-7">
-                        <h3>最新评论</h3>
                         <div class="post-entry-sidebar">
-                            <ul id="">
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="">
-                                        <img src="static/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                                        <div class="text">
-                                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                                            <div class="post-meta">
-                                                <span class="mr-2">March 15, 2018 </span> &bullet;
-                                                <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
+                            <ul>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-1"></div>
-
                     <div class="col-md-4">
-
                         <div class="mb-5">
                             <h3>Quick Links</h3>
                             <ul class="list-unstyled">
@@ -570,7 +458,6 @@
                                 <li><a href="#">Categories</a></li>
                             </ul>
                         </div>
-
                         <div class="mb-5">
                             <h3>Social</h3>
                             <ul class="list-unstyled footer-social">
@@ -598,7 +485,6 @@
     </div>
 </footer>
 <!-- END footer -->
-
 <!-- loader -->
 <div id="loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
@@ -607,27 +493,116 @@
                 stroke="#f4b214"/>
     </svg>
 </div>
-
 <script src="static/js/jquery-3.2.1.min.js"></script>
 <script src="static/js/jquery-migrate-3.0.0.js"></script>
 <script src="static/js/popper.min.js"></script>
-<!--<script src="static/js/bootstrap.min.js"></script>-->
+<script src="static/js/bootstrap.min.js"></script>
 <script src="static/js/owl.carousel.min.js"></script>
 <script src="static/js/jquery.waypoints.min.js"></script>
 <script src="static/js/jquery.stellar.min.js"></script>
-<script src="static/js/main.js"></script>
 <script src="/layuiadmin/layui/layui.js"></script>
 <script>
+    //留言板富文本
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //构建一个富文本编辑器
+        var index = layedit.build('discussionContent', {
+            tool: [
+                'strong' //加粗
+                , 'italic' //斜体
+                , 'underline' //下划线
+                , 'del' //删除线
+                , '|' //分割线
+                , 'left' //左对齐
+                , 'center' //居中对齐
+                , 'right' //右对齐
+                , 'link' //超链接
+                , 'unlink' //清除链接
+                //, 'face' //表情
+                //,'image' //插入图片
+            ]
+            , height: 150
+        });
+
+        //提交时验证规则
+        //提交时把值同步到文本域中
+        form.verify({
+            //discussionContent：富文本域中的lay-verify值
+            discussionContent: function (value) {
+                return layedit.sync(index);
+            }
+        });
+        //验证通过，提交
+        form.on('submit(demo1)', function (data) {
+            /*layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });*/
+            var formData = new FormData(document.getElementById("f1"));
+            $.ajax({
+                url: "/discussion.do?action=addDiscussion",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+                    //layer.closeAll();
+                    //console.log(data);
+                    window.parent.layer.closeAll();
+                    //window.parent.location.reload();
+                    if (data == "true") {
+                        layer.msg("新增成功！");
+                        //alert("新增成功！")
+                        //$("#resetButton").click();
+                    } else {
+                        layer.msg("新增失败！");
+                        //$("#resetButton").click();
+                    }
+                }
+            });
+        });
+        /*$("#submit").on("click", function () {
+            var name = readCookie("userName");
+            alert(name)
+            $.ajax({
+                url: "discussion.do",
+                //回传评论数据
+                data: {
+                    action: "addToolDiscussion",
+                    discussionHead: '111',
+                    username: name,
+                    discussionContent: index
+                },
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    alert(123)
+                    alert($("#content").val())
+                    alert(123456)
+                    if (data == "true") {
+                        layer.msg('评论成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg('未登录');
+                    }
+                }
+            })
+            return false;
+        })*/
+    });
+
     layui.use(['carousel', 'form'], function () {
         var carousel = layui.carousel
             , form = layui.form;
-
         //常规轮播
         carousel.render({
             elem: '#test1'
             , arrow: 'always'
         });
-
         //改变下时间间隔、动画类型、高度
         carousel.render({
             elem: '#test2'
@@ -635,7 +610,6 @@
             , anim: 'fade'
             , height: '120px'
         });
-
         //设定各种参数
         var ins3 = carousel.render({
             elem: '#test3'
@@ -647,36 +621,29 @@
             , height: '100%'
             , interval: 5000
         });
-
-
         var $ = layui.$, active = {
             set: function (othis) {
                 var THIS = 'layui-bg-normal'
                     , key = othis.data('key')
                     , options = {};
-
                 othis.css('background-color', '#5FB878').siblings().removeAttr('style');
                 options[key] = othis.data('value');
                 ins3.reload(options);
             }
         };
-
         //监听开关
         form.on('switch(autoplay)', function () {
             ins3.reload({
                 autoplay: this.checked
             });
         });
-
         $('.demoSet').on('keyup', function () {
             var value = this.value
                 , options = {};
             if (!/^\d+$/.test(value)) return;
-
             options[this.name] = value;
             ins3.reload(options);
         });
-
         //其它示例
         $('.demoTest .layui-btn').on('click', function () {
             var othis = $(this), type = othis.data('type');
@@ -685,7 +652,6 @@
     });
     layui.use('element', function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-
         //监听导航点击
         element.on('nav(demo)', function (elem) {
             //console.log(elem)
@@ -693,5 +659,6 @@
         });
     });
 </script>
+<script src="static/js/main.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import java.util.List;
  * @date ：Created in 2020/12/14 19:41
  */
 public class Page2<T> {
-    public static final Integer PAGE_SIZE = 5;
+    //public static final Integer PAGE_SIZE = 5;
     private Integer code;
     private String msg;
     private Integer count;
@@ -33,9 +33,9 @@ public class Page2<T> {
         this.data = data;
     }
 
-    public static Integer getPageSize() {
-        return PAGE_SIZE;
-    }
+   // public static Integer getPageSize() {
+//        return PAGE_SIZE;
+//    }
 
     public Integer getCode() {
         return code;

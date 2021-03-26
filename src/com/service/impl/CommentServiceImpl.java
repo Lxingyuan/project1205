@@ -33,8 +33,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int deleteComment(Integer toolId, String commentUser) {
-        return commentDao.deleteComment(toolId,commentUser);
+    public int deleteComment(Integer toolId, String commentUser,String commentContent) {
+        return commentDao.deleteComment(toolId,commentUser,commentContent);
     }
 
     @Override
