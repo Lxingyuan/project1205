@@ -41,6 +41,7 @@
         $(function () {
 
             hotTool(1);
+            showTypes();
 
             $("#logOut").on("click", function () {
                 var name = readCookie("adminName");
@@ -77,8 +78,8 @@
                             //console.log("data:" + data);//data代表服务器回传的数据
                             if (data == "true") {
                                 layer.msg("退出成功！");
-                                return false;
-                                window.location.reload();
+                                window.location.href = '/index.html';
+                                window.event.returnValue = false;
                             }
                             else {
                                 layer.msg("退出失败！");
@@ -95,6 +96,7 @@
                 //隐藏“登录”和“注册”
                 $("#login").hide();
                 $("#register").hide();
+                $("#f1").hide();
                 //显示登录信息
                 $("#userMessage").show();
                 $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
@@ -218,6 +220,21 @@
                 success: function (data) {
 
                     hotToolinit(data);
+                }
+            });
+        }
+
+        function showTypes() {
+            $.ajax({
+                url: "http://localhost:8765/tool.do",
+                data: {action: "queryAllType"},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    var jsonObj = JSON.parse(data);
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        $("#types").append("<dd><a href=\"category.html?toolType="+jsonObj[i].type+"\">"+jsonObj[i].type+"</a></dd>");
+                    }
                 }
             });
         }
@@ -352,6 +369,20 @@
         </a>
     </li>
     <li class="layui-nav-item">
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">工具分类</a>
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--            <dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+                        <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+                        <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+                        <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
+        </dl>
+    </li>
+    <li class="layui-nav-item">
         <a href="/Guestbook.html">留言板
             <!--<span  class="layui-badge-dot"></span>-->
         </a>
@@ -372,7 +403,7 @@
         </a>
     </li>
     <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
-        <a href="/register.html">
+        <a href="/register.html?choose=login">
             登录
         </a>
     </li>
@@ -542,28 +573,62 @@
                 title: '最终的提交信息'
             });*/
             var formData = new FormData(document.getElementById("f1"));
-            $.ajax({
-                url: "/discussion.do?action=addDiscussion",
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "POST",
-                dataType: "text",
-                success: function (data) {
-                    //layer.closeAll();
-                    //console.log(data);
-                    window.parent.layer.closeAll();
-                    //window.parent.location.reload();
-                    if (data == "true") {
-                        layer.msg("新增成功！");
-                        //alert("新增成功！")
-                        //$("#resetButton").click();
-                    } else {
-                        layer.msg("新增失败！");
-                        //$("#resetButton").click();
+            var name = readCookie("adminName");
+            if (name != null){
+                $.ajax({
+                    url: "/discussion.do?action=addDiscussion",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    dataType: "text",
+                    success: function (data) {
+                        //layer.closeAll();
+                        //console.log(data);
+                        window.parent.layer.closeAll();
+                        //window.parent.location.reload();
+                        if (data == "true") {
+                            layer.msg("新增成功！");
+                            //alert("新增成功！")
+                            //$("#resetButton").click();
+                        } else {
+                            layer.msg("新增失败！");
+                            //$("#resetButton").click();
+                        }
                     }
+                });
+            }
+            else {
+                var name = readCookie("userName");
+                if(name!=null){
+                    $.ajax({
+                        url: "/discussion.do?action=addDiscussion",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        dataType: "text",
+                        success: function (data) {
+                            //layer.closeAll();
+                            //console.log(data);
+                            window.parent.layer.closeAll();
+                            //window.parent.location.reload();
+                            if (data == "true") {
+                                layer.msg("新增成功！");
+                                //alert("新增成功！")
+                                //$("#resetButton").click();
+                            } else {
+                                layer.msg("新增失败！");
+                                //$("#resetButton").click();
+                            }
+                        }
+                    });
                 }
-            });
+                else{
+                    layer.msg('未登录');
+                }
+            }
+
         });
         /*$("#submit").on("click", function () {
             var name = readCookie("userName");

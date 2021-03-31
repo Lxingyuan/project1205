@@ -32,7 +32,8 @@ public class DiscussionDaoImpl extends BaseDao implements DiscussionDao {
         return update(sql, discussionId);
     }
 
-    public int deleteDiscussion(String discussionUser,String discussionContent){
+    @Override
+    public int deleteDiscussion(String discussionUser, String discussionContent){
         String sql = "delete from discussion where discussionUser = ? and discussionContent=?";
         return update(sql, discussionUser,discussionContent);
     }
@@ -62,6 +63,7 @@ public class DiscussionDaoImpl extends BaseDao implements DiscussionDao {
         return queryForOne(Discussion.class, sql, discussionUser);
     }
 
+    @Override
     public Discussion queryDiscussionByTime(){
         String sql="SELECT * FROM discussion ORDER BY CreateTime DESC LIMIT 1";
         return  queryForOne(Discussion.class,sql);
@@ -79,6 +81,7 @@ public class DiscussionDaoImpl extends BaseDao implements DiscussionDao {
         return queryForList(Discussion.class, sql, begin, pageSize);
     }
 
+    @Override
     public List<Discussion> queryAllDiscussion() {
         String sql = "select * from discussion";
         return queryForList(Discussion.class, sql);
@@ -102,6 +105,7 @@ public class DiscussionDaoImpl extends BaseDao implements DiscussionDao {
         return queryForList(Discussion.class, sql);
     }
 
+    @Override
     public List<Discussion> queryDiscussion() {
         String sql="SELECT * FROM discussion c,user u  where c.discussionUser=u.userName ORDER BY c.CreateTime DESC";
         return  queryForList(Discussion.class,sql);

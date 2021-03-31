@@ -40,8 +40,35 @@ public class ToolServiceImpl implements ToolService {
     }
 
     @Override
-    public Tool queryToolByType(String toolType) {
-        return toolDao.queryToolByType(toolType);
+    public List<Tool> queryAllType() {
+        return toolDao.queryAllType();
+    }
+
+    @Override
+    public Page<Tool> queryToolByType(String toolType, int pageNo, int pageSize) {
+        Page<Tool> page = new Page<>();
+        //设置当前页码
+        page.setPageNo(pageNo);
+        //设置页面大小
+        page.setPageSize(pageSize);
+        //求总记录数
+        Integer pageTotalCount = toolDao.queryPageTotalCountsByType(toolType);
+        //设置总记录数
+        page.setPageTotalCount(pageTotalCount);
+        //求总页码
+        Integer pageTotal = pageTotalCount / pageSize;
+        if (pageTotalCount % pageSize > 0) {
+            pageTotal += 1;
+        }
+        //设置总页码
+        page.setPageTotal(pageTotal);
+        //求开始页码
+        int begin = (page.getPageNo() - 1) * pageSize;
+        //获取开始页码的分页数据
+        List<Tool> items = toolDao.queryToolByType(toolType,begin, pageSize);
+        //设置数据
+        page.setItems(items);
+        return page;
     }
 
     @Override
@@ -55,13 +82,40 @@ public class ToolServiceImpl implements ToolService {
     }
 
     @Override
-    public Tool queryToolByProtagonist(String protagonist) {
-        return toolDao.queryToolByProtagonist(protagonist);
+    public List<Tool> queryToolByUploader(String uploader) {
+        return toolDao.queryToolByUploader(uploader);
+    }
+
+    @Override
+    public Page<Tool> queryToolByUploaders(int pageNo, int pageSize) {
+        Page<Tool> page = new Page<>();
+        //设置当前页码
+        page.setPageNo(pageNo);
+        //设置页面大小
+        page.setPageSize(pageSize);
+        //求总记录数
+        Integer pageTotalCount = toolDao.queryPageTotalCountsByUploaders();
+        //设置总记录数
+        page.setPageTotalCount(pageTotalCount);
+        //求总页码
+        Integer pageTotal = pageTotalCount / pageSize;
+        if (pageTotalCount % pageSize > 0) {
+            pageTotal += 1;
+        }
+        //设置总页码
+        page.setPageTotal(pageTotal);
+        //求开始页码
+        int begin = (page.getPageNo() - 1) * pageSize;
+        //获取开始页码的分页数据
+        List<Tool> items = toolDao.queryToolByUploaders(begin, pageSize);
+        //设置数据
+        page.setItems(items);
+        return page;
     }
 
     @Override
     public Tool queryToolByShowTime(String showTime) {
-        return toolDao.queryToolByShowTime(showTime);
+        return toolDao.queryToolByUploadTime(showTime);
     }
 
     @Override
@@ -113,11 +167,11 @@ public class ToolServiceImpl implements ToolService {
     }
 
     @Override
-    public Page2<Tool> queryToolByPage2(String toolName, String type, String protagonist, String showTime) {
+    public Page2<Tool> queryToolByPage2(String toolName, String type, String uploader, String uploadTime) {
         Page2<Tool> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");
-        List<Tool> list = toolDao.queryAllTool(toolName, type, protagonist, showTime);
+        List<Tool> list = toolDao.queryAllTool(toolName, type, uploader, uploadTime);
         page.setData(list);
         page.setCount(list.size());
         return page;

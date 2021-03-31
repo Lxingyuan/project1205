@@ -1,22 +1,34 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-    <title>软测工具资源网</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/static/images/favicon.ico"/>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300, 400,700" rel="stylesheet">
+
     <link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/css/animate.css">
     <link rel="stylesheet" href="static/css/owl.carousel.min.css">
+
     <link rel="stylesheet" href="static/fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="static/fonts/fontawesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="static/fonts/flaticon/font/flaticon.css">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
-    <!-- Theme Style -->
+
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+
     <script type="text/javascript" src="./static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/getUrlParam.js"></script>
+
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="static/css/style.css">
 
     <style>
         .imgdetial {
@@ -46,11 +58,9 @@
         }
 
         $(function () {
-            hotTool(1);
             showTypes();
-            rotation();
+            hotTool(1);
             showNotice();
-            showToolComment();
             //删除按钮事件
             $("body").on("click", ".deleteTool", function () {
                 //alert($(this).children("input").val());
@@ -244,13 +254,15 @@
         }
 
         function hotTool(pageNo) {
+            var toolType = UrlParm.parm("toolType");
+            $(document).attr("title",toolType);
+            $('.mb-4').html(toolType);
             $.ajax({
                 url: "http://localhost:8765/tool.do",
-                data: {action: "queryToolPage", pageNo: pageNo},
+                data: {action: "queryToolByType", pageNo: pageNo, toolType: toolType},
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
-                    //alert(data)
                     hotToolinit(data);
                 }
             });
@@ -269,63 +281,6 @@
                     }
                 }
             });
-        }
-
-        function showToolComment() {
-            $.ajax({
-                url: "http://localhost:8765/comment.do",
-                data: {action: "queryCommentByTime"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    for (var i = 0; i < 5; i++) {
-                        $("#newComment").append("<li><a href=detailsPage.html?toolId=" + jsonObj.data[i].toolId + ">\n" +
-                            "<div class=\"text\">\n" +
-                            "<h5>评论内容：" + jsonObj.data[i].commentContent + "</h5>\n" +
-                            "<div class=\"post-meta\">\n" +
-                            "<span class=\"mr-2\" style=\"font-size:20px\">" + jsonObj.data[i].commentUser + "</span> &bullet;\n" +
-                            "<span class=\"ml-2\">" + jsonObj.data[i].createTime +"</span>\n" +
-                            "</div>\n" +
-                            "</div>\n" +
-                            "</a>\n" +
-                            "</li>");
-                    }
-                }
-            });
-        }
-
-        function rotation() {
-            $.ajax({
-                url: "tool.do",
-                data: {action: "queryToolByVoteNum"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    //alert(data);
-                    var jsonObj = JSON.parse(data);
-                    //jsonObj.data表示json字符串中key为data对应的值
-                    //console.log(jsonObj.data.length);
-                    for (let i = 0; i < 3; i++) {
-                        $("#img" + (i + 1)).attr("src", jsonObj.data[i].picAddress);
-                        $("#img" + (i + 1)).attr("title", jsonObj.data[i].toolName);
-                        $("#a" + (i + 1)).attr('href', "detailsPage.html?toolId=" + jsonObj.data[i].toolId);
-                    }
-                    $("#popularTool").attr("src", jsonObj.data[0].picAddress);
-                }
-            });
-            $.ajax({
-                url: "tool.do",
-                data: {action: "queryToolByHits"},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    var jsonObj = JSON.parse(data);
-                    for (let j = 0; j < 5; j++) {
-                        $(".categories").append("<li><a href=\"detailsPage.html?toolId=" + jsonObj.data[j].toolId + "\">" + jsonObj.data[j].toolName + "</a></li>")
-                    }
-                }
-            })
         }
 
         function changepage(i) {
@@ -352,7 +307,7 @@
             } else if (currentPage > 3 && currentPage < (jsonObj.pageTotal - 1)) {
                 index = currentPage - 3;
             } else if (currentPage >= jsonObj.pageTotal - 1) {
-                index = jsonObj.pageTotal - 3;
+                index = jsonObj.pageTotal - 4;
             }
             if (jsonObj.pageTotal > 5) {
                 for (let i = index; i <= index + 4; i++) {
@@ -383,7 +338,7 @@
 
             for (let i = 0; i < jsonObj.items.length; i++) {
                 //console.log(jsonObj.items[i]);
-                let colmd6 = $("<div class=\"col-md-6\"></div>");
+                let colmd4 = $("<div class=\"col-md-4\"></div>");
                 //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
                 let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
                 let img = $("<a href=\"detailsPage.html?toolId=" + jsonObj.items[i].toolId + "\"><img  class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.items[i].picAddress + "'/></a>");
@@ -399,18 +354,14 @@
                 }
                 blogentry.append(img);
                 blogentry.append(blogbody);
-                colmd6.append(blogentry);
-                $("#hotTool").append(colmd6);
+                colmd4.append(blogentry);
+                $("#hotTool").append(colmd4);
             }
         }
 
     </script>
 </head>
-
-<!-- END header -->
-
-<body style="width: auto">
-
+<body>
 <ul class="layui-nav" id="top">
     <li class="layui-nav-item">
         <a href="/index.html">首页
@@ -423,13 +374,17 @@
         </a>
     </li>
     <li class="layui-nav-item">
-    <a href="/toolUpload.html">资源上传
-        <!--<span class="layui-badge-dot"></span>-->
-    </a>
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
     </li>
     <li class="layui-nav-item">
         <a href="javascript:;">工具分类</a>
-        <dl class="layui-nav-child" id="types">
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--        <dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+                    <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+                    <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+                    <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
         </dl>
     </li>
     <li class="layui-nav-item">
@@ -448,42 +403,27 @@
             <dd><a href="javascript:;" id="logOut">注销</a></dd>
         </dl>
     </li>
-    <li class="layui-nav-item" style="float: right" id="login">
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="login">
         <a href="/register.html">
             注册
         </a>
     </li>
-    <li class="layui-nav-item" style="float: right" id="register">
+    <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
         <a href="/register.html?choose=login">
             登录
         </a>
     </li>
 </ul>
 
-<div align="center" style="margin-top: 10px;" id="vote">
-    <h1><a href="javascript:;" style="color: #ff9f26">当前正在举行投票，点击查看！</a></h1>
-</div>
-
-<div class="container" style="height: 600px;margin-top: 10px;margin-bottom: 50px" align="center">
-    <div class="layui-carousel" id="test10" style="height: 500px">
-        <div carousel-item="">
-            <div><a id="a1"><img width="100%" src="" id="img1"></a></div>
-            <div><a id="a2"><img width="100%" src="" id="img2"></a></div>
-            <div><a id="a3"><img width="100%" src="" id="img3"></a></div>
-        </div>
-    </div>
-</div>
-<!-- END section -->
-
 <section class="site-section py-sm">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
-                <h2 class="mb-4">热门工具</h2>
+            <div class="col-md-6" style="margin-top: 80px">
+                <h2 class="mb-4"></h2>
             </div>
         </div>
         <div class="row blog-entries">
-            <div class="col-md-12 col-lg-8 main-content" id="pageBody">
+            <div class="col-md-12 col-lg-12 main-content" id="pageBody">
                 <div class="row" id="hotTool">
                 </div>
                 <ul class="pagination">
@@ -491,34 +431,6 @@
             </div>
             <!-- END main-content -->
 
-
-            <div class="col-md-12 col-lg-4 sidebar">
-
-                <!-- END sidebar-box -->
-                <div class="sidebar-box">
-                    <CENTER><h1>公告</h1></CENTER>
-                    <div class="bio text-center" id="notice">
-
-                    </div>
-                </div>
-
-                <!-- END sidebar-box -->
-
-                <div class="sidebar-box">
-                    <h2 class="heading">高浏览工具</h2>
-                    <ul class="categories">
-                    </ul>
-                </div>
-                <!-- END sidebar-box -->
-                <div class="sidebar-box">
-                    <h3 class="heading">最新评论</h3>
-                    <div class="post-entry-sidebar">
-                        <ul id="newComment">
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -538,7 +450,7 @@
             <div class="col-md-6 ml-auto">
                 <div class="row">
                     <div class="col-md-7">
-                        <h3>最新影评</h3>
+                        <h3>最新评论</h3>
                         <div class="post-entry-sidebar">
                             <ul id="">
                                 <li>
@@ -642,6 +554,29 @@
 <script src="static/js/main.js"></script>
 <script src="/layuiadmin/layui/layui.js"></script>
 <script>
+    /**
+     *@param name 键值
+     * @return 通过键值获取到对应的数据，如果没有则返回null
+     **/
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == " ")
+                c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+
+
+
+
+
     layui.use(['carousel', 'form'], function () {
         var carousel = layui.carousel
             , form = layui.form;
@@ -707,9 +642,9 @@
             active[type] ? active[type].call(this, othis) : '';
         });
     });
+
     layui.use('element', function () {
         var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
-
         //监听导航点击
         element.on('nav(demo)', function (elem) {
             //console.log(elem)

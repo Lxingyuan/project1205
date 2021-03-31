@@ -17,5 +17,8 @@ public interface ToolScoreService {
     Integer insertScore(ToolScore toolScore);
 
     //重复性判断
-    ToolScore repeatJudge(String userName,String toolId);
+    ToolScore repeatJudge(String userName, String toolId);
+
+    //获取工具平均分数
+    Object toolScore(String toolId);
 }

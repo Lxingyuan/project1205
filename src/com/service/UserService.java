@@ -28,6 +28,8 @@ public interface UserService {
 
     User queryUserByName(String username);
 
+    User queryUserByToolId(String toolId);
+
     User queryUserByNameAndPassword(User user);
 
     //用户分页
@@ -42,9 +44,13 @@ public interface UserService {
     //电影分页2
     Page2<User> queryUserByPage2();
 
-    Page2<User> queryUserByPage2(String userName,String telephone,String qq,String email);
+    Page2<User> queryUserByPage2(String userName, String telephone, String qq, String email);
 
-    int updateUserColumnValue(Integer userId,String columnName,String columnValue);
+    int updateUserColumnValue(Integer userId, String columnName, String columnValue);
+
+    int scoreUp(Integer userId, Integer score);
+
+    int levelUp(Integer userId, Integer level, Integer score);
 
     User findUserVoteOrNot(String userName);
 

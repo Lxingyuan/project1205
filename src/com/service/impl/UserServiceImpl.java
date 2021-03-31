@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User queryUserByToolId(String toolId) {
+        return userDao.queryUserByToolId(toolId);
+    }
+
+    @Override
     public User queryUserByNameAndPassword(User user) {
         return userDao.queryUserByNameAndPassword(user);
     }
@@ -137,6 +142,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserColumnValue(Integer userId, String columnName, String columnValue) {
         return userDao.updateUserColumnValue(userId, columnName, columnValue);
+    }
+
+    @Override
+    public int scoreUp(Integer userId, Integer score) {
+        return userDao.scoreUp(userId, score);
+    }
+
+    @Override
+    public int levelUp(Integer userId, Integer level, Integer score) {
+        return userDao.levelUp(userId, level, score);
     }
 
     @Override

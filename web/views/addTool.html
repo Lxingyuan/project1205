@@ -24,33 +24,42 @@
             <label class="layui-form-label">工具类型</label>
             <div class="layui-input-block">
                 <input onKeypress="checkSpace()" type="text" id="type" name="type" lay-verify="type" autocomplete="off"
-                       placeholder="请输入类型"
+                       placeholder="请输入工具类型"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">特征</label>
+            <label class="layui-form-label">工具特点</label>
             <div class="layui-input-block">
                 <input onKeypress="checkSpace()" type="text" id="characteristic" name="characteristic" lay-verify="characteristic"
                        autocomplete="off"
-                       placeholder="请输入特征"
+                       placeholder="请输入工具特点"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">主演</label>
+            <label class="layui-form-label">上传年份</label>
             <div class="layui-input-block">
-                <input onKeypress="checkSpace()" type="text" id="protagonist" name="protagonist"
-                       lay-verify="protagonist" autocomplete="off"
-                       placeholder="请输入主演"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">发行年份</label>
-            <div class="layui-input-block">
-                <select name="showTime" id="showTime">
+                <select name="uploadTime" id="uploadTime">
                 </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">资源地址</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="link-load" name="" lay-verify="characteristic"
+                       autocomplete="off"
+                       placeholder="请输入资源地址"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教学地址</label>
+            <div class="layui-input-block">
+                <input onKeypress="checkSpace()" type="text" id="link-teach" name="" lay-verify="characteristic"
+                       autocomplete="off"
+                       placeholder="请输入教学地址"
+                       class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -130,7 +139,7 @@
             //获取当前年
             var year = myDate.getFullYear();
             for (var i = year; i >= 1900; i--) {
-                $("#showTime").append('<option value=' + i + '>' + i + '</option>');
+                $("#uploadTime").append('<option value=' + i + '>' + i + '</option>');
             }
         }
 
@@ -189,11 +198,6 @@
             , characteristic: function (value) {
                 if (value.length < 1) {
                     return '请输入特征！';
-                }
-            }
-            , protagonist: function (value) {
-                if (value.length < 1) {
-                    return '请输入主演！';
                 }
             }
             , chooseImage: function (value) {

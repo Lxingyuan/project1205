@@ -29,4 +29,8 @@ public class ToolScoreServiceImpl implements ToolScoreService {
     public ToolScore repeatJudge(String userName, String toolId) {
         return toolScoreDao.repeatJudge(userName,toolId);
     }
+
+    public Object toolScore(String toolId){
+        return toolScoreDao.toolScore(toolId);
+    }
 }

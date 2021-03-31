@@ -13,10 +13,19 @@
     <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
     <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <script type="text/javascript" src="static/js/getUrlParam.js"></script>
     <script type="text/javascript">
         $(function () {
             //验证码
             var code;
+            var choose = UrlParm.parm("choose");
+            console.log(choose);
+
+            //显示登录页面
+            if (choose == "login") {
+                $("#registerDiv").hide();
+                $("#loginDiv").show();
+            }
 
             //判断字符串是否为空
             function isEmptyOrBlank(str) {

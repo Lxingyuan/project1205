@@ -12,8 +12,8 @@ public class Tool {
     private String toolName;
     private String type;
     private String characteristic;
-    private String protagonist;
-    private String showTime;
+    private String uploader;
+    private String uploadTime;
     private String picAddress;
     private String downloadAddr;
     private String teachingAddress;
@@ -22,6 +22,7 @@ public class Tool {
     private Date createTime;
     private Date updateTime;
     private Integer voteNum;
+    private Integer state;
 
     public Integer getVoteNum() {
         return voteNum;
@@ -38,8 +39,8 @@ public class Tool {
                 ", toolName='" + toolName + '\'' +
                 ", type='" + type + '\'' +
                 ", characteristic='" + characteristic + '\'' +
-                ", protagonist='" + protagonist + '\'' +
-                ", showTime='" + showTime + '\'' +
+                ", uploader='" + uploader + '\'' +
+                ", uploadTime='" + uploadTime + '\'' +
                 ", picAddress='" + picAddress + '\'' +
                 ", downloadAddr='" + downloadAddr + '\'' +
                 ", teachingAddress='" + teachingAddress + '\'' +
@@ -48,18 +49,19 @@ public class Tool {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", voteNum=" + voteNum +
+                ", state=" + state +
                 '}';
     }
 
     public Tool() {
     }
 
-    public Tool(String toolName, String type, String characteristic, String protagonist, String showTime, String picAddress, String downloadAddr, String teachingAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum) {
+    public Tool(String toolName, String type, String characteristic, String uploader, String uploadTime, String picAddress, String downloadAddr, String teachingAddress, String content, Integer hits, Date createTime, Date updateTime, Integer voteNum, Integer state) {
         this.toolName = toolName;
         this.type = type;
         this.characteristic = characteristic;
-        this.protagonist = protagonist;
-        this.showTime = showTime;
+        this.uploader = uploader;
+        this.uploadTime = uploadTime;
         this.picAddress = picAddress;
         this.downloadAddr = downloadAddr;
         this.teachingAddress = teachingAddress;
@@ -68,6 +70,7 @@ public class Tool {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.voteNum = voteNum;
+        this.state = state;
     }
 
     public String getDownloadAddr() {
@@ -118,20 +121,20 @@ public class Tool {
         this.characteristic = characteristic;
     }
 
-    public String getProtagonist() {
-        return protagonist;
+    public String getUploader() {
+        return uploader;
     }
 
-    public void setProtagonist(String protagonist) {
-        this.protagonist = protagonist;
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
     }
 
-    public String getShowTime() {
-        return showTime;
+    public String getUploadTime() {
+        return uploadTime;
     }
 
-    public void setShowTime(String showTime) {
-        this.showTime = showTime;
+    public void setUploadTime(String uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
     public String getPicAddress() {
@@ -172,5 +175,13 @@ public class Tool {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

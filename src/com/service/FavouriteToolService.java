@@ -11,5 +11,5 @@ import java.util.List;
 public interface FavouriteToolService {
     List<FavouriteTool> queryFavouriteTool(String userName);
     Integer insert(FavouriteTool favouriteTool);
-    int deleteFavouriteTool(Integer toolId,String userName);
+    int deleteFavouriteTool(Integer toolId, String userName);
 }

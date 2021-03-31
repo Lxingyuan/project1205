@@ -32,4 +32,9 @@ public class ToolScoreDaoImpl extends BaseDao implements ToolScoreDao {
         return queryForOne(ToolScore.class, sql, userName, toolId);
     }
 
+    @Override
+    public Object toolScore(String toolId) {
+        String sql = "SELECT (SELECT SUM(score) as sumscore from (SELECT * from toolscore where toolid=?) ts)/(select count(1) from toolscore where toolId=?) score;";
+        return queryForSingleValue(sql, toolId,toolId);
+    }
 }

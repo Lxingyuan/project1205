@@ -38,6 +38,25 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
+    <li class="layui-nav-item">
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">工具分类</a>
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--<dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+            <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+            <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+            <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/Guestbook.html">留言板
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
         <a href="javascript:;">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
@@ -75,7 +94,10 @@
                 <center>
                     <b style="font-size: 20px">用户名:<span class="BigUserName"></span></b>
                     <br>
-                    <b style="font-size: 20px">邮箱:<span class="UserEmail"></span></b>
+                    <b style="font-size: 20px">邮箱:<span class="UserEmail"></span></b><br>
+                    <b>
+                        <span class="layui-badge layui-bg-green" id="level"></span>
+                    </b>
                     <!-- <br>
                      <i class="layui-icon layui-icon-home" style="font-size: 30px; color: #1E9FFF;"></i>
                      <a href="#" style="font-size: 20px">发邮件</a>-->
@@ -125,6 +147,20 @@
         return null;
     }
 
+    function showTypes() {
+        $.ajax({
+            url: "http://localhost:8765/tool.do",
+            data: {action: "queryAllType"},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                var jsonObj = JSON.parse(data);
+                for (var i = 0; i < jsonObj.length; i++) {
+                    $("#types").append("<dd><a href=\"category.html?toolType="+jsonObj[i].type+"\">"+jsonObj[i].type+"</a></dd>");
+                }
+            }
+        });
+    }
 
     function initTop() {
         var name = readCookie("adminName");
@@ -213,6 +249,7 @@
                         $("#UserBigPic").attr("src", jsonObj.headPic);
                         $(".UserEmail").html(jsonObj.email);
                         $(".BigUserName").html(jsonObj.userName);
+                        $("#level").html("Lv."+jsonObj.level);
                     }
                 });
             } else {
@@ -232,6 +269,7 @@
                         $("#UserBigPic").attr("src", jsonObj.headPic);
                         $(".UserEmail").html(jsonObj.email);
                         $(".BigUserName").html(jsonObj.userName);
+                        $("#level").html("Lv."+jsonObj.level);
                         //console.log($(".sex:checked").val());
                     }
                 });
@@ -324,6 +362,7 @@
 
 
     $(function () {
+        showTypes();
         initTop();
         initRightTop()
 

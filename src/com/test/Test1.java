@@ -1,9 +1,25 @@
 package com.test;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.dao.ToolDao;
+import com.dao.ToolScoreDao;
+import com.dao.UserDao;
+import com.dao.impl.ToolDaoImpl;
+import com.dao.impl.ToolScoreDaoImpl;
+import com.dao.impl.UserDaoImpl;
+import com.entity.Tool;
+import com.entity.ToolScore;
+import com.entity.User;
+import com.service.ToolService;
+import com.service.UserService;
+import com.service.impl.ToolServiceImpl;
+import com.service.impl.UserServiceImpl;
+import com.utils.Page;
 import com.utils.SmsUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+
+import javax.swing.*;
 
 /**
  * @author ：liuyuntao
@@ -56,4 +72,23 @@ public class Test1 {
         }
         System.out.println(sql);
     }
+
+    ToolDao toolDao =new ToolDaoImpl();
+    ToolService toolService = new ToolServiceImpl();
+    UserDao userDao = new UserDaoImpl();
+    UserService userService = new UserServiceImpl();
+    ToolScoreDao toolScore=new ToolScoreDaoImpl();
+    @Test
+    public void test2(){
+        Tool toolObj = toolService.queryToolById(1);
+        System.out.println(toolObj.toString());
+    }
+    
+    @Test
+    public void test3(){
+        Object f=toolScore.toolScore("1");
+        System.out.println(f);
+
+    }
+
 }

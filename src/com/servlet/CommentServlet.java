@@ -132,6 +132,7 @@ public class CommentServlet extends BaseServlet {
     public void queryCommentByToolId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer toolId = Integer.valueOf(request.getParameter("toolId"));
         List<Comment> comments = commentService.queryCommentByToolId(toolId);
+
         Page2<Comment> page = new Page2<>();
         page.setCode(0);
         page.setMsg("");

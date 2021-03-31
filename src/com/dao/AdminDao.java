@@ -15,7 +15,7 @@ import java.util.List;
 public interface AdminDao {
     int updateAdmin(Admin admin);
     //修改某个字段的信息
-    int updateUserColumnValue(Integer userId,String columnName,String columnValue);
+    int updateUserColumnValue(Integer userId, String columnName, String columnValue);
     int deleteUser(Integer userId);
 
     List<User> queryAllUser();

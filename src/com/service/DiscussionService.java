@@ -22,7 +22,7 @@ public interface DiscussionService {
 
     int deleteDiscussion(Integer discussionId);
 
-    int deleteDiscussion(String discussionUser,String discussionContent);
+    int deleteDiscussion(String discussionUser, String discussionContent);
 
     //根据id搜索公告
     Discussion queryDiscussionById(Integer id);
@@ -39,8 +39,8 @@ public interface DiscussionService {
 
     Page2<Discussion> queryDiscussionByPage2();
 
-    Page2<Discussion> queryDiscussionByPage2(String discussionHead,String discussionContent,String discussionUser);
+    Page2<Discussion> queryDiscussionByPage2(String discussionHead, String discussionContent, String discussionUser);
 
-    int updateDiscussionColumnValue(Integer discussionId,String columnName,String columnValue);
+    int updateDiscussionColumnValue(Integer discussionId, String columnName, String columnValue);
 
 }

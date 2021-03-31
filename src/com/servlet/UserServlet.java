@@ -2,6 +2,7 @@ package com.servlet;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.entity.Admin;
+import com.entity.Tool;
 import com.google.gson.Gson;
 import com.entity.User;
 import com.service.AdminService;
@@ -64,6 +65,16 @@ public class UserServlet extends BaseServlet {
         Page<User> page = userService.queryUserByPage(pageNo, Page.PAGE_SIZE);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryUserByToolId(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String toolId = request.getParameter("toolId");
+
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(userService.queryUserByToolId(toolId));
+        System.out.println("1");
+        System.out.println(jsonStr);
         response.getWriter().write(jsonStr);
     }
 
@@ -243,6 +254,29 @@ public class UserServlet extends BaseServlet {
         }
     }
 
+    public void updateUserByScore(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId=request.getParameter("userId");
+        Integer level= Integer.valueOf(request.getParameter("level"));
+        //要更新的字段名
+        String columnName=request.getParameter("columnName");
+        //要更新的字段值
+        String columnValue=request.getParameter("columnValue");
+        columnValue=columnValue.replace("'", "\\'");
+        columnValue=columnValue.replace("\"", "\\\"");
+        columnValue=columnValue.replace("\\", "\\\\");
+        System.out.println(userId+" "+level+" "+columnName+" "+columnValue);
+        Integer score = Integer.valueOf(columnValue)+1;
+        Integer result=userService.scoreUp(Integer.parseInt(userId), score);
+        //System.out.println(result);
+        Integer result2=userService.levelUp(Integer.parseInt(userId), level, score);
+        System.out.println(result2);
+        if(result<0){
+            response.getWriter().write("false");
+        }else {
+            response.getWriter().write("true");
+        }
+    }
+
     /**
      * 限定条件查询
      * @param request
@@ -335,6 +369,7 @@ public class UserServlet extends BaseServlet {
         String jsonStr = gson.toJson(user);
         response.getWriter().write(jsonStr);
     }
+
     public void findUserByTelephone(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String telephone=request.getParameter("telephone");
         String userName=request.getParameter("userName");

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" characteristic="webkit">
+    <meta http-equiv="X-UA-Compatible" characteristic="IE=edge,chrome=1">
+    <meta name="viewport" characteristic="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico"/>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div style="margin: 30px 60px;">
+    <form class="layui-form" action="" id="f1" style="margin-left: -110px">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <textarea lay-verify="characteristic" class="layui-textarea" id="characteristic" style="display: none" name="characteristic">
+                </textarea>
+            </div>
+        </div>
+        <input type="hidden" id="id" name="toolId">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1" id="submitButton">立即提交</button>
+                <!--<button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>-->
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-2.0.0.min.js"></script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //构建一个富文本编辑器
+        var index = layedit.build('characteristic', {
+            tool: [
+                'strong' //加粗
+                , 'italic' //斜体
+                , 'underline' //下划线
+                , 'del' //删除线
+                , '|' //分割线
+                , 'left' //左对齐
+                , 'center' //居中对齐
+                , 'right' //右对齐
+                , 'link' //超链接
+                , 'unlink' //清除链接
+                //, 'face' //表情
+                //,'image' //插入图片
+            ]
+            , height: 250
+        });
+
+        //提交时验证规则
+        //提交时把值同步到文本域中
+        form.verify({
+            //characteristic：富文本域中的lay-verify值
+            characteristic: function (value) {
+                return layedit.sync(index);
+            }
+        });
+        //验证通过，提交
+        form.on('submit(demo1)', function (data) {
+            /*layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });*/
+            var formData = new FormData(document.getElementById("f1"));
+            //上传的文件名
+            var toolId = formData.get("toolId");
+            var characteristic = formData.get("characteristic");
+            //console.log(toolId);
+            console.log(characteristic);
+            $.ajax({
+                url: "/tool.do?action=updateTool",
+                data: {toolId: toolId, columnName: "characteristic", columnValue: characteristic},
+                type: "GET",
+                async: false,
+                dataType: "text",//返回的数据类型
+                success: function (data) {
+                    //layer.closeAll();
+                    //layer.msg('更新成功');
+                    //layer.msg('不开心。。', {icon: 1});
+                    window.parent.layer.closeAll();
+                    window.parent.location.reload();
+                    if (data == "true") {
+                        window.parent.layer.msg('更新成功');
+                        //window.parent.alert('更新成功');
+                    } else {
+                        window.parent.layer.msg('更新失败');
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

@@ -27,7 +27,7 @@ public interface CommentDao {
     int deleteComment(Integer commentId);
 
     //删除评论信息
-    int deleteComment(Integer toolId, String commentUser,String commentContent);
+    int deleteComment(Integer toolId, String commentUser, String commentContent);
 
     Integer queryPageTotalCounts();
 

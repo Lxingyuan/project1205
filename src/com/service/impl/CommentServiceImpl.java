@@ -69,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
         return page;
     }
 
+    @Override
     public Page2<Comment> queryCommentByPage2() {
         Page2<Comment> page = new Page2<>();
         page.setCode(0);

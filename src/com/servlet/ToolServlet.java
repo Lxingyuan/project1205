@@ -54,7 +54,6 @@ public class ToolServlet extends BaseServlet {
         super.doGet(request, response);
     }
 
-
     public void queryToolList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
         Page2<Tool> page = toolService.queryToolByPage2();
@@ -126,16 +125,16 @@ public class ToolServlet extends BaseServlet {
      * @throws IOException
      */
     public void queryToolListLimit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //电影名称
+        //工具名称
         String toolName = request.getParameter("toolName");
-        //电影类型
+        //工具类型
         String type = request.getParameter("type");
-        //主演
-        String protagonist = request.getParameter("protagonist");
-        //上映年份
-        String showTime = request.getParameter("showTime");
+        //上传者
+        String uploader = request.getParameter("uploader");
+        //上传年份
+        String uploadTime = request.getParameter("uploadTime");
         //System.out.println("|toolName:"+toolName+"|type:"+type+"|protagonist:"+protagonist+"|showTime:"+showTime+"|");
-        Page2<Tool> page = toolService.queryToolByPage2(toolName, type, protagonist, showTime);
+        Page2<Tool> page = toolService.queryToolByPage2(toolName, type, uploader, uploadTime);
         System.out.println("page2:" + page);
         Gson gson = new Gson();
         //转成字符串
@@ -145,6 +144,66 @@ public class ToolServlet extends BaseServlet {
     }
 
     public void queryToolPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        Page<Tool> page = toolService.queryToolByPage(pageNo, Page.PAGE_SIZE);
+        System.out.println(page.getPageTotalCount());
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryAllType(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(toolService.queryAllType());
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryToolByType(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        String toolType = String.valueOf(request.getParameter("toolType"));
+        Page<Tool> page = toolService.queryToolByType(toolType, pageNo, Page.PAGE_SIZE);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryToolByProtagonist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userName = request.getParameter("userName");
+        //System.out.println(userName);
+        List<Tool> list = toolService.queryToolByUploader(userName);
+        List<Tool> toolList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            //System.out.println(list.get(i).getToolId());
+            toolList.add(toolService.queryToolById(list.get(i).getToolId()));
+        }
+        Page2<Tool> page = new Page2<>();
+        page.setCode(0);
+        page.setMsg("");
+        page.setCount(toolList.size());
+        page.setData(toolList);
+        //System.out.println(toolList);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        System.out.println(jsonStr);
+        response.getWriter().write(jsonStr);
+        //System.out.println(list);
+    }
+
+    public void queryToolByUploaders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+        Page<Tool> page = toolService.queryToolByUploaders(pageNo, Page.PAGE_SIZE);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(page);
+        response.getWriter().write(jsonStr);
+    }
+
+    public void queryTool(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
@@ -181,9 +240,9 @@ public class ToolServlet extends BaseServlet {
                         } else if ("characteristic".equals(fileItem.getFieldName())) {
                             tool.setCharacteristic(fileItem.getString("UTF-8"));
                         } else if ("protagonist".equals(fileItem.getFieldName())) {
-                            tool.setProtagonist(fileItem.getString("UTF-8"));
+                            tool.setUploader(fileItem.getString("UTF-8"));
                         } else if ("showTime".equals(fileItem.getFieldName())) {
-                            tool.setShowTime(fileItem.getString("UTF-8"));
+                            tool.setUploadTime(fileItem.getString("UTF-8"));
                         } else if ("content".equals(fileItem.getFieldName())) {
                             tool.setContent(fileItem.getString("UTF-8"));
                         }

@@ -24,8 +24,11 @@ public interface ToolService {
     //按名字查询电影
     Tool queryToolByName(String toolName);
 
+    //查询所有分类
+    List<Tool> queryAllType();
+
     //按类别查询电影
-    Tool queryToolByType(String toolType);
+    Page<Tool> queryToolByType(String toolType, int pageNo, int pageSize);
 
     //按导演查询电影
     Tool queryToolByCharacteristic(String characteristic);
@@ -34,7 +37,10 @@ public interface ToolService {
     Tool queryToolById(Integer id);
 
     //按主演查询电影
-    Tool queryToolByProtagonist(String protagonist);
+    List<Tool> queryToolByUploader(String uploader);
+
+    //查询所有用户上传资源
+    Page<Tool> queryToolByUploaders(int pageNo, int pageSize);
 
     //按上映年份查询电影
     Tool queryToolByShowTime(String showTime);
@@ -55,11 +61,11 @@ public interface ToolService {
      *
      * @param toolName
      * @param type
-     * @param protagonist
-     * @param showTime
+     * @param uploader
+     * @param uploadTime
      * @return
      */
-    Page2<Tool> queryToolByPage2(String toolName, String type, String protagonist, String showTime);
+    Page2<Tool> queryToolByPage2(String toolName, String type, String uploader, String uploadTime);
 
     //修改某个字段的电影信息
     int updateToolColumnValue(Integer toolId, String columnName, String columnValue);

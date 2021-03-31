@@ -19,9 +19,9 @@ public interface DiscussionDao {
 
     int deleteDiscussion(Integer discussionId);
 
-    int deleteDiscussion(String discussionUser,String discussionContent);
+    int deleteDiscussion(String discussionUser, String discussionContent);
 
-    int updateDiscussionColumnValue(Integer discussionId,String columnName,String columnValue);
+    int updateDiscussionColumnValue(Integer discussionId, String columnName, String columnValue);
     //根据id搜索公告
     Discussion queryDiscussionById(Integer discussionId);
 
@@ -40,7 +40,7 @@ public interface DiscussionDao {
 
     List<Discussion> queryAllDiscussion();
 
-    List<Discussion> queryAllDiscussion(String discussionHead,String discussionContent,String discussionUser);
+    List<Discussion> queryAllDiscussion(String discussionHead, String discussionContent, String discussionUser);
 
     List<Discussion> queryDiscussion();
 

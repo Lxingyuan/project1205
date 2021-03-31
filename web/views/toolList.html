@@ -35,7 +35,7 @@
                 //获取当前年
                 var year = myDate.getFullYear();
                 for (var i = year; i >= 1950; i--) {
-                    $("#showTime").append('<option value=' + i + '>' + i + '</option>');
+                    $("#uploadTime").append('<option value=' + i + '>' + i + '</option>');
                 }
             }
 
@@ -64,16 +64,16 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">主演</label>
+                    <label class="layui-form-label">上传者</label>
                     <div class="layui-input-block">
-                        <input type="text" name="protagonist" placeholder="请输入" autocomplete="off" class="layui-input"
-                               id="protagonist">
+                        <input type="text" name="uploader" placeholder="请输入" autocomplete="off" class="layui-input"
+                               id="uploader">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">发行年份</label>
                     <div class="layui-input-block">
-                        <select name="showTime" id="showTime">
+                        <select name="uploadTime" id="uploadTime">
                             <option value="">不限</option>
                         </select>
                     </div>
@@ -118,8 +118,16 @@
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     <!--<a class="layui-btn layui-btn-xs" lay-event="showMessage">显示</a>-->
-</script>
 
+</script>
+<script type="text/html" id="barDemo2">
+    {{#  if(d.state == 1){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="state">已通过</a>
+    {{#  } }}
+    {{#  if(d.state == 0){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="state">待审核</a>
+    {{#  } }}
+</script>
 
 <script>
     function checkSpace() {
@@ -128,6 +136,11 @@
             layer.msg("不能输入空格哦！")
         }
     }
+
+    $(function () {
+
+    });
+
     layui.use('table', function () {
         var table = layui.table;
         var form = layui.form;
@@ -157,22 +170,15 @@
                     unresize: true,
                     event: 'updateImg'
                 }
-                /*, {
-                    field: 'downloadAddr',
-                    title: '大海报预览',
-                    width: 130,
-                    templet: '#imgTp2',
-                    unresize: true,
-                    event: 'downloadAddr'
-                }*/
                 , {field: 'downloadAddr', title: '下载地址', width: 130, edit: 'text'}
-                , {field: 'characteristic', title: '特征', width: 130, edit: 'text'}
-                , {field: 'protagonist', title: '主演', width: 130, edit: 'text'}
-                , {field: 'showTime', title: '发行年份', width: 100, sort: true, edit: 'text'}
+                , {field: 'characteristic', title: '特点', width: 130, edit: 'text',event: 'characteristic'}
+                , {field: 'uploader', title: '上传者', width: 130, edit: 'text'}
+                , {field: 'uploadTime', title: '上传年份', width: 100, sort: true, edit: 'text'}
                 , {field: 'content', title: '工具详细介绍', width: 150, event: 'content'}
                 , {field: 'hits', title: '浏览数', width: 100, sort: true, edit: 'text'}
                 , {field: 'voteNum', title: '得票数', width: 100, sort: true, edit: 'text'}
-                , {field: 'teachingAddress', title: '教学地址', width: 100, templet: '#teachingAddress'}
+                , {field: 'teachingAddress', title: '教学地址', width: 100, edit: 'text'}
+                , {field: 'state', title: '状态', width: 120, align: 'center', templet: '#barDemo2'}
                 , {fixed: 'right', title: '操作', width: 120, align: 'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
 
             ]]
@@ -191,8 +197,7 @@
                 //console.log(JSON.stringify(res));
                 if (this.page.curr) {
                     result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
-                }
-                else {
+                } else {
                     result = res.data.slice(0, this.limit);
                 }
                 return {
@@ -231,7 +236,7 @@
                         ,
                         btn: ['关闭']
                         ,
-                        yes: function () {
+                        yes: function (index) {
                             layer.closeAll();
                         }
                     });
@@ -309,69 +314,83 @@
                 });
             } else if (layEvent === 'showMessage') { //输出一行信息
                 console.log(data)
-            }
-            else if (layEvent === 'showVideo') { //显示视频
-                //console.log(data)
+            } else if (layEvent === 'state') {
+                var toolId = data.toolId;
+                var state = data.state;
+                if (state == 0) {
+                    state = 1;
+                    $.ajax({
+                        url: "/tool.do?action=updateTool",
+                        data: {toolId: toolId, columnName: "state", columnValue: state},
+                        type: "GET",
+                        dataType: "text",//返回的数据类型
+                        success: function (data) {
+                            if (data == "true") {
+                                $.ajax({
+                                    url: "/user.do?action=queryUserByToolId",
+                                    data: {toolId: toolId},
+                                    type: "GET",
+                                    dataType: "text",//返回的数据类型
+                                    success: function (data) {
+                                        var jsonObj = JSON.parse(data);
+                                        var userName = jsonObj.userName;
+                                        var userId = jsonObj.userId;
+                                        var score = jsonObj.score;
+                                        var level = jsonObj.level;
+                                        $.ajax({
+                                            url: "/user.do?action=updateUserByScore",
+                                            data: {userId: userId, columnName: "score", columnValue: score, level: level},
+                                            type: "GET",
+                                            async: false,
+                                            dataType: "text",//返回的数据类型
+                                            success: function (data) {
+                                                layer.msg('用户【'+userName+'】经验+1！');
+                                            }
+                                        });
+                                    }
+                                });
+                                layer.msg('切换成功！');
+                                table.reload('demo', {
+                                    page: {
+                                        curr: recodePage
+                                    }
+                                });
+                            } else {
+                                layer.msg('切换失败');
+                            }
+                        }
+                    });
+                }
+            }else if (layEvent === 'characteristic') {//富文本编辑器
+                //layer.msg("213")
+                //console.log(data.characteristic);
                 layer.open({
-                    type: 1,
-                    title: data.toolName + '的教学地址',
-                    area: ['1100px', '700px'],
-                    shade: 0.1,
-                    maxmin: true,
-                    offset: ['3%', '12%'],
-                    content: '<div style="padding: 10px 40px;">                                    <form id="f1" >\n' +
-                    '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
-                    '                                            <input type="hidden" name="tableName" value="tool">\n' +
-                    '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
-                    '                                                <iframe height=600 width=1000 src="' + data.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>\n' +
-                    '                                            <input onKeypress="checkSpace()" type="text" id="teachingAddress0" name="teachingAddress0" autocomplete="off" placeholder="请输入地址" class="layui-input"><a class="layui-btn layui-btn-sm" lay-event="editVideo" id="editVideo">修改视频地址</a>\n' +
-                    '                                        </div>\n' +
-                    '                                    </form></div>'
+                    type: 2
+                    ,
+                    title: '修改工具特点信息'
+                    ,
+                    area: ['700px', '500px']
+                    ,
+                    shade: 0.1
+                    ,
+                    maxmin: true
+                    ,
+                    offset: ['5%', '30%']
+                    ,
+                    content: '/views/editToolCharacteristic.html'
                     ,
                     btn: ['关闭']
                     ,
+                    success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
+                        //console.log(data.characteristic);
+                        let body = layer.getChildFrame('body', index);
+                        body.find("#characteristic").html(data.characteristic);
+                        body.find("#id").val(data.toolId);
+                        layui.form.render();
+                    },
                     yes: function () {
                         layer.closeAll();
                     }
-                });
-                //修改视频地址按钮事件
-                $(document).on("click", "#editVideo", function () {
-                    if($("#teachingAddress0").val()==""){
-                        layer.msg('请输入地址！');
-                        return;
-                    }
-                    //console.log($("#teachingAddress0").val());
-                    layer.confirm("您确定修改吗?",{
-                        btn: ['确认', '取消']
-                        ,icon: 3,
-                        title: '提示'
-                    }, function () {
-                        // 按钮1的事件
-                        $.ajax({
-                            url: "/tool.do?action=updateTool",
-                            data: {toolId: data.toolId, columnName: "teachingAddress", columnValue: $("#teachingAddress0").val()},
-                            type: "GET",
-                            async: false,
-                            dataType: "text",//返回的数据类型
-                            success: function (data) {
-                                if (data == "true") {
-                                    layer.msg('更新成功');
-                                    layer.closeAll();
-                                    table.reload('demo', {
-                                        page: {
-                                            curr: recodePage
-                                        }
-                                    });
-                                } else {
-                                    layer.msg('更新失败');
-                                }
-                            }
-                        });
-                    }, function(){
-                        // 按钮2的事件
-                    });
-
                 });
             }
             else if (layEvent === 'content') {//富文本编辑器
@@ -418,15 +437,15 @@
                     maxmin: true,
                     offset: ['10%', '35%'],
                     content: '<div style="padding: 20px 100px;">                                    <form id="f1">\n' +
-                    '                                        <div>\n' +
-                    '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
-                    '                                            <input type="hidden" name="tableName" value="tool">\n' +
-                    '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
-                    '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
-                    '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.picAddress + '"/>\n' +
-                    '                                        </div>\n' +
-                    '                                        <button type="button" id="chuan">确认上传</button>\n' +
-                    '                                    </form></div>'
+                        '                                        <div>\n' +
+                        '                                            <input type="hidden" name="id" value="' + data.toolId + '">\n' +
+                        '                                            <input type="hidden" name="tableName" value="tool">\n' +
+                        '                                            <input type="hidden" name="columnName" value="picAddress">\n' +
+                        '                                            <input type="file" name="fileName" accept=".jpg,.png,.jpeg" id="chooseImage"><br>\n' +
+                        '                                            <img id="cropedBigImg" style="width: 320px;height: 400px;" src="' + data.picAddress + '"/>\n' +
+                        '                                        </div>\n' +
+                        '                                        <button type="button" id="chuan">确认上传</button>\n' +
+                        '                                    </form></div>'
                     ,
                     btn: ['关闭']
                     ,
@@ -602,7 +621,7 @@
                 }
             }
             //修改发行年份字段
-            if (field == "showTime") {
+            if (field == "uploadTime") {
                 //数字
                 var $zz = /^[1-9]*[1-9][0-9]*$/;
                 //console.log(value);
@@ -642,9 +661,9 @@
                 }
             }
             //验证通过，修改数据库
-            layer.confirm("您确定修改吗?",{
+            layer.confirm("您确定修改吗?", {
                 btn: ['确认', '取消']
-                ,icon: 3,
+                , icon: 3,
                 title: '提示'
             }, function () {
                 //alert("确认")
@@ -668,7 +687,7 @@
                         }
                     }
                 });
-            }, function(){
+            }, function () {
                 // 按钮2的事件
                 table.reload('demo', {
                     page: {
@@ -682,15 +701,15 @@
         $("#search").on("click", function () {
             //layer.msg('233');
             //layer.msg($("#toolName").val());
-            //layer.msg($("#showTime").val());
+            //layer.msg($("#uploadTime").val());
             table.reload('demo', {
                 url: '/tool.do?action=queryToolListLimit' //数据接口
                 ,
                 where: {
                     toolName: $("#toolName").val(),
                     type: $("#type").val(),
-                    protagonist: $("#protagonist").val(),
-                    showTime: $("#showTime").val()
+                    uploader: $("#uploader").val(),
+                    uploadTime: $("#uploadTime").val()
                 }
                 ,
                 page: {

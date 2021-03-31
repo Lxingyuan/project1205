@@ -63,6 +63,7 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
         return queryForList(Comment.class, sql, begin, pageSize);
     }
 
+    @Override
     public List<Comment> queryAllComment() {
         String sql = "select c.* , m.* from `comment` c,`tool` m WHERE c.ToolId=m.ToolId";
         return queryForList(Comment.class, sql);
@@ -86,11 +87,13 @@ public class CommentDaoImpl extends BaseDao implements CommentDao {
         return queryForList(Comment.class, sql);
     }
 
+    @Override
     public Integer queryTotalCommentByToolId(Integer toolId) {
         String sql = "select count(1) from comment where toolId ='"+toolId+"'";
         return Math.toIntExact((Long) queryForSingleValue(sql));
     }
 
+    @Override
     public List<Comment> queryCommentByToolId(Integer toolId) {
         String sql="SELECT * FROM comment c,user u  where c.toolId = '"+toolId+"' and c.commentUser=u.userName ORDER BY c.CreateTime DESC";
         return  queryForList(Comment.class,sql);

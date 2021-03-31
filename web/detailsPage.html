@@ -111,8 +111,8 @@
                             //console.log("data:" + data);//data代表服务器回传的数据
                             if (data == "true") {
                                 layer.msg("退出成功！");
-                                return false;
-                                window.location.reload();
+                                window.location.href = '/index.html';
+                                window.event.returnValue = false;
                             }
                             else {
                                 layer.msg("退出失败！");
@@ -129,6 +129,8 @@
                 //隐藏“登录”和“注册”
                 $("#login").hide();
                 $("#register").hide();
+                $("#starbox").hide();
+                $("#addCommentBox").hide();
                 //显示登录信息
                 $("#userMessage").show();
                 $("#dl01").prepend("<dd><a href=\"/adminManage.html\">进入后台</a></dd>");
@@ -175,18 +177,35 @@
                 }
             }
             var toolId = UrlParm.parm("toolId");
+            //评分显示
+            $.ajax({
+                url:"toolScore.do",
+                data:{action:"GetToolScore",toolId:toolId},
+                type:"GET",
+                dataType: "text",
+                success: function (data) {
+                    if (data == "null") {
+                        $("#score").append("<span style='color: red;font-size: 30px'>暂无评分信息</span>");
+                    }else{
+                        $("#score").append("<span style='color: black;font-size: 30px'>综合评分："+data+"<i class=\"layui-icon layui-icon-rate-solid\" style=\"font-size: 30px; color: yellow;\"></i>  </span>")
+                    }
+                }
+            })
+            //点击量
             $.ajax({
                 url: "tool.do",
                 data: {action: "addToolHits", toolId: toolId},
                 type: "GET",
+
             });
+            //搜索工具信息
             $.ajax({
                 url: "tool.do",
                 data: {action: "queryToolByToolId", toolId: toolId},
-
                 type: "GET",
                 dataType: "text",
                 success: function (data) {
+                    console.log(data);
                     let jsonObj = JSON.parse(data);
                     let hits = jsonObj.hits;
                     var toolId = jsonObj.toolId;
@@ -197,24 +216,14 @@
                         "<a class=\"layui-btn layui-btn-warm layui-btn-sm\" id='unLike' style='color: black;margin-left: 5px'>取消喜欢</a>" +
                         "</center>");
                     $(".bio-body>img").attr("src", jsonObj.picAddress);
-                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type + "</span><br>特征：<span>" + jsonObj.characteristic + " </span><br>参演演员：<span>" + jsonObj.protagonist + "</span><br>发行年份：<span>" + jsonObj.showTime + "</span><br>剧情介绍：<p>" + jsonObj.content + "</p>");
-                    // $("#showTool").on("click", function () {
-                    //     layer.open({
-                    //         type: 1,
-                    //         title: jsonObj.toolName + '的教学地址',
-                    //         area: ['1100px', '700px'],
-                    //         shade: 0.1,
-                    //         maxmin: true,
-                    //         offset: ['3%', '12%'],
-                    //         content: '<div style="padding: 10px 40px;"><form id="f1" ><div>' +
-                    //         '<iframe height=600 width=1000 src="' + jsonObj.teachingAddress + '" frameborder=0 allowfullscreen="true"></iframe>' +
-                    //         '</div></form></div>',
-                    //         btn: ['关闭'],
-                    //         yes: function () {
-                    //             layer.closeAll();
-                    //         }
-                    //     });
-                    // })
+                    $("#toolMassage").append("工具类型：<span class=\"category \" style='font-size: large'>" + jsonObj.type
+                        + "</span><br>特征：<span>" + jsonObj.characteristic
+                        + " </span><br>上传者：<span>" + jsonObj.uploader
+                        + "</span><br>上传年份：<span>" + jsonObj.uploadTime
+                        + "</span><br>工具特点：<p style='text-indent: 2em;'>" + jsonObj.content
+                        + "</p><br>资源地址：<a href=\'//"+ jsonObj.downloadAddr + "\'>"+ jsonObj.downloadAddr +"</a>"
+                        + "</p><br>教学地址：<a href=\'//"+ jsonObj.teachingAddress + "\'>"+ jsonObj.teachingAddress +"</a>"
+                    );
                     if (readCookie("userName") == null) {
                         $("#like").hide();
                         $("#unLike").hide();
@@ -379,7 +388,7 @@
                     }
                 })
                 return false;
-            })
+            });
         });
     </script>
 </head>
@@ -395,6 +404,20 @@
         <a href="/search.html">点击搜索
             <!--<span class="layui-badge-dot"></span>-->
         </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">工具分类</a>
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--            <dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+                        <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+                        <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+                        <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
+        </dl>
     </li>
     <li class="layui-nav-item">
         <a href="/Guestbook.html">留言板
@@ -417,7 +440,7 @@
         </a>
     </li>
     <li class="layui-nav-item" lay-unselect="" style="float: right" id="register">
-        <a href="/register.html">
+        <a href="/register.html?choose=login">
             登录
         </a>
     </li>
@@ -432,12 +455,12 @@
                 </div>
                 <!--分隔符-->
                 <div class="pt-5">
-                    <h3>评价：<div id="star" style="height: 50px;"></div></h3>
+                    <h3 id="starbox">评分：<div id="star" style="height: 50px;"></div></h3>
                     <h3 class="mb-5" id="commentNum">总评论数：</h3>
                     <ul class="comment-list">
                     </ul>
                     <!-- END comment-list -->
-                    <div class="comment-form-wrap pt-5">
+                    <div class="comment-form-wrap pt-5" id="addCommentBox">
                         <h3 class="mb-5">添加评论</h3>
                         <form action="#" class="p-5 bg-light">
                             <div class="form-group">
@@ -460,13 +483,17 @@
                     </div>
                 </div>
                 <div class="sidebar-box">
+                    <div id="score">
+                    </div>
+                </div>
+                <div class="sidebar-box">
                     <h3 class="heading">高浏览工具</h3>
                     <ul class="categories">
                     </ul>
                 </div>
                 <!-- END sidebar-box -->
                 <div class="sidebar-box">
-                    <h3 class="heading">最新影评</h3>
+                    <h3 class="heading">最新评论</h3>
                     <div class="post-entry-sidebar">
                         <ul id="newComment">
                         </ul>
@@ -576,8 +603,8 @@
                             }else if(data == "empty"){
                                 layer.msg("未登录");
                             } else{
-                                layer.msg("您已经评过分数啦！")
-                            }
+                                layer.msg("您已经评过分数啦！"
+                            )}
                         }
                     })
                 }

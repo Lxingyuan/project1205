@@ -17,6 +17,8 @@ public interface ToolScoreDao {
     int insertScore(ToolScore toolScore);
 
     //重复判定
-    ToolScore repeatJudge(String userName,String toolId);
+    ToolScore repeatJudge(String userName, String toolId);
+
+    Object toolScore(String toolId);
 
 }

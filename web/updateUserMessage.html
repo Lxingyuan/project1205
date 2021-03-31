@@ -22,6 +22,25 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
+    <li class="layui-nav-item">
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">工具分类</a>
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--<dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+            <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+            <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+            <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/Guestbook.html">留言板
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
         <a href="/UserPersonal.html">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
@@ -240,7 +259,23 @@
         return flag;
     }
 
+    function showTypes() {
+        $.ajax({
+            url: "http://localhost:8765/tool.do",
+            data: {action: "queryAllType"},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                var jsonObj = JSON.parse(data);
+                for (var i = 0; i < jsonObj.length; i++) {
+                    $("#types").append("<dd><a href=\"category.html?toolType="+jsonObj[i].type+"\">"+jsonObj[i].type+"</a></dd>");
+                }
+            }
+        });
+    }
+
     $(function () {
+        showTypes();
         var name = readCookie("adminName");
         console.log("adminName:" + readCookie("adminName"));
         console.log("userName:" + readCookie("userName"));

@@ -144,6 +144,9 @@
                     sort: true,
                     templet: '<div>{{ layui.laytpl.toDateString(d.updateTime) }}</div>'
                 }
+                , {field: 'vote', title: '投票数', width: 150, sort: true, edit: 'text'}
+                , {field: 'level', title: '等级', width: 150, sort: true, edit: 'text'}
+                , {field: 'score', title: '积分', width: 150, sort: true, edit: 'text'}
                 , {fixed: 'right', title: '操作', width: 180, align: 'center', toolbar: '#barDemo', unresize: true} //这里的toolbar值是模板元素的选择器
             ]]
             , done: function (res, curr, count) {

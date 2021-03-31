@@ -15,14 +15,14 @@ import java.util.List;
 public class ToolDaoImpl extends BaseDao implements ToolDao {
     @Override
     public int insertTool(Tool tool) {
-        String sql = "insert into tool (ToolName,Type,Characteristic,Protagonist,ShowTime,PicAddress,DownloadAddr,TeachingAddress,Content,Hits)values(?,?,?,?,?,?,?,?,?,?)";
-        return update(sql, tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits());
+        String sql = "insert into tool (ToolName,Type,Characteristic,Uploader,UploadTime,PicAddress,DownloadAddr,TeachingAddress,Content,Hits,state)values(?,?,?,?,?,?,?,?,?,?,?)";
+        return update(sql, tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getUploader(), tool.getUploadTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits(), tool.getState());
     }
 
     @Override
     public int updateTool(Tool tool) {
-        String sql = "update tool set UpdateTime=?,ToolName=?,Type=?,Characteristic=?,Protagonist=?,ShowTime=?,PicAddress=?,DownloadAddr=?,TeachingAddress=?,Content=?,Hits=? where ToolId = ?";
-        return update(sql, tool.getUpdateTime(), tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getProtagonist(), tool.getShowTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits(), tool.getToolId());
+        String sql = "update tool set UpdateTime=?,ToolName=?,Type=?,Characteristic=?,Uploader=?,UploadTime=?,PicAddress=?,DownloadAddr=?,TeachingAddress=?,Content=?,Hits=? where ToolId = ?";
+        return update(sql, tool.getUpdateTime(), tool.getToolName(), tool.getType(), tool.getCharacteristic(), tool.getUploader(), tool.getUploadTime(), tool.getPicAddress(), tool.getDownloadAddr(), tool.getTeachingAddress(), tool.getContent(), tool.getHits(),  tool.getToolId());
     }
 
     @Override
@@ -46,27 +46,27 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
     }
 
     @Override
-    public Tool queryToolByType(String toolType) {
-        String sql = "select * from tool where ToolType=?";
-        return queryForOne(Tool.class, sql, toolType);
-    }
-
-    @Override
     public Tool queryToolByCharacteristic(String characteristic) {
         String sql = "select * from tool where Characteristic=?";
         return queryForOne(Tool.class, sql, characteristic);
     }
 
     @Override
-    public Tool queryToolByProtagonist(String protagonist) {
-        String sql = "select * from tool where Protagonist=?";
-        return queryForOne(Tool.class, sql, protagonist);
+    public List<Tool> queryToolByUploader(String uploader) {
+        String sql = "select * from tool where uploader=?";
+        return queryForList(Tool.class, sql, uploader);
     }
 
     @Override
-    public Tool queryToolByShowTime(String showTime) {
-        String sql = "select * from tool where ShowTime=?";
-        return queryForOne(Tool.class, sql, showTime);
+    public List<Tool> queryToolByUploaders(Integer begin, Integer pageSize) {
+        String sql = "select * from tool where uploader!=\'admin\' limit ?, ?";
+        return queryForList(Tool.class, sql, begin, pageSize);
+    }
+
+    @Override
+    public Tool queryToolByUploadTime(String uploadTime) {
+        String sql = "select * from tool where UploadTime=?";
+        return queryForOne(Tool.class, sql, uploadTime);
     }
 
     @Override
@@ -90,14 +90,38 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
     //查询当前表的总记录条数
     @Override
     public Integer queryPageTotalCounts() {
-        String sql = "select count(1) from tool";
+        String sql = "select count(1) from tool where state=1";
+        return Math.toIntExact((Long) queryForSingleValue(sql));
+    }
+
+    @Override
+    public Integer queryPageTotalCountsByType(String toolTpye) {
+        String sql = "select count(1) from tool where type=?";
+        return Math.toIntExact((Long) queryForSingleValue(sql,toolTpye));
+    }
+
+    @Override
+    public Integer queryPageTotalCountsByUploader(String uploader) {
+        String sql = "select count(1) from tool where uploader=?";
+        return Math.toIntExact((Long) queryForSingleValue(sql,uploader));
+    }
+
+    @Override
+    public Integer queryPageTotalCountsByUploaders() {
+        String sql = "select count(1) from tool where uploader!=1";
         return Math.toIntExact((Long) queryForSingleValue(sql));
     }
 
     @Override
     public List<Tool> queryToolByPage(Integer begin, Integer pageSize) {
-        String sql = "select * from tool limit ?, ?";
+        String sql = "select * from tool where state=1 limit ?, ?";
         return queryForList(Tool.class, sql, begin, pageSize);
+    }
+
+    @Override
+    public List<Tool> queryToolByType(String toolType, Integer begin, Integer pageSize) {
+        String sql = "select * from tool where state=1 and type=? limit ?, ?";
+        return queryForList(Tool.class, sql, toolType, begin, pageSize);
     }
 
     @Override
@@ -107,8 +131,8 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
     }
 
     @Override
-    public List<Tool> queryAllTool(String toolName, String type, String protagonist, String showTime) {
-        String sql = "SELECT * FROM tool WHERE toolName LIKE '%' AND type LIKE '%' AND protagonist LIKE '%' AND showTime LIKE '%'";
+    public List<Tool> queryAllTool(String toolName, String type, String protagonist, String uploadTime) {
+        String sql = "SELECT * FROM tool WHERE toolName LIKE '%' AND type LIKE '%' AND uploader LIKE '%' AND uploadTime LIKE '%'";
         if(StringUtils.isNotEmpty(toolName)){
             String string="toolName LIKE '%"+toolName+"%'";
             sql=sql.replace("toolName LIKE '%'",string);
@@ -118,12 +142,12 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
             sql=sql.replace("type LIKE '%'",string);
         }
         if(StringUtils.isNotEmpty(protagonist)){
-            String string="protagonist LIKE '%"+protagonist+"%'";
-            sql=sql.replace("protagonist LIKE '%'",string);
+            String string="uploader LIKE '%"+protagonist+"%'";
+            sql=sql.replace("uploader LIKE '%'",string);
         }
-        if(StringUtils.isNotEmpty(showTime)){
-            String string="showTime LIKE '"+showTime+"'";
-            sql=sql.replace("showTime LIKE '%'",string);
+        if(StringUtils.isNotEmpty(uploadTime)){
+            String string="uploadTime LIKE '"+uploadTime+"'";
+            sql=sql.replace("uploadTime LIKE '%'",string);
         }
         return queryForList(Tool.class, sql);
     }
@@ -136,7 +160,7 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
 
     @Override
     public List<Tool> searchTool(String searchMessage) {
-        String sql = "SELECT * FROM tool WHERE toolName LIKE '%"+searchMessage+"%' or type LIKE '%"+searchMessage+"%' or protagonist LIKE '%"+searchMessage+"%' or showTime LIKE '%"+searchMessage+"%'or characteristic LIKE '%"+searchMessage+"%'";
+        String sql = "SELECT * FROM tool WHERE toolName LIKE '%"+searchMessage+"%' or type LIKE '%"+searchMessage+"%' or uploader LIKE '%"+searchMessage+"%' or uploadTime LIKE '%"+searchMessage+"%'or characteristic LIKE '%"+searchMessage+"%'";
         return queryForList(Tool.class, sql);
     }
 
@@ -144,5 +168,11 @@ public class ToolDaoImpl extends BaseDao implements ToolDao {
     public Integer addToolVote(Integer toolId) {
         String sql="UPDATE tool SET voteNum=voteNum+1 where toolId = ? ";
         return update(sql,toolId);
+    }
+
+    @Override
+    public List<Tool> queryAllType() {
+        String sql="SELECT DISTINCT type FROM tool where state=1";
+        return queryForList(Tool.class, sql);
     }
 }

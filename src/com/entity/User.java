@@ -20,6 +20,8 @@ public class User {
     private Date registerTime;
     private String headPic;
     private Integer vote;
+    private Integer level;
+    private Integer score;
 
     public Integer getVote() {
         return vote;
@@ -85,6 +87,8 @@ public class User {
                 ", registerTime=" + registerTime +
                 ", headPic='" + headPic + '\'' +
                 ", vote=" + vote +
+                ", level=" + level +
+                ", score=" + score +
                 '}';
     }
 
@@ -174,5 +178,21 @@ public class User {
 
     public void setHeadPic(String headPic) {
         this.headPic = headPic;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

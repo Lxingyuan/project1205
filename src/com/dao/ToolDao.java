@@ -25,17 +25,23 @@ public interface ToolDao {
     //按名字查询电影
     Tool queryToolByName(String toolName);
 
+    //查询所有分类
+    List<Tool> queryAllType();
+
     //按类别查询电影
-    Tool queryToolByType(String toolType);
+    List<Tool> queryToolByType(String toolType, Integer begin, Integer pageSize);
 
     //按导演查询电影
     Tool queryToolByCharacteristic(String characteristic);
 
-    //按主演查询电影
-    Tool queryToolByProtagonist(String protagonist);
+    //按上传者查询电影
+    List<Tool> queryToolByUploader(String uploader);
+
+    //查询所有用户上传资源
+    List<Tool> queryToolByUploaders(Integer begin, Integer pageSize);
 
     //按上映年份查询电影
-    Tool queryToolByShowTime(String showTime);
+    Tool queryToolByUploadTime(String uploadTime);
 
     //按id查询电影
     Tool queryToolById(Integer id);
@@ -47,6 +53,12 @@ public interface ToolDao {
 
     Integer queryPageTotalCounts();
 
+    Integer queryPageTotalCountsByType(String toolTpye);
+
+    Integer queryPageTotalCountsByUploader(String uploader);
+
+    Integer queryPageTotalCountsByUploaders();
+
     List<Tool> queryToolByPage(Integer pageNo, Integer pageSize);
 
     List<Tool> queryAllTool();
@@ -56,11 +68,11 @@ public interface ToolDao {
      *
      * @param toolName
      * @param type
-     * @param protagonist
-     * @param showTime
+     * @param uploader
+     * @param uploadTime
      * @return
      */
-    List<Tool> queryAllTool(String toolName, String type, String protagonist, String showTime);
+    List<Tool> queryAllTool(String toolName, String type, String uploader, String uploadTime);
 
     int addToolHits(Integer toolId);
 

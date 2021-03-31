@@ -18,22 +18,22 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     //注册用户
     @Override
     public int registerUser(User user) {
-        String sql = "insert into user (UserName,UserPassword,Telephone)values(?,?,?)";
+        String sql = "insert into user (UserName,UserPassword,Telephone,Level,Score,Vote)values(?,?,?,?,?,?)";
 
-        return update(sql, user.getUserName(), user.getUserPassword(), user.getTelephone());
+        return update(sql, user.getUserName(), user.getUserPassword(), user.getTelephone(), 1, 0, 0);
     }
 
     @Override
     public int insertUser(User user) {
-        String sql = "insert into user (UserName,UserPassword,HeadPic,Sex,Telephone,QQ,Email)values(?,?,?,?,?,?,?)";
-        return update(sql, user.getUserName(), user.getUserPassword(), user.getHeadPic(), user.getSex(), user.getTelephone(), user.getQq(), user.getEmail());
+        String sql = "insert into user (UserName,UserPassword,HeadPic,Sex,Telephone,QQ,Email,Vote,Level,Score)values(?,?,?,?,?,?,?,?,?,?)";
+        return update(sql, user.getUserName(), user.getUserPassword(), user.getHeadPic(), user.getSex(), user.getTelephone(), user.getQq(), user.getEmail(), 0, 1, 1);
     }
 
 
     //更新用户
     @Override
     public int updateUser(User user) {
-        String sql = "update user set UserName = ?,UserPassword = ?,Telephone = ?,QQ = ?,Email = ?,Sex = ?,RegisterTime = ?,HeadPic = ? where UserId = ?";
+        String sql = "update user set UserName = ?,UserPassword = ?,Telephone = ?,QQ = ?,Email = ?,Sex = ?,RegisterTime = ?,HeadPic = ?  where UserId = ?";
         return update(sql, user.getUserName(), user.getUserPassword(), user.getTelephone(), user.getQq(), user.getEmail(), user.getSex(), user.getRegisterTime(), user.getHeadPic(), user.getUserId());
     }
 
@@ -41,6 +41,18 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     public int updateUser2(User user) {
         String sql = "update user set Telephone = ?,QQ = ?,Email = ?,Sex = ?,HeadPic = ? where UserName = ?";
         return update(sql, user.getTelephone(),user.getQq(),user.getEmail(),user.getSex(),user.getHeadPic(),user.getUserName());
+    }
+
+    @Override
+    public int updateLevel(User user) {
+        String sql = "update user set Level = ?  where UserName = ?";
+        return update(sql, user.getLevel()+1,user.getUserName());
+    }
+
+    @Override
+    public int updateScore(User user) {
+        String sql = "update user set Score = ?  where UserName = ?";
+        return update(sql, user.getScore()+1,user.getUserName());
     }
 
     @Override
@@ -68,6 +80,12 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     public User queryUserByName(String username) {
         String sql = "select * from user where UserName=?";
         return queryForOne(User.class, sql, username);
+    }
+
+    @Override
+    public User queryUserByToolId(String toolId) {
+        String sql = "SELECT * FROM user where UserName = (SELECT Protagonist FROM tool WHERE toolId=?);";
+        return queryForOne(User.class, sql, toolId);
     }
 
     @Override
@@ -152,4 +170,17 @@ public class UserDaoImpl extends BaseDao implements UserDao {
         String sql = "update user set vote = 1 where UserName = ?";
         return update(sql, username);
     }
+
+    @Override
+    public Integer scoreUp(Integer userId, Integer score) {
+        String sql = "UPDATE user SET Score=? WHERE UserId=?";
+        return update(sql, score, userId);
+    }
+
+    @Override
+    public Integer levelUp(Integer userId, Integer level, Integer score) {
+        String sql = "UPDATE user SET Score=0,Level=? WHERE UserId=? AND ?=?";
+        return update(sql, level+1, userId, score, level);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.servlet;
 
 import com.entity.FavouriteTool;
 import com.entity.ToolScore;
+import com.google.gson.Gson;
 import com.service.ToolScoreService;
 import com.service.impl.ToolScoreServiceImpl;
 
@@ -75,5 +76,21 @@ public class ToolScoreServlet extends BaseServlet{
 
     }
 
+    public void GetToolScore(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        String toolId = request.getParameter("toolId");
+        Object toolScore = toolScoreService.toolScore(toolId);
+
+        System.out.println(toolScore);
+        if (!("").equals(toolScore)){
+            Gson gson = new Gson();
+            //转成字符串
+            String jsonStr = gson.toJson(toolScore);
+            //写入返回信息
+            response.getWriter().write(jsonStr);
+        }else {
+            response.getWriter().write("null");
+        }
+
+    }
 }

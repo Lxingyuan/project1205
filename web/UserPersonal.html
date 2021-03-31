@@ -37,6 +37,25 @@
             <!--<span class="layui-badge-dot"></span>-->
         </a>
     </li>
+    <li class="layui-nav-item">
+        <a href="/toolUpload.html">资源上传
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
+    <li class="layui-nav-item">
+        <a href="javascript:;">工具分类</a>
+        <dl class="layui-nav-child" id="types"> <!-- 二级菜单 -->
+            <!--<dd><a href="category.html?toolType=接口测试工具">接口测试工具</a></dd>
+            <dd><a href="category.html?toolType=性能测试工具">性能测试工具</a></dd>
+            <dd><a href="category.html?toolType=自动化测试工具">自动化测试工具</a></dd>
+            <dd><a href="category.html?toolType=测试管理工具">测试管理工具</a></dd>-->
+        </dl>
+    </li>
+    <li class="layui-nav-item">
+        <a href="/Guestbook.html">留言板
+            <!--<span class="layui-badge-dot"></span>-->
+        </a>
+    </li>
     <li class="layui-nav-item" lay-unselect="" style="display: none;float: right" id="userMessage">
         <a href="javascript:;">
             <img src="/static/images/noLogin.jpg" class="layui-nav-img" id="userHeadPic">
@@ -61,7 +80,7 @@
 <div style="margin: 20px 60px;display: none" id="adminDiv" align="center">
     <h2 style="text-align: center"><b>管理员个人空间！</b></h2>
 </div>
-<div style="border: 1px dashed #929ca8;margin-top: 20px;margin-left: 200px;margin-right: 200px; display: none;"
+<div style="border: 1px solid white;margin-top: 20px;margin-left: 200px;margin-right: 200px; display: none;"
      id="userDiv">
     <h2 style="text-align: center;padding: 10px">
         <b><span>我</span>的个人空间</b>
@@ -74,7 +93,13 @@
                 <center>
                     <b style="font-size: 20px">用户名:<span class="BigUserName"></span></b>
                     <br>
-                    <b style="font-size: 20px">邮箱:<span class="UserEmail"></span></b>
+                    <b style="font-size: 20px">邮箱:<span class="UserEmail"></span></b><br>
+                    <b>
+                        <span class="layui-badge layui-bg-green" id="level"></span>
+                        <div class="layui-progress">
+                            <div class="layui-progress-bar" id="score" lay-percent="70%"></div>
+                        </div>
+                    </b>
                    <!-- <br>
                     <i class="layui-icon layui-icon-home" style="font-size: 30px; color: #1E9FFF;"></i>
                     <a href="#" style="font-size: 20px">发邮件</a>-->
@@ -83,11 +108,20 @@
         </div>
         <div class="layui-col-md9" style="background: #9cabb4">
             <div class="grid-demo">
-                <br><center><b style="font-size: 20px;color: black;">我喜欢的工具</b></center><br>
-                <div class="row" id="hotTool">
+                <div style="float: left;width: 50%">
+                    <br><center><b style="font-size: 20px;color: black;">我喜欢的工具</b></center><br>
+                    <div class="row" id="hotTool" style="margin-left: 5px">
+                    </div>
+                    <ul class="pagination">
+                    </ul>
                 </div>
-                <ul class="pagination">
-                </ul>
+                <div style="float: right;width: 50%;background-color: #4E5465">
+                    <br><center><b style="font-size: 20px;color: black;">我上传的工具</b></center><br>
+                    <div class="row" id="uploadedTool" style="margin-left: 5px">
+                    </div>
+                    <ul class="pagination2">
+                    </ul>
+                </div>
             </div>
 
 
@@ -179,6 +213,9 @@
                         //表单信息回填
                         $("#UserBigPic").attr("src", jsonObj.headPic);
                         $(".UserEmail").html(jsonObj.email);
+                        $("#level").html("Lv."+jsonObj.level);
+                        var percent = Math.round(parseFloat(jsonObj.score) / parseFloat(jsonObj.level) * 10000) / 100.00;
+                        $("#score").attr("lay-percent", percent+"%");
                         //console.log($(".sex:checked").val());
                     }
                 });
@@ -234,6 +271,21 @@
 
     }
 
+    function showTypes() {
+        $.ajax({
+            url: "http://localhost:8765/tool.do",
+            data: {action: "queryAllType"},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                var jsonObj = JSON.parse(data);
+                for (var i = 0; i < jsonObj.length; i++) {
+                    $("#types").append("<dd><a href=\"category.html?toolType="+jsonObj[i].type+"\">"+jsonObj[i].type+"</a></dd>");
+                }
+            }
+        });
+    }
+
     function initRightTop(){
         $.ajax({
             url: "/tool.do",
@@ -248,10 +300,10 @@
 
                 for (let i = 0; i < jsonObj.data.length; i++) {
                     //console.log(jsonObj.items[i]);
-                    let colmd6 = $("<div class=\"col-md-3\" style=\"margin-left: 60px;height: 500px\"></div>");
+                    let colmd6 = $("<div class=\"col-md-6\" style=\"height: 350px\"></div>");
                     //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
-                    let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn'></div>")
-                    let img = $("<a href=\"detailsPage.html?toolId="+jsonObj.data[i].toolId+"\"><img width='270px' height='400px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
+                    let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn' style='background-color: #7c9192;width: 250px'></div>")
+                    let img = $("<a href=\"detailsPage.html?toolId="+jsonObj.data[i].toolId+"\"><img width='250px' height='250px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
                     let blogbody = $("<div class=\"blog-content-body\"></div>");
                     let postmeta = $("<div class=\"post-meta\"></div>");
                     postmeta.append("<span class=\"category\">" + jsonObj.data[i].type + "</span>");
@@ -272,11 +324,49 @@
     }
 
 
+    function uploadedTool(){
+        $.ajax({
+            url: "/tool.do",
+            data: {action: "queryToolByProtagonist", userName: readCookie("userName")},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                //console.log(data);
+                let jsonObj = JSON.parse(data);
+
+                $("#uploadedTool").empty();
+
+                for (let i = 0; i < jsonObj.data.length; i++) {
+                    //console.log(jsonObj.items[i]);
+                    let colmd6 = $("<div class=\"col-md-6\" style=\"height: 350px\"></div>");
+                    //tool.do?action=queryToolName&toolName=jsonObj.items[i].toolName
+                    let blogentry = $("<div class='blog-entry element-animate fadeIn element-animated'data-animate-effect='fadeIn' style='background-color: #7c9192;width: 250px'></div>")
+                    let img = $("<a href=\"detailsPage.html?toolId="+jsonObj.data[i].toolId+"\"><img width='250px' height='250px' class='imgdetial' alt=\"Image placeholder\" src='" + jsonObj.data[i].picAddress + "'/></a>");
+                    let blogbody = $("<div class=\"blog-content-body\"></div>");
+                    let postmeta = $("<div class=\"post-meta\"></div>");
+                    postmeta.append("<span class=\"category\">" + jsonObj.data[i].type + "</span>");
+                    postmeta.append("<span class=\"mr-2\">上映时间：" + jsonObj.data[i].showTime + "</span>");
+                    postmeta.append("<span class=\"ml-2\"><span class=\"fa fa-comments\"></span>"+jsonObj.data[i].hits+"</span>")
+                    blogbody.append(postmeta);
+                    blogbody.append("<center><h2>"+ jsonObj.data[i].toolName +"</h2></center>");
+                    if(readCookie("adminName")!=null){
+                        blogbody.append("<center><a class='deleteTool' href='javascript:;' style='color: red'><input type='hidden' value='"+jsonObj.data[i].toolId+"'>"+ "删除" +"</a></center>");
+                    }
+                    blogentry.append(img);
+                    blogentry.append(blogbody);
+                    colmd6.append(blogentry);
+                    $("#uploadedTool").append(colmd6);
+                }
+            }
+        });
+    }
 
 
     $(function () {
+        showTypes();
         initTop();
-        initRightTop()
+        initRightTop();
+        uploadedTool();
 
     });
 

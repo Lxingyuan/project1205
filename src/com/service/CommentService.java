@@ -20,16 +20,16 @@ public interface CommentService {
 
     //删除评论信息
     int deleteComment(Integer commentId);
-    int deleteComment(Integer toolId,String commentUser,String commentContent);
+    int deleteComment(Integer toolId, String commentUser, String commentContent);
     List<Comment> queryCommentByTime();
     //评论页面
     Page<Comment> queryCommentByPage(int pageNo, int pageSize);
 
     Page2<Comment> queryCommentByPage2();
 
-    Page2<Comment> queryCommentByPage2(String toolName,String commentUser,String commentContent);
+    Page2<Comment> queryCommentByPage2(String toolName, String commentUser, String commentContent);
 
-    int updateCommentColumnValue(Integer commentId,String columnName,String columnValue);
+    int updateCommentColumnValue(Integer commentId, String columnName, String columnValue);
 
     Integer queryTotalCommentByToolId(Integer toolId);
 
